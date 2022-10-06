@@ -1,0 +1,937 @@
+* {
+    box-sizing: border-box !important;
+}
+button .dashicons {
+    line-height: 30px;
+}
+.cubewp-builder-area .size-1-1 {
+    width: calc(100% - 10px) !important;
+}
+.cubewp-builder-area .size-1-2 {
+    width: calc((100% / 2) - 10px) !important;
+}
+.cubewp-builder-area .size-1-3 {
+    width: calc((100% / 3) - 10px) !important;
+}
+.cubewp-builder-area .size-1-4 {
+    width: calc((100% / 4) - 10px) !important;
+}
+.cubewp-builder-area .size-2-3 {
+    width: calc(((100% / 3) * 2) - 10px) !important;
+}
+.cubewp-builder-area .size-3-4 {
+    width: calc(((100% / 4) * 3) - 10px) !important;
+}
+#cwp-layout-builder-ovelay,
+.notice
+{
+    display: none;
+}
+#wpbody {
+    position: fixed;
+    width: calc(100% - 160px);
+}
+#wpfooter {
+    display: none;
+}
+#wpbody-content,
+#wpcontent {
+    padding: 0 0 0 0;
+}
+.color-danger {
+    color: #e02020;
+}
+.cubewp-content {
+    margin: 0 0 0 0;
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding: 0 0 0 0;
+}
+.cubewp-expand-container > .cubewp-expand-target {
+    display: none;
+}
+.cubewp-expand-container.active-expanded > .cubewp-expand-target {
+    display: flex;
+}
+.cubewp-expand-container .cubewp-expand-trigger {
+    cursor: pointer;
+}
+.cubewp-expand-container.active-expanded .cubewp-expand-trigger.expanded {
+    transform: rotate(180deg);
+}
+.cubewp-pro-tag {
+    background-color: #f56e28;
+    border-radius: 4px;
+    color: #ffffff;
+    margin: 0 9px 0 0;
+    padding: 2px 3px;
+}
+.cubewp-tab-switcher-target:not(.active-tab) {
+    display: none;
+}
+/*Title Bar*/
+#cubewp-title-bar {
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 25px;
+}
+#cubewp-title-bar h1 {
+    color: #23282d;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 32px;
+    margin: 0 0 0 0;
+}
+#cwpform-builder {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+#cwpform-builder .cubewp-builder-container {
+    padding: 0 0 0 0;
+    width: calc(100% - 400px);
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder {
+    height: calc(100vh - 150px);
+    overflow-y: auto;
+    padding: 30px 50px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-bottom-bar {
+    align-items: center;
+    background: #ffffff;
+    border-top: 1px solid #dddddd;
+    box-shadow: 0 -5px 5px -3px #dddddd;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 0 0;
+    padding: 10px 18px;
+    position: relative;
+    z-index: 1;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-container-topbar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 10px 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area {
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px #00000012;
+    padding: 30px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections {
+    background-color: #fdfdfd;
+    border: 1px dashed #0073af;
+    border-radius: 4px;
+    padding: 15px 30px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section {
+    margin: 15px 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header {
+    align-items: center;
+    background-color: #c9d8e3;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    padding: 8px 20px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header .cubewp-builder-section-actions {
+    margin: 0 0 0 auto;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section.active-expanded .cubewp-builder-section-header {
+    border-radius: 4px 4px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header .dashicons {
+    cursor: pointer;
+    margin-left: 10px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header h3 {
+    color: #000000;
+    font-size: 14px;
+    line-height: 24px;
+    margin: 0 0 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields {
+    align-items: flex-start;
+    background-color: #f5f9fc;
+    border-radius: 0 0 4px 4px;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 30px 25px;
+}
+.cubewp-builder-group-widget.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section.active-expanded .cubewp-builder-section-fields {
+    display: flex;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget-placeholder {
+    height: 47px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget-placeholder {
+    align-items: center;
+    background-color: #fdfdfd;
+    border: 1px dashed #bfbfbf;
+    border-radius: 3px;
+    display: flex;
+    justify-content: flex-start;
+    margin: 5px;
+    padding: 0 10px;
+    flex-wrap: wrap;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-row-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-mover {
+    height: 20px;
+    width: 36px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-mover svg {
+    cursor: move;
+}
+
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-actions {
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-actions .cubewp-builder-group-widget-expander {
+    margin-left: 5px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-type-icon {
+    margin: 0 40px 0 20px;
+    width: 19px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-title {
+    margin: 0 60px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 110px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-type {
+    margin: 0 60px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-class {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-size {
+    align-items: center;
+    background: #c9d8e3;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    height: 48px;
+    justify-content: center;
+    margin: -1px -11px -1px 10px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-3-4 .cubewp-builder-group-widget-type-icon {
+    margin: 0 20px 0 10px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-3-4 .cubewp-builder-group-widget-title {
+    width: 100px;
+    margin: 0 20px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-3-4 .cubewp-builder-group-widget-type {
+    width: 80px;
+    margin: 0 20px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-3-4 .cubewp-builder-group-widget-class {
+    width: 80px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-2-3 .cubewp-builder-group-widget-type-icon {
+    margin: 0 15px 0 10px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-2-3 .cubewp-builder-group-widget-title {
+    width: 100px;
+    margin: 0 15px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-2-3 .cubewp-builder-group-widget-type {
+    width: 80px;
+    margin: 0 15px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-2-3 .cubewp-builder-group-widget-class {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-2 .cubewp-builder-group-widget-type-icon {
+    margin: 0 15px 0 10px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-2 .cubewp-builder-group-widget-title {
+    width: 100px;
+    margin: 0 15px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-2 .cubewp-builder-group-widget-type {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-2 .cubewp-builder-group-widget-class {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 {
+    padding-left: 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-type-icon {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-title {
+    width: 80px;
+    margin: 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-type {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-class {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 {
+    padding-left: 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-type-icon {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-title {
+    width: 35px;
+    margin: 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-type {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-class {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-mover img {
+    min-width: 30px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-settings,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-settings
+{
+    padding: 10px;
+    margin: 0 -10px 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field
+{
+    width: 100%;
+    flex-wrap: wrap;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-3 .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field label,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget.size-1-4 .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field label
+{
+    width: 100%;
+    margin: 0 0 5px 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-size span {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-size span:first-of-type {
+    box-shadow: 0 1px #bfbfbf;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-size .size {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings {
+    align-items: flex-start;
+    border-top: 1px dashed #bfbfbf;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0 -10px;
+    padding: 25px;
+    width: calc(100% + 20px);
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings > button {
+    display: block;
+    margin: 0 0 0 auto;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 20px 0;
+    width: 100%;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field:last-of-type {
+    margin: 0 0 0 0;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field label {
+    color: #1a2432;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 19px;
+    margin: 0 40px 0 0;
+    min-width: 110px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field input,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-settings .cubewp-builder-group-widget-setting-field select {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px #00000012;
+    margin: 0;
+    min-width: calc(100% - 150px);
+    padding: 2px 15px;
+    width: 100%;
+}
+#cwpform-builder .cubewp-builder-sidebar {
+    background-color: #ffffff;
+    border-left: 1px solid #dddddd;
+    height: calc(100vh - 150px);
+    overflow: hidden;
+    overflow-y: auto;
+    width: 400px;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-option {
+    border-bottom: 1px solid #dddddd;
+    padding: 22px;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-option label {
+    color: #1a2432;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 19px;
+    margin: 0 0 11px 0;
+    width: 100%;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-option select {
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px #00000012;
+    display: block;
+    padding: 7px 15px;
+    width: 100%;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-header {
+    align-items: center;
+    border-bottom: 1px solid #dddddd;
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 16px;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-header h3 {
+    color: #1a2432;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 19px;
+    margin: 0 0 0 0;
+    width: 100%;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-header h3 .cwp-group-taxonomies {
+    display: block;
+    font-weight: 400;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-header .cubewp-builder-section-actions .cubewp-builder-section-action-delete, 
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-header .cubewp-builder-section-actions .cubewp-builder-section-action-edit {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields {
+    align-items: flex-start;
+    border-bottom: 1px solid #dddddd;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 11px;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget,
+.cubewp-builder-group-widget-placeholder {
+    align-items: center;
+    background-color: #f3f4f5;
+    border-radius: 3px;
+    cursor: move;
+    display: flex;
+    flex-direction: column;
+    height: 75px;
+    justify-content: center;
+    margin: 9px 11px;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    width: calc((100% - 66px) / 3);
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-row-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget .builder-area-content {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget img {
+    height: 22px;
+    margin: 0 0 12px 0;
+    object-fit: contain;
+    width: 22px;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget p {
+    color: #32373c;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 14px;
+    margin: 0 0 0 0;
+    text-align: center;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-mover:after {
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-mover svg {
+    display: none;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-content {
+    width: calc(65% - 10px);
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar {
+    width: calc(35% - 10px);
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-size,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-class,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-type,
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-type-icon
+{
+    display: none !important;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-title {
+    margin: 0 0 0 0 !important;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget {
+    padding: 0 0 0 0 !important;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-mover img {
+    width: 30px !important;
+    margin: 0 0 0 0 !important;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-setting-field label {
+    width: 100% !important;
+    margin: 0 0 5px 0 !important;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-setting-field {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-sidebar .cubewp-builder-group-widget-settings {
+    padding: 10px !important;
+    margin: 0 0 !important;
+}
+
+#cwp-layout-builder-ovelay::after {
+    content: "";
+    z-index: 9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+#cwp-layout-builder-ovelay .layout-builder-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: #fff;
+    padding: 25px;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    z-index: 10;
+    min-width: 40%;
+    box-shadow: 0 0 25px -10px #a3a3a3;
+}
+#cwp-layout-builder-ovelay .layout-builder-content .new-section-title {
+    color: #1d2327;
+    margin: 0 0 20px;
+}
+#cwp-layout-builder-ovelay .layout-builder-content .section-form-field {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+#cwp-layout-builder-ovelay .layout-builder-content .section-form-field input,
+#cwp-layout-builder-ovelay .layout-builder-content .section-form-field textarea,
+#cwp-layout-builder-ovelay .layout-builder-content .section-form-field select
+{
+    width: 100%;
+    margin: 0 0;
+    max-width: 100%;
+}
+#cwp-layout-builder-ovelay .layout-builder-content .section-form-field label {
+    margin: 0 0 3px 0;
+    font-weight: 400;
+}
+#cwp-layout-builder-ovelay .layout-builder-content .form-section-form-btns {
+    margin: 20px 0 0;
+}
+#cwp-layout-builder-ovelay .layout-builder-content .form-section-form-btns button {
+    min-width: 80px;
+    margin: 0 15px 0 0;
+}
+.form-settings {
+    width: 100%;
+    margin: 0 auto 30px;
+}
+.form-settings .cwpform-settings {
+    display: block;
+    background-color: #fdfdfd;
+    border: 1px dashed #0073af;
+    border-radius: 4px;
+    padding: 15px 30px;
+}
+.form-settings .cwpform-settings .cwpform-setting-label h2 {
+    margin: 0 0 15px;
+}
+.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px 0;
+    width: 100%;
+}
+.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field label {
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field input {
+    width: calc(100% - 200px);
+}
+.shoftcode-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.shoftcode-area .cwpform-shortcode {
+    margin: 0 15px 0 0;
+}
+.shoftcode-area .cwpform-shortcode .inner {
+    background: #000;
+    padding: 0 15px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 19px;
+    height: 30px;
+    user-select: all;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media only screen and (max-width: 1026px) {
+    #cwpform-builder .cubewp-builder-sidebar {
+        width: 200px;
+    }
+    #cwpform-builder .cubewp-builder-container {
+        width: calc(100% - 200px);
+    }
+    #cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget,
+    .cubewp-builder-group-widget-placeholder
+    {
+        width: calc((100% - 20px) / 2);
+        margin: 5px 5px;
+    }
+    #cwpform-builder .cubewp-builder-container .cubewp-builder {
+        padding: 15px 25px;
+    }
+}
+@media only screen and (max-width: 960px) {
+    #wpbody {
+        width: calc(100% - 35px);
+    }
+}
+@media only screen and (max-width: 800px) {
+    #cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget,
+    .cubewp-builder-group-widget-placeholder
+    {
+        width: 100%;
+    }
+    #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-type-icon,
+    #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .builder-area-content.cubewp-builder-group-widget-type,
+    #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .builder-area-content.cubewp-builder-group-widget-class
+    {
+        display: none;
+    }
+    #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-title {
+        margin: 0;
+    }
+}
+@media only screen and (max-width: 782px) {
+    #wpbody {
+        width: 100%;
+    }
+    .auto-fold #wpcontent {
+        padding-left: 0;
+    }
+    #cwpform-builder .cubewp-builder-container .cubewp-builder {
+        padding: 15px;
+    }
+}
+
+.cubewp-builder-no-section.hidden {
+    display: none;
+}
+.cubewp-builder-no-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 30px;
+}
+.cubewp-builder-no-section img {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 0 30px 0;
+}
+.cubewp-builder-no-section h3 {
+    font-size: 23px;
+    line-height: 1;
+    margin: 0 0 30px 0;
+    text-align: center;
+}
+.cubewp-builder-no-section .cubewp-builder-no-section-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 0 40px 0;
+    text-align: center;
+}
+.cubewp-builder-no-section .cubewp-builder-no-section-steps p {
+    margin: 0 20px 10px 0;
+    text-align: center;
+}
+.cubewp-builder-no-section .cubewp-builder-no-section-steps p:last-child {
+    margin: 0 0 10px 0;
+}
+.cubewp-builder-no-section .cubewp-builder-no-section-steps p span {
+    background-color: #397AFF;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 5px 0 0;
+    display: inline-block;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+}
+@media only screen and (max-width: 1400px) {
+    #cwpform-builder.cubewp-builder-single_layout .cubewp-builder-sidebar {
+        width: 200px;
+    }
+    #cwpform-builder.cubewp-builder-single_layout .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget, .cubewp-builder-group-widget-placeholder {
+        width: 100%;
+    }
+    #cwpform-builder.cubewp-builder-single_layout .cubewp-builder-container {
+        width: calc(100% - 200px);
+    }
+    #cwpform-builder.cubewp-builder-single_layout .cubewp-builder-container .cubewp-builder {
+        padding: 30px;
+    }
+}
+
+/*---------Empty Builder form CSS-----*/
+.cubewp-subscription-frame {
+    position: relative;
+    height: 100%;
+    overflow: scroll;
+    text-align: center;
+}
+.cubewp-subscription-form {
+    width: 550px;
+    background-color: #ffffff;
+    margin: auto;
+    left: 0;
+    right: 0;
+    transform: translateY(-52%);
+    top: 50%;
+    align-items: center;
+    display: flex;
+    border-radius: 11px;
+    overflow: hidden;
+    flex-direction: column;
+    background-image: linear-gradient(198deg, #0031FF, #B100FF);
+}
+.cube-subscription-header {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 258px;
+    width: 100%;
+    text-align: center;
+}
+.cube-subscription-header .subscription-header-super {
+    width: 383px;
+    height: auto;
+    margin-top: 6px;
+}
+.cubewp-subscription-frame .cubewp-subscription-form .cubewp-subscription-contant .cube-popup-title h2 {
+    letter-spacing: 0px;
+    color: rgba(0, 0, 0, 1);
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+.cubewp-subscription-frame .cubewp-subscription-form .cubewp-subscription-contant .cube-popup-title h3 {
+    letter-spacing: 0px;
+    color: rgba(172, 0, 0, 1);
+    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 14px 0 18px 0;
+}
+.cubewp-subscription-frame .cubewp-subscription-form .cubewp-subscription-contant .cube-popup-title {
+    padding: 14px 0 0 0;
+}
+.cubewp-subscription-frame .cubewp-subscription-form .cubewp-subscription-contant .cube-popup-title p {
+    letter-spacing: 0px;
+    color: rgba(88, 89, 91, 1);
+    text-align: center;
+    padding: 0 31px;
+    line-height: 22px;
+    margin: 14px 0;
+    font-size: 16px;
+    font-weight: 400;
+}
+.cubewp-subscription-frame .cubewp-subscription-form .cubewp-subscription-contant {
+    background: #fff;
+    margin: 0px 1.5px 1.5px 1px;
+    padding: 0 30px;
+    border-radius: 0 0 10px 10px !important;
+    overflow: hidden;
+}
+.list-options-subscription-form {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding-left: 0;
+    margin-right: -39px;
+    margin-left: 28px;
+}
+.cubewp-subscription-download a:hover {
+    transition: 0.3s;
+    background: #1f8013 0% 0% no-repeat padding-box;
+}
+.list-options-subscription-form li {
+    width: calc((100% / 2) - 0px);
+    text-align: left;
+    font: normal normal 300 14px/25px Helvetica;
+    letter-spacing: 0px;
+    line-height: 26px;
+    color: rgba(50, 55, 60, 1);
+}
+.list-options-subscription-form li span.dashicons.dashicons-yes {
+    color: #23A713;
+    font-size: 28px;
+    margin: 0px 8px 0 0;
+}
+.cubewp-subscription-bottom-contant .cubewp-logo {
+    margin-bottom: 14px;
+    text-align: center;
+}
+.cubewp-subscription-download a {
+    background: #23A713 0% 0% no-repeat padding-box;
+    border-radius: 4px;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    margin: auto;
+}
+.cubewp-subscription-download {
+    text-align: center;
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+}
+.cubewp-subscription-download .cube-award-option span.dashicons.dashicons-awards {
+    color: #F9B234;
+}
+.cubewp-subscription-download .cube-award-option {
+    letter-spacing: 0px;
+    color: #58595B;
+    opacity: 1;
+    text-align: center;
+    font: normal normal 300 14px/25px Helvetica;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    align-items: center;
+}
+.cubewp-subscription-frame .cubewp-subscription-frame-bg {
+    width: auto;
+}
+.cubewp-subscription-download span.dashicons.dashicons-star-filled {
+    font-size: 14px;
+    margin: 2px -1px -3px 0;
+}
+@media only screen and (max-width: 1400px) {
+    .cubewp-subscription-form {
+        margin-bottom: 24%;
+    }
+    .cubewp-subscription-form {
+        transform: translateY(-36%);
+        top: 50%;
+    }
+}
+.cubewp-subscription-main {
+    position: absolute;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    top: 44%;
+}
+.cubewp-subscription-bottom-contant .cubewp-logo img {
+    width: 170px;
+    height: auto;
+}

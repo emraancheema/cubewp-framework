@@ -1,0 +1,292 @@
+.cwp-postbox-holder {
+	margin: 10px 20px 0 2px;
+}
+.cwp-postbox-holder #poststuff .postbox-container {
+	width: calc(100% - 300px);
+}
+.cwp-postbox-holder #poststuff .postbox .inside th,
+.cwp-postbox-holder #poststuff .postbox .inside td {
+	padding: 12px 12px;
+}
+.cwp-postbox-holder .field-desc {
+	width: 100%;
+}
+.cwp-custom-field {
+	margin-bottom: 10px;
+	width: 95%;
+}
+.cwp-custom-field .cwp-field {
+	margin-bottom: 5px;
+}
+.cwp-custom-field .cwp-field textarea {
+	width: 100%;
+}
+.cwp-custom-field .cwp-field-desc p {
+	margin: 0;
+}
+.cwp-tax-upload-field input[type="text"] {
+	width: 80%;
+}
+.postbox-side-container {
+	float: right;
+	width: 200px;
+}
+.cwp-save-button {
+	background: #007cba;
+	border: 0;
+	border-radius: 2px;
+	box-shadow: none;
+	color: #ffffff;
+	cursor: pointer;
+	line-height: 30px;
+	padding: 0 20px;
+	text-decoration: none;
+	text-shadow: none;
+}
+.cwp-form-table {
+	margin: 0 12px 12px;
+}
+.cwp-add-form-feild .conditional-rule tbody td {
+	text-align: left;
+}
+.cwp-edit-custom-feild-group {
+	padding: 0 12px;
+	width: 100%;
+}
+input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], .postbox-container input[type=text], input[type=time], input[type=url], input[type=week] {
+	width: 100%
+}
+.cwp-add-form-feild {
+	background: #ffffff;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+	display: inline-block;
+	float: none;
+	margin-bottom: 20px;
+	min-width: 255px;
+	padding: 0 10px 10px;
+	position: relative;
+	width: calc(70% - 16px);
+}
+.cwp-add-form-feild .cwp-postbox-title {
+	padding-top: 0;
+}
+.cwp-add-form-feild table {
+	width: 100%
+}
+.cwp-add-form-feild table label {
+	text-transform: capitalize;
+}
+.cwp-add-form-feild table tr td, .cwp-edit-custom-feild-group tbody tr td {
+	padding: 10px 14px 10px 0;
+}
+.cwp-add-form-feild tbody td:first-child, .cwp-edit-custom-feild-group tbody td:first-child {
+	font-weight: 500;
+	min-width: 200px;
+	padding-right: 30px;
+	text-align: right;
+	vertical-align: top;
+	width: 20%;
+}
+.cwp-collapsible-inner textarea {
+	width: 100%;
+}
+.sub-fields-holder .sub-fields {
+	border: 1px solid #ccd0d4;
+	border-bottom: none;
+}
+#poststuff .sub-fields-holder h2 {
+	color: #23282d;
+	font-size: 1.3em;
+	font-weight: 600;
+	padding-bottom: 15px;
+	padding-left: 15px;
+}
+.sub-fields-holder .add-sub-field {
+	float: right;
+	margin-top: 15px;
+}
+.cwp-group-fields .cwp-postbox-title {
+	border-top: 1px solid #ccd0d4;
+	margin: 0;
+	padding: 15px
+}
+.cwp-group-fields .cwp-edit-custom-feild-group {
+	margin-top: 20px;
+	padding: 0 20px;
+}
+.cwp-group-fields .cwp-field-set {
+	border: none;
+	box-shadow: none;
+	margin-bottom: 20px;
+	padding: 0;
+	width: 100%;
+}
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner {
+	padding: 20px;
+}
+.cwp-hide {
+	display: none;
+}
+.cwp-hide-row {
+	display: none;
+}
+.cwp-group-fields .field-header {
+	align-items: center;
+	border-bottom: 1px solid #ccd0d4;
+	border-top: 1px solid #ccd0d4;
+	color: #23282d;
+	display: flex;
+	font-size: 1.3em;
+	justify-content: space-between;
+	margin: 0;
+	padding: 15px;
+}
+.cwp-group-fields .field-header.closed {
+	border-bottom: none;
+}
+.cwp-group-fields .field-header .field-title {
+	flex-grow: 1;
+	margin: 0;
+}
+.field-header .remove-field {
+	color: red;
+	margin-left: 5px;
+}
+.cwp-group-fields #post-body-content {
+	margin-bottom: 0;
+}
+.field-header .field-order {
+	cursor: move;
+	float: left;
+	margin: 0 10px 0 0;
+	width: 2%;
+}
+.field-header .sub-field-order {
+	cursor: move;
+	float: left;
+	width: 3%;
+}
+.field-header .field-label {
+	float: left;
+	width: 30%;
+}
+.field-header .field-label,
+.field-header .field-type {
+	text-transform: capitalize;
+}
+.field-header .field-type,
+.field-header .field-slug {
+	float: left;
+	font-weight: 400;
+	width: 20%;
+}
+.cwp-group-settings .cwp-collapsible-inner {
+	margin-bottom: 50px;
+}
+.group-fields {
+	color: #23282d;
+	font-size: 1.3em;
+	font-weight: 600;
+	padding-bottom: 15px;
+	padding-left: 15px;
+}
+.cwp-group-fields .field-header {
+	align-items: center;
+	border-bottom: 1px solid #ccd0d4;
+	border-top: 1px solid #ccd0d4;
+	color: #23282d;
+	display: flex;
+	font-size: 1.3em;
+	justify-content: space-between;
+	margin: 0;
+	padding: 15px;
+}
+.cwp-group-fields .field-header.closed {
+	border-bottom: none;
+}
+.cwp-group-fields .field-header .field-title {
+	flex-grow: 1;
+	margin: 0;
+}
+.conditional-rule tbody td.conditional-rule-field select {
+	min-width: 250px;
+}
+.conditional-rule tbody td.conditional-rule-operator select {
+	min-width: 200px;
+}
+.conditional-rule tbody td.conditional-rule-value {
+	width: 370px;
+}
+.cwp-add-form-feild .field-options-table .clone-option {
+	display: none !important;
+}
+.cubewp-locked-field {
+	position: relative;
+}
+.cwp-add-form-feild tbody tr.conditional-rule td.conditional-rule-field {
+    padding: 0 10px 20px 0;
+}
+.cwp-add-form-feild tbody tr.conditional-rule td.conditional-rule-operator {
+    padding-top: 0px;
+    display: block;
+	vertical-align: top;
+}
+.cwp-add-form-feild tbody tr.conditional-rule td.conditional-rule-operator select {
+    width: 100%;
+}
+.cwp-add-form-feild tbody tr.conditional-rule td.conditional-rule-value {
+    padding: 0px 0px 10px 0px;
+	vertical-align: top;
+}
+.cubewp-locked-field:not(.unlocked)::after {
+	background: #0003;
+	border-radius: 4px;
+	content: "";
+	cursor: not-allowed;
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 2;
+}
+.cubewp-locked-field span {
+	cursor: pointer;
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 3;
+}
+td.move-option {
+	min-width: 5% !important;
+	padding: 20px 10px 20px 0 !important;
+	width: 5% !important;
+}
+.cwp-add-form-feild tbody td:first-child, .cwp-edit-custom-feild-group tbody td:first-child {
+	min-width: 100px;
+	width: 20%;
+	text-align: left;
+}
+.cwp-add-form-feild tbody td td:first-child {
+	padding: 20px 10px;
+}
+.cwp-sub-field-inner tbody td:first-child {
+	min-width: auto;
+	text-align: left;
+}
+@media only screen and (max-width: 1200px) {
+	.field-slug {
+		display: none !important;
+	}
+	.field-header .field-order {
+		width: 10% !important;
+	}
+	.field-header .field-label {
+		width: 40% !important;
+	}
+	.field-header .field-type {
+		width: 40% !important;
+	}
+}

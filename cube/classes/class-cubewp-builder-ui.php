@@ -1,0 +1,533 @@
+<?php
+/**
+ * Builder UI trait is contains all markup for cubeWP builder.
+ *
+ * @package cubewp/cube/classes
+ * @version 1.0
+ * @since  1.0.0
+ * 
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+trait CubeWp_Builder_Ui {
+
+	protected static $tab_options = array();
+	
+	/**
+	 * Method CubeWp_Form_Builder
+	 *
+	 * @param array $data form data for builder
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function CubeWp_Form_Builder(array $data) {
+		if (empty($data['form_type'])) {
+			return '';
+		}
+		$data      = self::builder_fields_parameters($data);
+		self::CubeWp_build_tab_options($data);
+		$form_type  = $data['form_type'];
+        $builder_ui = '<div class="cubewp-content">';
+		$builder_ui .= self::builder_header($data['page_title']);
+		$builder_ui .= '<section id="cwpform-builder" class="cwpform-builder cubewp-builder-' . $form_type . '">';
+		$builder_ui .= '<div class="cubewp-builder-sidebar">';
+		$builder_ui .= self::CubeWp_build_post_type_switcher($data);
+		$builder_ui .= self::CubeWp_build_plans_switcher($data);
+		$builder_ui .= '<div class="cubewp-builder-sidebar-groups-widgets">';
+        $builder_ui .= self::cubewp_builder_widgets_ui($form_type);
+		$builder_ui .= '</div>';
+		$builder_ui .= '</div>';
+		$builder_ui .= '<div class="cubewp-builder-container">';
+		$builder_ui .= '<div class="cubewp-builder">';
+		if ($data['form_type'] == 'single_layout') {
+			$builder_ui .= self::builder_single_layout($data);
+		} else {
+			$builder_ui .= self::cubewp_builder_area($data);
+		}
+		$builder_ui .= '</div>';
+		$builder_ui .= '</div>';
+		$builder_ui .= '</section>';
+		$builder_ui .= '</div>';
+
+		return $builder_ui;
+	}
+	
+	/**
+	 * Method cubewp_builder_widgets_ui
+	 *
+	 * @param string $form_type
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	public static function cubewp_builder_widgets_ui(string $form_type) {
+		$output = '';
+		$options    = self::$tab_options;
+		if (isset($options) && count($options) != 0) {
+			foreach ($options as $slug => $option) {
+				$output .= '<div class="sidebar-type-'.$slug.' cubewp-tab-switcher-target cubewp-switcher-tab-' . $slug . '">';
+				if ($option["plans"]) {
+					foreach ($option["plans"] as $plan_id) {
+						$output .= '<div id="plan-' . $plan_id . '" class="sidebar-plan-tab cubewp-tab-switcher-target cubewp-switcher-tab-' . $plan_id . '" data-id="'.$plan_id.'">';
+						$output .= self::cubewp_builder_widgets($form_type, $slug);
+						$output .= '</div>';
+					}
+				}
+				else {
+					$output .= self::cubewp_builder_widgets($form_type, $slug);
+				}
+				$output .= '</div>';
+			}
+		}
+
+        return $output;
+    }
+	
+	/**
+	 * Method cubewp_builder_widgets
+	 *
+	 * @param string $form_type
+	 * @param string $slug
+	 *
+	 * @return html
+	 * @since  1.0.0
+	 */
+	public static function cubewp_builder_widgets(string $form_type, string $slug) {
+		return apply_filters("cubewp/builder/{$form_type}/default/fields", '', $slug) .
+               apply_filters("cubewp/builder/{$form_type}/taxonomies/fields", '', $slug) .
+               apply_filters("cubewp/builder/{$form_type}/group/fields", '', $slug);
+    }
+	
+	/**
+	 * Method builder_fields_parameters
+	 *
+	 * @param array $args form arguments to parse with default args
+	 *
+	 * @return array
+	 * @since  1.0.0
+	 */
+	public static function builder_fields_parameters($args = array()) {
+		$default = array(
+			'form_type'      => '',
+			'wrapper_class'  => '',
+			'page_title'     => '',
+			'switcher_types' => array(),
+			'switcher_title' => '',
+			'price_plan'     => '',
+		);
+
+		return wp_parse_args($args, $default);
+	}
+	
+	/**
+	 * Method CubeWp_build_tab_options
+	 *
+	 * @param array $data form data
+	 *
+	 * @return set array
+	 * @since  1.0.0
+	 */
+	protected static function CubeWp_build_tab_options(array $data) {
+		$return = array();
+		if (isset($data['switcher_types']) && is_array($data['switcher_types']) && count($data['switcher_types']) > 0) {
+			$options = $data['switcher_types'];
+			foreach ($options as $slug => $title) {
+				$plans                  = self::CubeWp_get_post_type_pricing_plans($slug);
+				$return[$slug]["title"] = $title;
+                if ( ! empty($plans) && is_array($plans) && (isset($data['form_type']) && $data['form_type'] == 'post_type' && class_exists('CubeWp_Payments_Load'))) {
+                    $return[$slug]["plans"] = $plans;
+                } else {
+                    $return[$slug]["plans"] = false;
+                }
+			}
+		}
+
+		self::$tab_options = $return;
+	}
+	
+	/**
+	 * Method CubeWp_get_post_type_pricing_plans
+	 *
+	 * @param string $post_type any post type slug
+	 *
+	 * @return array all price_plan's ids
+	 * @since  1.0.0
+	 */
+	protected static function CubeWp_get_post_type_pricing_plans($post_type) {
+		global $cwpOptions;
+		$paid_submission = isset($cwpOptions['paid_submission']) ? $cwpOptions['paid_submission'] : '';
+		if ($paid_submission == 'yes') {
+			$query_args = array(
+				'post_type'      => 'price_plan',
+				'post_status'    => 'publish',
+				'posts_per_page' => - 1,
+				'fields'         => 'ids',
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+				'meta_query'     => array(
+					array(
+						'key'     => 'plan_post_type',
+						'value'   => $post_type,
+						'compare' => '=',
+					)
+				)
+			);
+
+			return get_posts($query_args);
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Method builder_header
+	 *
+	 * @param string $title
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_header($title = '') {
+		return '
+		<ul id="size-list" class="hidden">
+            <li data-class="size-1-4" data-text="1 / 4" class="min"></li>
+            <li data-class="size-1-3" data-text="1 / 3"></li>
+            <li data-class="size-1-2" data-text="1 / 2"></li>
+            <li data-class="size-2-3" data-text="2 / 3"></li>
+            <li data-class="size-3-4" data-text="3 / 4"></li>
+        	<li data-class="size-1-1" data-text="1 / 1" class="max"></li>
+		</ul>
+		<section id="cubewp-title-bar">
+			' . self::cubewp_builder_title($title) . '
+			' . self::builder_get_shortcode() . '
+		</section>';
+	}
+	
+	/**
+	 * Method cubewp_builder_title
+	 *
+	 * @param string $title 
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function cubewp_builder_title($title = '') {
+		return "<h1>{$title}</h1>";
+	}
+	
+	/**
+	 * Method CubeWp_build_post_type_switcher
+	 *
+	 * @param array $data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function CubeWp_build_post_type_switcher(array $data) {
+		$title   = $data['switcher_title'];
+		$options = self::$tab_options;
+		$name    = "cubewp-builder-cpt";
+		$class   = "cubewp-tab-switcher cubewp-tab-switcher-trigger-on-load cubewp-tab-switcher-have-child";
+		$output  = '<div class="cubewp-builder-sidebar-option">';
+		$output .= '<label for="' . $name . '">' . $title . '</label>';
+		$output .= '<select name="' . $name . '" id="' . $name . '" class="' . $class . '">';
+		foreach ($options as $slug => $option) {
+			$output .= '<option data-switcher-target="cubewp-switcher-tab-' . $slug . '" value="' . $slug . '">' . $option["title"] . '</option>';
+		}
+		$output .= '</select>';
+		$output .= '</div>';
+
+		return $output;
+	}
+	
+	/**
+	 * Method CubeWp_build_plans_switcher
+	 *
+	 * @param array $data 
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function CubeWp_build_plans_switcher(array $data) {
+		$output = null;
+		if (isset($data['form_type']) && $data['form_type'] == 'post_type' && class_exists('CubeWp_Payments_Load')) {
+			$title   = esc_html__("Select Plan", "cubewp-framework");
+			$options = self::$tab_options;
+			if (isset($options) && count($options) != 0) {
+				foreach ($options as $slug => $option) {
+					if ( ! $option['plans']) {
+						continue;
+					}
+					$name        = "cubewp-builder-" . $slug . "-plan";
+					$class       = "cubewp-tab-switcher";
+					$price_plans = $option['plans'];
+					if (isset($price_plans) && ! empty($price_plans)) {
+						$output .= '<div class="cubewp-switcher-tab-' . $slug . ' cubewp-tab-switcher-target">';
+						$output .= '<div class="cubewp-builder-sidebar-option">';
+						$output .= '<label for="' . $name . '">' . $title . '</label>';
+						$output .= '<select name="' . $name . '" id="' . $name . '" class="' . $class . '">';
+						foreach ($price_plans as $id) {
+							$output .= '<option data-switcher-target="cubewp-switcher-tab-' . $id . '" value="' . $id . '">' . get_the_title($id) . '</option>';
+						}
+						$output .= '</select>';
+                        $output .= '</div>';
+						$output .= '</div>';
+					}
+				}
+			}
+		}
+
+		return $output;
+	}
+	
+	/**
+	 * Method cubewp_builder_area_topbar
+	 *
+	 * @param string $slug post type slug
+	 * @param array $data form data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function cubewp_builder_area_topbar(string $slug = "", array $data = array()) {
+        return '<div class="cubewp-builder-container-topbar">
+            ' . self::builder_form_settings_btn($data['form_type']) . '
+            ' . self::builder_add_Section_btn($data['form_type']) . '
+            '.self::builder_hidden_fields($slug, $data['form_type']).'
+        </div>';
+    }
+	
+	/**
+	 * Method cubewp_builder_area
+	 *
+	 * @param array $data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function cubewp_builder_area(array $data) {
+        $output = '';
+		$options = self::$tab_options;
+		if (isset($options) && count($options) > 0) {
+			foreach ($options as $slug => $option) {
+				$output .= '<div id="type-' . esc_attr__($slug) . '" class="cubewp-type-container cubewp-switcher-tab-' . esc_attr__($slug) . ' cubewp-tab-switcher-target">';
+                    if ( ! $option["plans"]) {
+	                    $output .= self::cubewp_builder_area_content($slug, $data);
+                    }else {
+                        foreach ($option["plans"] as $plan_id) {
+                            $data['price_plan'] = $plan_id;
+	                        $output .= '<div id="plan-' . esc_attr__($plan_id) . '" class="cubewp-plan-tab cubewp-switcher-tab-' . esc_attr__($plan_id) . ' cubewp-tab-switcher-target" data-id="' . esc_attr__($plan_id) . '">';
+	                        $output .= self::cubewp_builder_area_content($slug, $data);
+	                        $output .= '</div>';
+                        }
+                    }
+				$output .= '</div>';
+			}
+		}
+
+        return $output;
+	}
+	
+	/**
+	 * Method cubewp_builder_area_content
+	 *
+	 * @param string $slug post type slug
+	 * @param array $data form data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function cubewp_builder_area_content(string $slug, array $data) {
+		$output = '';
+		if ($data['form_type'] == 'single_layout') {
+			$output .= self::cubewp_builder_area_topbar($slug, $data) . '
+            <div class="cubewp-builder-area">
+                <div class="cubewp-single-layout-builder-container single-layout-builder">
+                    <div class="cubewp-single-layout-builder-content">
+                        <div class="cubewp-builder-sections">
+                            ' . apply_filters("cubewp/builder/single/right/content/section", "", $slug, $data) . '
+                        </div>
+                    </div>
+                    <div class="cubewp-single-layout-builder-sidebar">
+                        <div class="cubewp-builder-sections">
+                            ' . apply_filters("cubewp/builder/single/right/sidebar/section", "", $slug, $data) . '
+                        </div>
+                    </div>
+                </div>
+				' . self::cubewp_builder_no_section() . '
+            </div>';
+        }else {
+			$output .= self::cubewp_builder_area_topbar($slug, $data) . '
+            <div class="cubewp-builder-area">
+                ' . self::builder_settings($slug,$data) . '
+                <div class="cubewp-builder-sections">
+                    ' . apply_filters("cubewp/builder/default/right/section", '', $slug, $data) . '
+                </div>
+				' . self::cubewp_builder_no_section() . '
+            </div>';
+		}
+
+        return $output;
+    }
+	
+	/**
+	 * Method builder_hidden_fields
+	 *
+	 * @param string $key post type slug
+	 * @param string $FormType form type
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_hidden_fields($key, $FormType) {
+		$output        = '';
+		$hidden_fields = array(
+			array(
+				'class' => 'form-relation',
+				'name'  => 'form_relation',
+				'value' => $key,
+			),
+			array(
+				'class' => 'form-type',
+				'name'  => 'form_type',
+				'value' => $FormType,
+			),
+		);
+		foreach ($hidden_fields as $field) {
+			$output .= cwp_render_hidden_input($field);
+		}
+
+		return $output;
+	}
+	
+	/**
+	 * Method builder_single_layout
+	 *
+	 * @param array $data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_single_layout(array $data) {
+		$output = '';
+        $options = self::$tab_options;
+		if (isset($options) && count($options) > 0) {
+			foreach ($options as $slug => $option) {
+				$output .= '<div id="type-' . esc_attr__($slug) . '" class="cubewp-type-container cubewp-switcher-tab-' . esc_attr__($slug) . ' cubewp-tab-switcher-target">';
+				$output .= self::cubewp_builder_area_content($slug, $data);
+				$output .= '</div>';
+            }
+        }
+
+        return $output;
+	}
+	
+	/**
+	 * Method builder_add_Section_btn
+	 *
+	 * @param string $FormType
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_add_Section_btn($FormType) {
+		if ($FormType != 'search_filters' && $FormType != 'search_fields') {
+			return '<button class="button cwpform-add-section">
+                <span class="dashicons dashicons-plus"></span>
+                ' . esc_html__("Create Section", "cubewp-framework") . '
+            </button>';
+		}
+
+        return '';
+	}
+	
+	/**
+	 * Method builder_settings
+	 *
+	 * @param string $slug
+	 * @param array $data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_settings(string $slug, array $data) {
+		return '<div class="form-settings" style="display:none;">
+            ' . apply_filters("cubewp/builder/right/settings", '', $slug,$data) . '
+        </div>';
+	}
+	
+	/**
+	 * Method builder_get_shortcode
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_get_shortcode() {
+		$button_text = esc_html__("Get Shortcode", "cubewp-framework");
+		if(self::$FORM_TYPE == "single_layout") {
+		   $button_text = esc_html__("Save Form", "cubewp-framework");
+		}
+		return '<div class="shoftcode-area">
+			<div class="cwpform-shortcode"></div>
+			<button class="button-primary cwpform-get-shortcode">
+				'. $button_text .'
+			</button>
+		</div>';
+	 }
+	
+	/**
+	 * Method builder_form_settings_btn
+	 *
+	 * @param string $FormType
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	protected static function builder_form_settings_btn($FormType) {
+		if ($FormType != 'single_layout') {
+			return '<button class="button form-settings-form">
+                <span class="dashicons dashicons-admin-generic"></span>
+                ' . esc_html__("Form Settings", "cubewp-framework") . '
+            </button>';
+		}
+
+        return '';
+	}
+
+	/**
+	 * Method cubewp_builder_no_section
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */	
+	protected static function cubewp_builder_no_section() {
+		$FormType = self::$FORM_TYPE;
+		$output = '';
+		if ($FormType != 'search_filters' && $FormType != 'search_fields') {
+			$output .= '<div class="cubewp-builder-no-section hidden">
+				<img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/no-section.png" alt="' . esc_html__("No Section Image", "cubewp-framework") . '">
+				<h3>' . esc_html__("Let’s build something awesome today!", "cubewp-framework") . '</h3>';
+				$output .= '<div class="cubewp-builder-no-section-steps">';
+				if ($FormType == 'post_type' || $FormType == 'single_layout') {
+						$output .= '<p><span>' . esc_html__( "1", "cubewp-framework" ) . '</span>' . esc_html__( "Select a Post Type", "cubewp-framework" ) . '</p>';
+					}else {
+						$output .= '<p><span>' . esc_html__( "1", "cubewp-framework" ) . '</span>' . esc_html__( "Select a User Role", "cubewp-framework" ) . '</p>';
+					}
+					$output .= '<p><span>' . esc_html__("2", "cubewp-framework") . '</span>' . esc_html__("Create a Section", "cubewp-framework") . '</p>
+					<p><span>' . esc_html__("3", "cubewp-framework") . '</span>' . esc_html__("Drag a field from", "cubewp-framework") . '</p>
+					<p><span>' . esc_html__("4", "cubewp-framework") . '</span>' . esc_html__("Hit Get Shortcode", "cubewp-framework") . '</p>
+				</div>';
+				$output .= '<button class="button button-primary cubewp-trigger-add-section">
+	                <span class="dashicons dashicons-plus"></span>
+	                ' . esc_html__("Create Section", "cubewp-framework") . '
+	            </button>
+			</div>';
+		}
+
+		return $output;
+	}
+}

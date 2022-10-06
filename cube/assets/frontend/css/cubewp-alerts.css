@@ -1,0 +1,172 @@
+.cwp-alert {
+    max-width: 650px;
+    margin: 0 auto 15px auto;
+    padding: 1rem 3rem 1rem 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    position: relative;
+}
+.cwp-alert.cwp-alert-primary {
+    color: #084298;
+    background-color: #cfe2ff;
+    border-color: #b6d4fe;
+}
+.cwp-alert.cwp-alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+.cwp-alert.cwp-alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+.cwp-alert.cwp-alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+.cwp-alert svg {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+}
+.cwp-alert .cwp-alert-close {
+    box-sizing: content-box;
+    width: 30px;
+    height: 30px;
+    padding: 0 !important;
+    color: #000 !important;
+    border: 0;
+    border-radius: .25rem;
+    opacity: .5;
+    background: transparent !important;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+.cwp-alert .cwp-alert-close svg {
+    margin-right: 0;
+}
+/* Start Notification Style */
+.cwp-notification-area {
+    display: block;
+    position: fixed;
+    border-left: 15px solid #ccc;
+    -webkit-box-shadow: 0 1px 5px 0 rgb(234 236 238);
+    -moz-box-shadow: 0 1px 5px 0 rgba(234, 236, 238, 1);
+    box-shadow: 0 1px 5px 0 rgb(234 236 238);
+    bottom: -150px;
+    transition: all .5s;
+    z-index: 100;
+    background-color: #fff;
+    width: 550px;
+    left: 50%;
+    margin-left: -250px;
+    text-transform: capitalize;
+}
+.cwp-notification-area .cwp-notification-wrap {
+    border: 1px solid #e9ebf2;
+    border-left-color: rgb(233, 235, 242);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-left: 0;
+    display: inline-block;
+    width: 100%;
+    padding: 0 20px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row-reverse;
+}
+.cwp-notification-area .cwp-notification-icon{
+    display: flex;
+    align-items: center;
+}
+.cwp-notification-area .cwp-notification-icon img{
+    margin-top: 0;
+    margin-right: 20px;
+    width: 25px;
+    color: #b3c0ce;
+    cursor: pointer;
+}
+.cwp-notification-area .cwp-notification-content{
+    width: 90%;
+    display: inline-block;
+}
+.cwp-notification-area .cwp-notification-content h4{
+    font-size: 18px;
+    color: #333;
+}
+.cwp-notification-area.cwp-notification-error {
+    border-left: 15px solid #ff4a7a;
+}
+.cwp-notification-area.cwp-notification-warning {
+    border-left: 15px solid #fd0;
+}
+.cwp-notification-area.cwp-notification-success {
+    border-left: 15px solid #73d500;
+}
+.cwp-notification-area.cwp-notification-info {
+    border-left: 15px solid #17a2b8 !important;
+}
+
+.cwp-notification-area.active-wrap {
+    bottom: 220px;
+}
+
+.cubewp-post-author-actions {
+    position: fixed;
+    bottom: 50px;
+    right: 0;
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    box-shadow: -2px 3px 15px 0 #dddfff;
+    z-index: 99;
+    animation: cwp-slideIn 2s cubic-bezier(1, 0.02, 0, -0.72);
+}
+.cubewp-post-author-actions button {
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    margin: 0 5px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    min-width: 100px;
+    border: 1px solid;
+    transition: 300ms ease-in-out;
+}
+.cubewp-post-author-actions button,
+.cubewp-post-author-actions .cube-post-edit-btn:hover {
+    background-color: #1e90ff;
+    border-color: #1e90ff;
+    color: #fff;
+}
+.cubewp-post-author-actions button:hover,
+.cubewp-post-author-actions .cube-post-edit-btn {
+    color: #1e90ff;
+    border-color: #1e90ff;
+    background-color: #fff;
+}
+@keyframes cwp-slideIn {
+    0% {
+        right: -100%;
+    }
+    100% {
+        right: 0;
+    }
+}

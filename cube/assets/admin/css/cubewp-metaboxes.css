@@ -1,0 +1,293 @@
+.cwp-metaboxes tr{
+    border-bottom: 1px solid #e9e9e9;
+}
+.cwp-metaboxes tr:last-child{
+    border-bottom: none;
+}
+.cwp-metaboxes tr input[type="text"],
+.cwp-metaboxes tr input[type="number"],
+.cwp-metaboxes tr input[type="email"],
+.cwp-metaboxes tr input[type="url"],
+.cwp-metaboxes tr input[type="password"],
+.cwp-metaboxes tr textarea{
+    width: 100%;
+    margin: 0 0 5px 0;
+}
+.cwp-field-google-address-input-container {
+    position: relative;
+}
+.cwp-field-google-address-input-container .cwp-get-current-location {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+label.custom-checkbox-container {
+    margin: 5px 10px;
+    display: inline-block;
+}
+.cwp-metaboxes tr select{
+    min-width: 200px;
+}
+.cwp-metaboxes tr .cwp-upload-field input[type="text"]{
+    width: calc(100% - 85px);
+}
+.cwp-upload-field .cwp-remove-upload-button,
+.cwp-upload-field .cwp-remove-upload-button:hover{
+    color: red;
+    border-color: red;
+}
+.cwp-gallery-field .cwp-gallery{
+    border: 1px solid #ccd0d4;
+    width: 100%;
+    min-height: 300px;
+    margin-bottom: 10px;
+}
+.cwp-gallery-field .cwp-gallery .cwp-gallery-list{
+    margin: 0px;
+    padding: 5px;
+}
+.cwp-gallery-field .cwp-gallery-item{
+    width: calc((100% / 3) - 10px);
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.cwp-gallery-field .cwp-gallery-item .thumbnail img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+.cwp-gallery-field .cwp-gallery-item .cwp-gallery-actions {
+    position: absolute;
+    top: 0%;
+    left: 89%;
+    height: 22px;
+    width: 22px;
+    border-radius: 100%;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    background-color: #191E23;
+}
+.cwp-gallery-field .cwp-gallery-item .cwp-gallery-actions .remove-gallery-item {
+    text-decoration: none;
+    color: #d54e21;
+}
+.cwp-gallery-field .cwp-gallery-item .cwp-gallery-actions .remove-gallery-item:focus {
+    box-shadow: none;
+}
+
+.cwp-metaboxes .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.cwp-metaboxes .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.cwp-metaboxes .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.cwp-metaboxes .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.cwp-metaboxes input:checked + .slider {
+    background-color: #2196F3;
+}
+
+.cwp-metaboxes input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.cwp-metaboxes input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+.cwp-metaboxes .slider.round {
+    border-radius: 34px;
+}
+
+.cwp-metaboxes .slider.round:before {
+    border-radius: 50%;
+}
+.cwp-metaboxes .cwp-repeating-table {
+    border: #ccd0d4 solid 1px;
+    margin-bottom: 10px !important;
+}
+.cwp-add-row-btn{
+    float: right;
+}
+.cwp-metaboxes .cwp-repeating-table .cwp-repeating-count {
+    width: 16px;
+    text-align: center !important;
+    vertical-align: middle !important;
+    background: #f4f4f4;
+    cursor: move;
+    color: #aaa;
+    border-right: 1px solid #ccd0d4;
+    position: relative;
+}
+.cwp-metaboxes .cwp-repeating-table .cwp-repeating-fields{
+    background: #fff;
+    padding: 0px;
+}
+.cwp-metaboxes .cwp-repeating-table .cwp-repeating-fields th,
+.cwp-metaboxes .cwp-repeating-table .cwp-repeating-fields td{
+    padding: 15px 10px;
+}
+.cwp-metaboxes .cwp-repeating-table .cwp-clone-repeating-field{
+    display: none !important;
+}
+.cwp-remove-repeating-field{  
+    display: inline-block;
+    border: transparent solid 1px;
+    border-radius: 100%;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    line-height: 14px;
+    font-size: 14px;
+    background: #f7efef;
+    border-color: #a10000;
+    color: #dc3232;
+    text-decoration: none;
+    margin-top: 15px;
+}
+.cwp-required{
+    color: red;
+}
+.cwp-notice.cwp-error-message{
+    background: #ffe6e6;
+    color: #d12626;
+    border-left: #d12626 solid 3px;
+    margin: 10px 0 0px;
+    border-radius: 3px;
+}
+.form-table td .cwp-notice p {
+    font-size: 13px;
+    text-shadow: none;
+    color: inherit;
+    padding: 8px 10px;
+}
+.cwp-map-holder{
+    width: 100%;
+    height: 300px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/*------Date Picker Fields--------------*/
+.cwp-ui-datepicker .ui-datepicker {
+    background: #ffffff;
+    border: 1px solid #dddddd !important;
+    border-radius: 5px;
+    box-shadow: 0 8px 10px 0 rgb(0 0 0 / 52%);
+    padding: 20px;
+    width: 20%;
+    font-size: 12px;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0;
+    border: 0;
+    background: unset;
+    font-weight: normal;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header a.ui-datepicker-prev,
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header a.ui-datepicker-next {
+    color: #0b91ea;
+    cursor: pointer;
+    margin-bottom: 15px;
+    position: relative;
+    width: 50%;
+    left: unset;
+    top: unset;
+    height: unset;
+    font-size: 14px;
+    border: 0;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header a.ui-datepicker-prev span,
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header a.ui-datepicker-next span {
+    display: block;
+    text-indent: unset;
+    margin: 0;
+    position: relative;
+    left: unset;
+    top: unset;
+    background: unset;
+    background-image: unset;
+    width: unset;
+    height: unset;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header .ui-datepicker-title {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    margin-bottom: 15px;
+    width: 100%;
+    line-height: unset;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header .ui-datepicker-title select {
+    cursor: pointer;
+}
+.cwp-ui-datepicker .ui-datepicker table.ui-datepicker-calendar {
+    width: 100%;
+}
+.cwp-ui-datepicker .ui-datepicker tbody tr td {
+    text-align: center;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-buttonpane.ui-widget-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-buttonpane.ui-widget-content button {
+    cursor: pointer;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header .ui-datepicker-title .ui-datepicker-year,
+.cwp-ui-datepicker .ui-datepicker .ui-datepicker-header .ui-datepicker-title .ui-datepicker-month {
+    border: 1px solid #dcd7ca;
+    height: 25px;
+    padding: 0 5px;
+    width: 30%;
+    font-size: 14px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+.cwp-ui-datepicker .ui-datepicker .ui-timepicker-div .ui_tpicker_hour .ui_tpicker_hour_slider select,
+.cwp-ui-datepicker .ui-datepicker .ui-timepicker-div .ui_tpicker_minute .ui_tpicker_minute_slider select,
+.cwp-ui-datepicker .ui-datepicker .ui-timepicker-div .ui_tpicker_second .ui_tpicker_second_slider select {
+    padding: 7px;
+    max-width: 100%;
+    width: 100%;
+    min-width: 60px;
+}		

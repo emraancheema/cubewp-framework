@@ -1,0 +1,114 @@
+/*Box View*/
+.cwp-taxonomy-term-box {
+	background: #ffffff;
+	border: 1px solid #dcdce6;
+	border-radius: 8px;
+	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .102218));
+	margin: 0 0 calc((1.5rem * .5) * 2) 0;
+	overflow: hidden;
+	transition: 300ms;
+}
+.cwp-taxonomy-term-box:hover {
+	filter: none;
+}
+.cwp-taxonomy-term-box-heading {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	height: 120px;
+	justify-content: center;
+	position: relative;
+}
+.cwp-taxonomy-term-box-heading > svg {
+	fill: rgb(27, 27, 33);
+	margin-bottom: 8px;
+}
+.cwp-taxonomy-term-box-heading > i {
+	color: rgb(27, 27, 33);
+	margin-bottom: 8px;
+}
+.cwp-taxonomy-term-box-heading > img {
+	height: 100%;
+	left: 0;
+	object-fit: cover;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+.cwp-taxonomy-term-box-heading > img ~ a {
+	color: #ffffff;
+	z-index: 2;
+}
+.cwp-taxonomy-term-box-heading > .cwp-taxonomy-term-box-heading-overlay {
+	height: 100%;
+	left: 0;
+	opacity: 0.3;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+.cwp-taxonomy-term-box-heading > a {
+	font-style: normal;
+	font-weight: 500;
+	letter-spacing: .5px;
+	line-height: 1.5rem;
+	text-align: center;
+}
+.cwp-taxonomy-term-box-heading > a:after {
+	content: "";
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+.cwp-taxonomy-term-child-terms {
+	list-style: none;
+	margin: 0;
+	padding: 24px;
+}
+.cwp-taxonomy-term-child-terms-more {
+	border-top: 1px solid #f2f2f5;
+	display: none;
+	list-style: none;
+	margin: 12px 0 0 0;
+	padding: 0;
+}
+.cwp-taxonomy-term-child-terms li {
+	border-bottom: 1px solid #f2f2f5;
+	line-height: 1;
+	margin: 0 0 0 0;
+	padding: 12px 0;
+}
+.cwp-taxonomy-term-child-terms li:last-of-type {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+.cwp-taxonomy-term-child-terms > li:first-child {
+	padding-top: 0;
+}
+/*List View*/
+.cwp-taxonomy-term-list {
+	margin-bottom: .75rem;
+}
+.cwp-taxonomy-term-list > a {
+	display: block;
+	font-weight: 600;
+	margin: 0 0 5px 0;
+}
+.cwp-taxonomy-term-list ul {
+	list-style: none;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	position: relative;
+	top: -0.1875rem;
+}
+.cwp-taxonomy-term-list li {
+	line-height: 21px;
+	margin: 0 0 2px 0;
+}
+.cwp-taxonomy-term-list li a {
+	font-weight: 400;
+}

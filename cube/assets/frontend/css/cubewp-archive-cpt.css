@@ -1,0 +1,304 @@
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+@media only screen and (min-width: 768px) {
+    .cwp-archive-container .cwp-archive-content-container {
+        min-height: 700px;
+    }
+
+    .cwp-archive-container.cwp-active-ajax .cwp-archive-content-container {
+        position: relative;
+    }
+
+    .cwp-archive-container.cwp-active-ajax .cwp-archive-content-container:after {
+        background-image: url("../images/cubewp-archive-grid-loader.gif");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        content: "";
+        position: absolute;
+        height: 65%;
+        width: 95%;
+        left: 20px;
+        top: 45px;
+        z-index: 2;
+    }
+}
+
+@keyframes rotation {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/*---Archive Filters----*/
+.cwp-container.cwp-archive-container .cwp-archive-sidebar-filters-container {
+    padding: 0;
+}
+
+.cwp-search-filters-wrap {
+    padding: 12px 0;
+}
+
+.cwp-search-filters .cwp-reset-search-filters {
+    font-size: 14px;
+    padding: 8px 15px;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 0;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cwp-reset-search-filters p {
+    font-weight: bold;
+    margin: 0;
+}
+
+.cwp-search-filters .cwp-reset-search-filters a {
+    display: flex;
+    align-items: center;
+    word-break: keep-all;
+}
+
+.cwp-search-filters .cwp-reset-search-filters svg {
+    padding-right: 2px;
+}
+
+.cwp-search-filters-fields {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 0 0 5px 5px;
+    padding: 15px 5px;
+}
+
+.cwp-search-filters-fields .cwp-field-container {
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+.cwp-search-filters-fields .cwp-field-container ul li {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+/*----Archive Content---*/
+.cwp-archive-container.cwp-active-ajax .cwp-search-result-output {
+    display: none;
+}
+@import "loop.css";
+
+/*----Right Sidebar Map---*/
+.cwp-archive-container .cwp-archive-content-map {
+    height: 400px;
+    padding: 0;
+}
+
+#archive-map {
+    border-radius: 10px;
+    height: 100%;
+    margin: 15px 0;
+    position: relative;
+    width: 100%;
+}
+
+/*------Pagination-------*/
+.cwp-pagination {
+    display: block;
+    margin: 30px 0;
+}
+
+.cwp-pagination ul {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.cwp-pagination ul li {
+    list-style: none;
+    line-height: 12px;
+}
+
+.cwp-pagination ul li a,
+.cwp-pagination ul li a:focus {
+    color: #7e84a3;
+    margin: 0 10px;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cwp-pagination ul li.active a {
+    background: #007BFF !important;
+    border-radius: 5px;
+    color: #fff;
+    padding: 10px 18px;
+}
+
+.cwp-pagination ul li svg {
+    display: block;
+}
+
+.cwp-filtered-result-count {
+    margin: 0 auto 0 0;
+}
+
+/*responsive*/
+.cwp-reset-search-filters p {
+    font-weight: bold;
+    margin: 0;
+    width: 80%;
+    pointer-events: none;
+}
+
+@media screen and (max-width: 768px) {
+    .cwp-search-filters-fields {
+        display: none;
+    }
+
+    .cwp-reset-search-filters p {
+        pointer-events: auto;
+    }
+
+    div#headerimg h1 {
+        font-size: 44px;
+    }
+
+    .cwp-archive-container {
+        padding: 20px 30px;
+    }
+
+    .cwp-archive-container .cwp-archive-content-container {
+        padding: 0 0px;
+    }
+
+    select#cwp-sorting-filter {
+        width: 50%;
+    }
+
+    .cwp-post {
+        margin: 10px 0px;
+    }
+
+    .list-view .cwp-post-content {
+        padding: 4px 18px;
+    }
+
+    .list-view .cwp-post-thumbnail {
+        height: 150px !important;
+    }
+
+    .list-view ul.cwp-post-terms {
+        padding: 9px 20px 0 20px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .cwp-post-content h4 {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 1.3;
+        margin: 0 0 3px 0;
+    }
+
+    .cwp-post-content {
+        padding: 5px 8px 7px 10px;
+    }
+
+    .cwp-post-terms {
+        padding: 3px 10px 5px 10px;
+        line-height: 18px;
+    }
+
+    .cwp-post {
+        margin: 10px 10px;
+    }
+
+    .cwp-post-thumbnail {
+        height: 135px;
+        width: 100%;
+    }
+
+    .cwp-post-terms li a,
+    .cwp-post-content p {
+        font-size: 12px;
+    }
+
+    .cwp-archive-container .cwp-archive-content-container {
+        padding: 0 20px;
+    }
+
+    #cwp-sorting-filter {
+        width: 38% !important;
+    }
+
+    .cwp-archive-container .cwp-archive-content-map {
+        height: 250px;
+    }
+
+    .cwp-search-filters-fields .cwp-field-container {
+        padding: 0 !important;
+    }
+
+    ul.cwp-field-checkbox-container li label,
+    ul.cwp-field-radio-container li label {
+        font-size: 12px;
+    }
+
+    .cwp-search-field label,
+    .cwp-switch-container label {
+        display: block;
+        font-size: 14px;
+    }
+
+    .cwp-search-filters-fields input[type="number"] {
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    .cwp-search-filters-fields input[type=number]::-webkit-inner-spin-button,
+    .cwp-search-filters-fields input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .cwp-archive-container.cwp-active-ajax .cwp-archive-content-container::after {
+        height: 52%;
+        left: 16px;
+    }
+}
+
+@media (min-width: 576px) {
+    .cwp-container.cwp-archive-container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .cwp-container.cwp-archive-container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .cwp-container.cwp-archive-container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cwp-container.cwp-archive-container {
+        max-width: 1140px;
+    }
+}
