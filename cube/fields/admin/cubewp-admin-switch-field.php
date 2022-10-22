@@ -35,10 +35,10 @@ class CubeWp_Admin_Switch_Field extends CubeWp_Admin {
         $output = $this->cwp_field_wrap_start($args);
         
             $checked = '';
-            if( isset($args['value']) && $args['value'] == 'yes' ){
+            if( isset($args['value']) && $args['value'] == 'Yes' ){
                 $checked = 'checked="checked"';
             }else{
-                $args['value'] = 'no';
+                $args['value'] = 'No';
             }
 
             $output .= '<label class="switch" for="cwp-meta-'. $args['id'] .'">';

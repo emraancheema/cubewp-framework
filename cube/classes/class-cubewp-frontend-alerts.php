@@ -11,43 +11,45 @@ class CubeWp_Frontend_Alerts{
         wp_enqueue_style('cwp-alerts');
         wp_enqueue_script('cwp-alerts');
         ?>
-        <div class="cwp-notification-area cwp-notification-info">
-            <div class="cwp-notification-wrap">
-                <div class="cwp-notification-icon">
-                    <img alt="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE2SURBVFhH7dhBaoQwFMZxoZu5w5ygPc7AlF6gF5gLtbNpwVVn7LKQMG4b3c9ZCp1E3jdEEI1JnnGRP7h5Iv4wKmiRy+U8qkT7Wkn1VpblA43Yqn7abSWb+luqRxpNZ3D6oP+zUO+cSIPT57jqc/1p4I7G0xmUwXEibdxJ/j7T2D1OZDAOcSD7y9ruaexfTGR0HIqBZMOhECQ7DvkgF8OhOcjFccgFmQyHxpDJcWgIuRoc6iFl87kqHOqunFQfBtltQr3QrnVkLWsHxHLT7rTZ95y5cvflXgNy6IHo3ZNCHZMhx55WQh6TIV1eJcmQLji0OHIODi2G9MEhdmQIDrEhY+BQdGRMHIqG5MChYKSNC/puHSkIqQ+qOXGoh5TqQOPpvi7N06x/JQF1SI0TQmxolMvl3CuKG6LJpCW33jxQAAAAAElFTkSuQmCC">
-                </div>
-                <div class="cwp-notification-content">
-                    <h4></h4>
-                </div>
-            </div>
+        <div class="cwp-alert cwp-js-alert">
+            <h6 class="cwp-alert-heading"></h6>
+            <div class="cwp-alert-content"></div>
+            <button type="button" class="cwp-alert-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                </svg>
+            </button>
         </div>
         <?php
     }
     
-    public function cubewp_post_confirmation( $post_id = 0 ){
-        global $cwpOptions;
+    public static function cubewp_post_views($post_id) {
         // Adding Post Views
-        $post_views_count = get_post_meta($post_id, "cubewp_post_views", true);
-        $post_views_count = ! empty($post_views_count) ? $post_views_count : 0;
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        if ( ! isset($_SESSION['cubewp_added_post_view']) || ! is_array($_SESSION['cubewp_added_post_view'])) {
+        if ( ! isset($_SESSION['cubewp_added_post_view'][$post_id])) {
+            $post_views_count = get_post_meta($post_id, "cubewp_post_views", true);
+            $post_views_count = ! empty($post_views_count) ? $post_views_count : 0;
             $post_views_count += 1;
-            if ( ! is_array($_SESSION['cubewp_added_post_view'])) {
+            if ( isset($_SESSION['cubewp_added_post_view']) && ! is_array($_SESSION['cubewp_added_post_view'])) {
                 $_SESSION['cubewp_added_post_view'] = array();
             }
             $_SESSION['cubewp_added_post_view'][$post_id] = true;
+            update_post_meta($post_id, "cubewp_post_views", $post_views_count);
         }
-        update_post_meta($post_id, "cubewp_post_views", $post_views_count);
+    }
 
+    public function cubewp_post_confirmation( $post_id = 0 ){
+        global $cwpOptions;
+
+        self::cubewp_post_views($post_id);
         // Post Action Bar For Post Author
 	    $user_id = get_current_user_id();
         $author_id = get_post_field ('post_author', $post_id);
         if ($user_id == $author_id) {
             $post_type = get_post_type($post_id);
 	        $submit_edit_page = isset($cwpOptions['submit_edit_page'][$post_type]) ? $cwpOptions['submit_edit_page'][$post_type] : '';
-	        $submit_edit_post     =  isset($cwpOptions['submit_edit_post']) ? $cwpOptions['submit_edit_post'] : '';
 	        $post_admin_approved  =  isset($cwpOptions['post_admin_approved']) ? $cwpOptions['post_admin_approved'] : '';
 	        $paid_submission      =  isset($cwpOptions['paid_submission']) ? $cwpOptions['paid_submission'] : '';
 	        $postStatus           =  get_post_status($post_id);
@@ -57,6 +59,7 @@ class CubeWp_Frontend_Alerts{
 	        if( $payment_status == 'pending' && $paid_submission == 'yes' && $plan_price > 0 ){
 		        $payment_status = apply_filters('cubewp_check_post_payment_status', '', $plan_id, $post_id);
 	        }
+
             ?>
             <div class="cubewp-post-author-actions">
             <?php if (!empty($submit_edit_page)) { ?>
@@ -88,16 +91,14 @@ class CubeWp_Frontend_Alerts{
             ?>
             <script>
                 jQuery(window).load(function(){
-                    jQuery('.cwp-notification-area').removeClass('cwp-notification-info').removeClass('cwp-notification-error').removeClass('cwp-notification-success').removeClass('cwp-notification-warning');
-                    jQuery('.cwp-notification-area').addClass('cwp-notification-info').addClass('active-wrap');
-                    jQuery('.cwp-notification-area .cwp-notification-content h4').html('<?php echo wp_kses_post($this->cubewp_get_notification_msg('info')); ?>');
+                    cwp_notification_ui('warning', '<?php echo wp_kses_post($this->cubewp_get_notification_msg()); ?>');
                 });
             </script>
             <?php
         }
     }
     
-    public function cubewp_get_notification_msg( $notification_type = 'info' ){
+    public function cubewp_get_notification_msg(){
         $free_msg =  true;
         if(isset($_GET['p']) && isset($_GET['post_type']) && !is_admin()) {
             $post_id   =   wp_kses_post($_GET['p']);
@@ -110,7 +111,7 @@ class CubeWp_Frontend_Alerts{
             }
         }
         if( $free_msg ){
-            return sprintf(__('Your %s is pending for review.', 'listingpro'), get_post_type($post_id));
+            return sprintf(__('Your %s is pending for review.', 'cubewp-framework'), get_post_type($post_id));
         }else{
             return sprintf(__('Your %s is pending! Please proceed to make it published', 'cubewp-framework'), get_post_type($post_id));
         }

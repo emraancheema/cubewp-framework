@@ -64,6 +64,7 @@ class CubeWp_Settings_Ajax_Hooks {
             update_option('cwpOptions', $values);
             $status = 'success';
             $msg = esc_html__('Option Saved Successfully.', 'cubewp-framework');
+            do_action( 'cubewp/after/settings/saved', 'saved');
         }
         if ($status != 'success') {
             $class = 'danger';

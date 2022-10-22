@@ -433,10 +433,7 @@ if ( ! function_exists("get_post_save_button")) {
  */
 if ( ! function_exists("CubeWp_frontend_grid_HTML")) {
 	function CubeWp_frontend_grid_HTML($post_id, $col_class = 'cwp-col-12 cwp-col-md-6') {
-		$thumbnail_url = get_the_post_thumbnail_url($post_id);
-		if (empty($thumbnail_url)) {
-			$thumbnail_url = CWP_PLUGIN_URI . 'cube/assets/frontend/images/default-fet-image.png';
-		}
+		$thumbnail_url = cubewp_get_post_thumbnail_url($post_id);
 		$post_content = strip_tags(get_the_content('', '', $post_id));
 		if (str_word_count($post_content, 0) > 10) {
 			$words        = str_word_count($post_content, 2);
@@ -498,6 +495,17 @@ if ( ! function_exists("CubeWp_frontend_grid_HTML")) {
 	}
 }
 
+if ( ! function_exists("cubewp_get_post_thumbnail_url")) {
+	function cubewp_get_post_thumbnail_url($post_id) {
+		$thumbnail_url = get_the_post_thumbnail_url($post_id);
+		if (empty($thumbnail_url)) {
+			$thumbnail_url = CWP_PLUGIN_URI . 'cube/assets/frontend/images/default-fet-image.png';
+		}
+
+		return $thumbnail_url;
+	}
+}
+
 /**
  * Method get_user_details
  *
@@ -529,7 +537,7 @@ if ( ! function_exists("get_user_details")) {
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         </svg>
                     </li>
-                    <li>
+					<li>
                         <a href="mailto:<?php echo $user_email ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  viewBox="0 0 16 16">
@@ -537,14 +545,11 @@ if ( ! function_exists("get_user_details")) {
                             </svg>
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo $user_url ?>">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 viewBox="0 0 16 16">
-                                <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
-                            </svg>
-                        </a>
-                    </li>
+					<?php if(!empty($user_url)){ ?>
+						<li><a target="_blank" href="<?php echo  $user_url ?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+							<path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+						</svg></a></li>
+					<?php } ?>
                 </ul>
             </div>
         </div>
@@ -1165,12 +1170,14 @@ if ( ! function_exists('cubewp_get_template_path')) {
  */
 if ( ! function_exists('cubewp_extra_features')) {
 	function cubewp_extra_features() {
-		$add_ons = CubeWp_Add_On::cubewp_add_ons();
+		$addon = new CubeWp_Add_Ons();
+		$add_ons = $addon->cubewp_add_ons();
 		foreach ($add_ons as $key => $add_on) {
-			$id     = $add_on['id'];
+			$slug     = $add_on['slug'];
 			$load   = $add_on['load'];
-			$cubewp = CWP()->cubewp_options($id);
-			if (isset($cubewp->license) && $cubewp->license == 'valid') {
+			$cubewp = CWP()->cubewp_options($slug);
+			$lic = $addon::LIC.$addon::ENSE;
+			if (isset($cubewp->$lic) && $cubewp->$lic == 'valid') {
 				if (class_exists($load)) {
 					$load::instance();
 				}
@@ -1336,7 +1343,7 @@ if ( ! function_exists("cubewp_user_default_fields")) {
 			'user_url'     => array(
 				'label' => __("Website", "cubewp-framework"),
 				'name'  => 'user_url',
-				'type'  => 'text',
+				'type'  => 'url',
 			),
 			'display_name' => array(
 				'label' => __("Display Name", "cubewp-framework"),
@@ -1359,7 +1366,7 @@ if ( ! function_exists("cubewp_user_default_fields")) {
 				'type'  => 'text',
 			),
 			'description'  => array(
-				'label' => __("Biographical Info", "cubewp-framework"),
+				'label' => __("Bio", "cubewp-framework"),
 				'name'  => 'description',
 				'type'  => 'textarea',
 			),
@@ -1377,22 +1384,47 @@ if ( ! function_exists("cubewp_user_default_fields")) {
  */
 if ( ! function_exists("cubewp_user_login_fields")) {
 	function cubewp_user_login_fields() {
-		$wp_default_fields = array(
+	   $wp_default_fields = array(
+		  'username' => array(
+			 'label'    => __("Username/Email", "cubewp-framework"),
+			 'name'     => 'user_login',
+			 'type'     => 'text',
+			 'required' => 1,
+			 'class'    => 'required',
+			 'validation_msg' => esc_html__("Please Enter Username Or Email", "cubewp-framework")
+		  ),
+		  'password' => array(
+			 'label'    => __("Password", "cubewp-framework"),
+			 'name'     => 'user_pass',
+			 'type'     => 'password',
+			 'required' => 1,
+			 'class'    => 'required',
+			 'validation_msg' => esc_html__("Please Enter Password", "cubewp-framework")
+		  ),
+	   );
+ 
+	   return $wp_default_fields;
+	}
+}
+ 
+/**
+ * Method cubewp_forget_password_fields
+*
+* @return array
+* @since  1.0.0
+*/
+if ( ! function_exists("cubewp_forget_password_fields")) {
+	function cubewp_forget_password_fields() {
+		return array(
 			'username' => array(
 				'label'    => __("Username/Email", "cubewp-framework"),
 				'name'     => 'user_login',
 				'type'     => 'text',
 				'required' => 1,
-			),
-			'password' => array(
-				'label'    => __("Password", "cubewp-framework"),
-				'name'     => 'user_pass',
-				'type'     => 'password',
-				'required' => 1,
+				'class'    => 'required',
+				'validation_msg' => esc_html__("Please Enter Username Or Email", "cubewp-framework")
 			),
 		);
-
-		return $wp_default_fields;
 	}
 }
 
@@ -1476,3 +1508,53 @@ if ( ! function_exists("cwp_custom_mime_types")) {
 
 	add_filter('upload_mimes', 'cwp_custom_mime_types');
 }
+
+if ( ! function_exists("cubewp_add_user_roles_caps")) {
+	function cubewp_add_user_roles_caps() {
+		$roles = array(
+			"subscriber",
+			"contributor"
+		);
+		foreach ( $roles as $role ) {
+		$role_obj = get_role( $role );
+		// Add a new capability.
+		$role_obj->add_cap( 'edit_posts' );
+		$role_obj->add_cap( 'read' );
+		$role_obj->add_cap( 'delete_posts' );
+		}
+	}
+	
+	add_action('init', 'cubewp_add_user_roles_caps');
+}
+
+if ( ! function_exists("cubewp_custom_field_group_visibility")) {
+	function cubewp_custom_field_group_secure($post_id = 0) {
+		if($post_id == 0)
+		return false;
+		
+		$visibility = get_post_meta($post_id, '_cwp_group_visibility', 'true');
+		if(!empty($visibility) && 'secure' == $visibility){
+			return true;
+		}
+		return false;
+	}
+}
+
+if ( ! function_exists( 'cubewp_send_mail' ) ) {
+	function cubewp_send_mail( $to, $subject, $message, $headers = array(), $attachments = array() ) {
+	   if ( empty( $to ) || empty( $subject ) || empty( $message ) ) {
+		  return false;
+	   }
+	   $website_name = get_bloginfo( 'name' );
+	   $admin_email  = apply_filters( "cubewp_emails_from_mail", get_option( 'admin_email' ) );
+ 
+	   $headers[] = 'Content-Type: text/html; charset=UTF-8';
+	   $headers[] = 'From: ' . esc_html( $website_name ) . ' <' . esc_html( $admin_email ) . '>';
+ 
+	   add_filter( 'wp_mail_content_type', function () {
+		  return 'text/html';
+	   } );
+ 
+	   return wp_mail( $to, $subject, $message, $headers, $attachments );
+	}
+ }

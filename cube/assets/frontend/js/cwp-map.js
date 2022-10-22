@@ -32,36 +32,38 @@ function cwp_rand_id(length, preFix = '', postFix = '') {
     return preFix + ID + postFix;
 }
 
-var cptSingleMap = jQuery('.cpt-single-map');
-if(cptSingleMap.length > 0){
-    function CWP_Single_Map(tiles = Tiles()) {
-            cptSingleMap.each(function(){
-                var thisObj = jQuery(this),
-                    latitude  = parseFloat(thisObj.attr('data-latitude')),
-                    longitude = parseFloat(thisObj.attr('data-longitude')),
-                    uniqueID = cwp_rand_id(6, 'cwp-map-');
-                thisObj.empty();
-                thisObj.html('<div id="' + uniqueID + '"></div>');
+function CWP_Single_Map() {
+    var cptSingleMap = jQuery('.cpt-single-map');
+    if (cptSingleMap.length > 0) {
+        cptSingleMap.each(function () {
+            var thisObj = jQuery(this),
+                latitude = parseFloat(thisObj.attr('data-latitude')),
+                longitude = parseFloat(thisObj.attr('data-longitude')),
+                uniqueID = cwp_rand_id(6, 'cwp-map-'),
+                tiles = Tiles();
+            thisObj.empty();
+            thisObj.html('<div id="' + uniqueID + '"></div>');
 
-                if( typeof latitude == "undefined" || latitude === '' ) latitude = cubewp_map_params.map_latitude;
-                if( typeof longitude == "undefined" || longitude === '' ) longitude = cubewp_map_params.map_longitude;
+            if (typeof latitude == "undefined" || latitude === '') latitude = cubewp_map_params.map_latitude;
+            if (typeof longitude == "undefined" || longitude === '') longitude = cubewp_map_params.map_longitude;
 
-                if( typeof latitude == "undefined" || latitude === '' ) latitude = 51.5072;
-                if( typeof longitude == "undefined" || longitude === '' ) longitude = -0.128;
+            if (typeof latitude == "undefined" || latitude === '') latitude = 51.5072;
+            if (typeof longitude == "undefined" || longitude === '') longitude = -0.128;
 
-                if(checkIfValidlatitudeAndlongitude(latitude+','+latitude)){
-                    latlng = L.latLng(latitude, longitude);
-                    jQuery('#' + uniqueID).css('height', '100%');
-                    var map = L.map(uniqueID, {center: latlng, zoom: cubewp_map_params.map_zoom, layers: [tiles]});
-                    var marker = L.marker(new L.LatLng(latitude, longitude));
-                    map.addLayer(marker);
-                }
-                
-
-            });
+            if (checkIfValidlatitudeAndlongitude(latitude + ',' + latitude)) {
+                var map = latlng = marker = null;
+                latlng = new L.latLng(latitude, longitude);
+                jQuery('#' + uniqueID).css('height', '100%');
+                map = new L.map(uniqueID, {center: latlng, zoom: cubewp_map_params.map_zoom, layers: [tiles]});
+                marker = new L.marker(new L.LatLng(latitude, longitude));
+                map.addLayer(marker);
+            }
+        });
     }
-    CWP_Single_Map();
 }
+
+CWP_Single_Map();
+
 function checkIfValidlatitudeAndlongitude(str) {
     // Regular expression to check if string is a latitude and longitude
     const regexExp = /^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/gi;

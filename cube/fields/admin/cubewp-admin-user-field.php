@@ -51,6 +51,7 @@ class CubeWp_Admin_User_Field {
 		    }
 		    $args['options'] = $options;
 		    $args['class']  = $args['class'] . ' cubewp-remote-options ';
+            $args['extra_attrs'] = isset($args['extra_attrs']) ? $args['extra_attrs'] : '';
 		    $args['extra_attrs']  = $args['extra_attrs'] . ' data-dropdown-type="user" data-dropdown-values="' . $args['filter_user_roles'] . '" ';
 	    }else {
 		    $args['options'] = cwp_get_users_by_role( $args['filter_user_roles'] );

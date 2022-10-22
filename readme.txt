@@ -1,11 +1,11 @@
-=== CubeWP - The Most Advanced WordPress Dynamic Content Framework ===
+=== CubeWP - The Most Advanced End-to-End WordPress Dynamic Content Framework ===
 Contributors: Emraan Cheema
 Donate link: NA
 Tags: custom fields, custom post types, custom taxonomies, cpt, meta boxes, custom field, post type, taxonomy, meta, admin, advanced, custom, edit, field, file, image, magic fields, post types, more fields, post, repeater, simple fields, text, textarea, type, cms, fields post
 Requires at least: 4.3
 Requires PHP: 5.6
-Tested up to: 6.0.2
-Stable tag: 1.0.1
+Tested up to: 6.0.3
+Stable tag: 1.0.3
 License: GPLv2 or later
 
 CubeWP is an end-to-end dynamic content framework for WordPress
@@ -110,3 +110,30 @@ Plug released.
 = 1.0.1 - 2022-10-05
 
 - Several minor UI/UX fixes
+
+= 1.0.2 2022-10-06
+
+* New: Date Picker field type added in repeating fields.
+* New: Time Picker field type added In repeating field.
+* New: Post field type added In repeating field.
+* New: Share and save post button's On/Off option added in theme settings.
+* Tweak: Re-arrangment of CubeWP Settings.
+* Tweak: UI/UX.
+* Fix: Typos in custom fields and post types.
+* Fix: Multiple repeating fields mix in one due to array break.
+
+= 1.0.3 2022-10-22
+
+* New: Gallery field type in repeating Field of custom fields (Post types)
+* New: Google Address field type in custom fields (Taxonomies)
+* New: URL field type in custom fields (Taxonomies)
+* New: Gallery field field type in custom fields (Taxonomies)
+* New: AM/PM added in the Time picker field
+* Tweak: UI/UX
+* Tweak: Typos in CubeWP Settings, Custom Fields, and Alerts massages.
+* Tweak: Increased Custom field label's character limit to 25
+* Tweak: Alert POP Design
+* Tweak: Re-arrangment of CubeWP Settings.
+* Fix: Multiple conditional fields with one field.
+* Fix: Conditional field with conditional rule "has no value"
+* Fix: File Field type required with Gutenberg editor.

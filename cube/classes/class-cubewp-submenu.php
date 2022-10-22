@@ -114,37 +114,7 @@ class CubeWp_Submenu {
                 'parent'       => 'cube_wp_dashboard',
                 'title'        => esc_html__('Search Forms', 'cubewp-framework'),
                 'callback'     => 'cubewp-admin-search-fields',
-            ),/* 
-            array(
-                'id'           =>  'cubewp-user-registration-form',
-                'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('User SignUp Form', 'cubewp'),
-                'callback'     =>  'cubewp-user-registration-form',
             ),
-            array(
-                'id'           =>  'cubewp-user-profile-form',
-                'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('User Profile Form', 'cubewp'),
-                'callback'     =>  'cubewp-user-profile-form',
-            ),
-            array(
-                'id'           =>  'cubewp-post-types-form',
-                'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('Post Types Form', 'cubewp'),
-                'callback'     =>  'cubewp-post-types-form',
-            ),
-            array(
-                'id'           =>  'cubewp-single-layout',
-                'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('Single Layout', 'cubewp'),
-                'callback'     =>  'cubewp-single-layout',
-            ),
-            array(
-                'id'           =>  'cubewp-user-dashboard',
-                'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('User Dashboard', 'cubewp'),
-                'callback'     =>  'cubewp-user-dashboard',
-            ), */
             array(
                 'id'        => 'cubewp-settings', // Expected to be overridden if dashboard is enabled.
                 'parent'    => 'cube_wp_dashboard',

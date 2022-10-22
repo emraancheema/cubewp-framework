@@ -272,6 +272,10 @@ class CubeWp_Taxonomy_Custom_Fields {
         $field_types['textarea']       = esc_html__('Textarea', 'cubewp-framework');
         $field_types['image']          = esc_html__('Image', 'cubewp-framework');
         $field_types['color']          = esc_html__('Color', 'cubewp-framework');
+        $field_types['url']    = esc_html__('URL', 'cubewp-framework');
+        $field_types['gallery']    = esc_html__('Gallery', 'cubewp-framework');
+        $field_types['oembed']    = esc_html__('oEmbed', 'cubewp-framework');
+        $field_types['google_address']    = esc_html__('Google Address', 'cubewp-framework');
         
         return apply_filters('cwp_taxonomy_custom_field_types', $field_types);
     }

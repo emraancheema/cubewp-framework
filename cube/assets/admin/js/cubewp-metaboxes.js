@@ -68,9 +68,9 @@ jQuery(document).ready(function ($){
     
     jQuery(document).on('change', '.switch input[class="switch-field"]', function () {
         if(jQuery(this).is(":checked")){
-            jQuery(this).closest('label').find('input[type="hidden"]').val('yes').trigger("input");
+            jQuery(this).closest('label').find('input[type="hidden"]').val('Yes').trigger("input");
         }else{
-            jQuery(this).closest('label').find('input[type="hidden"]').val('no').trigger("input");
+            jQuery(this).closest('label').find('input[type="hidden"]').val('No').trigger("input");
         }
     });
     
@@ -84,7 +84,7 @@ jQuery(document).ready(function ($){
 
     jQuery(document).on('click', '.cwp-gallery-btn', function (e) {
         e.preventDefault();
-
+    
         var thisObj    = jQuery(this),
         gallery_id = thisObj.closest('.cwp-gallery-field').data('id'),
         custom_uploader = wp.media({
@@ -93,14 +93,31 @@ jQuery(document).ready(function ($){
             multiple: true
         }).on('select', function() {
             var attachments = custom_uploader.state().get('selection').map(function( attachment_data ) {
-                attachment_data.toJSON();
-                return attachment_data;
-            });
-
-            var attachments_list = '';
+                    attachment_data.toJSON();
+                    return attachment_data;
+                }),
+                repeating_name = '',
+                repeating_rand = '';
+            var attachments_list = '',
+                rand_id = makeid(5);
             jQuery.each( attachments, function( key, attachment_data ) {
+                var input_name = 'cwp_meta['+ gallery_id +'][]';
+    
+                if (thisObj.closest('.cwp-repeating-fields').length > 0) {
+                    var repeating_id = thisObj.closest('.cwp-repeating-fields').closest(".cwp-field").find('.cwp-add-row-btn').data('id'),
+                        gallery_list = thisObj.closest(".cwp-field").find(".cwp-gallery-list").find(".cwp-gallery-item");
+                    repeating_name = "[" + repeating_id + "]";
+                    repeating_rand = "[" + rand_id + "]";
+                    if (gallery_list.length > 0) {
+                        gallery_list = gallery_list.first().find("input[type=hidden]").attr("name");
+                        input_name = gallery_list;
+                    }else {
+                        input_name = 'cwp_meta' + repeating_name + '['+ gallery_id +']' + repeating_rand + '[]';
+                    }
+                }
+    
                 var attachment = '<li class="cwp-gallery-item" data-id="'+ attachment_data.id +'">\
-                    <input type="hidden" name="cwp_meta['+ gallery_id +'][]" value="'+ attachment_data.id +'">\
+                    <input type="hidden" name="' + input_name + '" value="'+ attachment_data.id +'">\
                     <div class="thumbnail">\
                         <img src="'+ attachment_data.attributes.url +'" alt="'+ attachment_data.attributes.title +'">\
                     </div>\
@@ -110,9 +127,9 @@ jQuery(document).ready(function ($){
                 </li>';
                 attachments_list += attachment;
             });
-            jQuery('#cwp-gallery-'+ gallery_id +' .cwp-gallery-list').append(attachments_list);
+            thisObj.closest(".cwp-field").find(".cwp-gallery-list").append(attachments_list);
         }).open();
-
+    
     });
 
     jQuery(document).on('click', '.remove-gallery-item', function (e) {
@@ -129,6 +146,11 @@ jQuery(document).ready(function ($){
             success: function (resp) {
                 thisObj.closest('.cwp-repeating-field').find('.cwp-repeating-table').append(resp.sub_field_html);
                 cwp_repreating_fields_county(thisObj);
+                if (typeof wp !== 'undefined' && typeof wp.blocks !== 'undefined') {
+                    if (new_row.find(".required").length > 0) {
+                        wp.data.dispatch('core/editor').lockPostSaving('cubewp_have_required_fields');
+                    }
+                }
             }
         });
         
@@ -151,13 +173,6 @@ jQuery(document).ready(function ($){
         });
     }
     
-    if(jQuery('.form-table #plan_type').length > 0){
-        cwp_hide_show_plan_fields();
-    }
-    jQuery(document).on('change', '.form-table #plan_type', function (e) {
-        cwp_hide_show_plan_fields();
-    });
-
     jQuery(document).on('click', '.cubewp-address-manually', function () {
         var $this = jQuery(this),
             parent = $this.closest(".cwp-google-address"),
@@ -178,17 +193,18 @@ jQuery(document).ready(function ($){
             long.attr("type", "text");
         }
     });
-    
-    function cwp_hide_show_plan_fields(){
-        var plan_type = jQuery('.form-table #plan_type').val();
-        if(plan_type == 'package'){
-            jQuery('.form-table #no_of_posts').closest('tr').show();
-        }else{
-            jQuery('.form-table #no_of_posts').closest('tr').hide();
-        }
-    }
 
 });
+
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
 function cwp_display_groups_meta_by_terms(){
     jQuery(".postbox .group-terms").each(function() {
@@ -295,7 +311,7 @@ function cwp_display_groups_meta_by_user_role(){
 function cwp_condition_logic(selectedVal, fieldVal, Compare, Target) {
     Target = '.' + Target;
     if (Compare === '!empty') {
-        if (selectedVal !== '' || typeof selectedVal != 'undefined') {
+        if (selectedVal !== '' && typeof selectedVal != 'undefined') {
             jQuery(Target).show();
             return true;
         } else {
@@ -312,18 +328,18 @@ function cwp_condition_logic(selectedVal, fieldVal, Compare, Target) {
         }
     } else if (Compare === '==') {
         if (selectedVal === fieldVal) {
-            jQuery(Target).show();
+            jQuery(Target+fieldVal).show();
             return true;
         } else {
-            jQuery(Target).hide();
+            jQuery(Target+fieldVal).hide();
             return true;
         }
     } else if (Compare === '!=') {
         if (selectedVal !== fieldVal && selectedVal !== '') {
-            jQuery(Target).show();
+            jQuery(Target+fieldVal).show();
             return true;
         } else {
-            jQuery(Target).hide();
+            jQuery(Target+fieldVal).hide();
             return true;
         }
     }
@@ -352,16 +368,12 @@ function cwp_conditional_fields() {
             
             jQuery(document).on('change input', '*[name="cwp_meta[' + field + ']"]', function (event) {
                 event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
                 var selectedVal = jQuery(this).val();
                 cwp_condition_logic(selectedVal, value, operator, field);
             });
 
             jQuery(document).on('change', 'select[name="cwp_meta[' + field + '][]"]', function (event) {
                 event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
                 var selectedVal = jQuery(this).val();
                 if (selectedVal.length) {
                     if(jQuery.inArray(value, selectedVal) !== -1) {
@@ -432,6 +444,13 @@ function cubewp_init_select2(selects) {
                 width: '100%',
                 placeholder: placeholder,
                 minimumInputLength: 3,
+                language: {
+                    inputTooShort: function() {
+                        if (dropdown_type === 'user') {
+                            return "Please enter username.";
+                        }
+                    }
+                },
                 ajax: {
                     url: cwp_vars_params.ajax_url,
                     dataType: "json",
@@ -493,7 +512,7 @@ function cubewp_init_time_pickers(time_pickers) {
     time_pickers.each(function () {
         var thisObj = jQuery(this),
             args = {
-                timeFormat: 'HH:mm:ss',
+                timeFormat: 'hh:mm:ss TT',
                 altField: thisObj.find('input[type="hidden"]'),
                 altFieldTimeOnly: false,
                 altTimeFormat: 'HH:mm:ss',

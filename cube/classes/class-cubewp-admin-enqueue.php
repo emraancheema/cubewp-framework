@@ -326,10 +326,10 @@ class CubeWp_Admin_Enqueue{
 		$pagenow == 'post.php' || $pagenow == 'post-new.php'
 		)
        {
-            self::enqueue_style('cubewp-custom-fields');
-            self::enqueue_style('cubewp-metaboxes');
-            self::enqueue_script('cubewp-metaboxes');
-            self::enqueue_script('cubewp-metaboxes-validation');
+			self::enqueue_style('cubewp-custom-fields');
+			self::enqueue_style('cubewp-metaboxes');
+			self::enqueue_script('cubewp-metaboxes-validation');
+			self::enqueue_script('cubewp-metaboxes');
             
         }
         
@@ -344,6 +344,7 @@ class CubeWp_Admin_Enqueue{
         if ( $pagenow == 'term.php' || $pagenow == 'edit-tags.php' ) {
             self::enqueue_style('cubewp-custom-fields');
             self::enqueue_style( 'wp-color-picker' );
+			self::enqueue_style('cubewp-metaboxes');
             self::enqueue_script( 'wp-color-picker' );
             self::enqueue_script('cubewp-term-meta');
             wp_enqueue_media();

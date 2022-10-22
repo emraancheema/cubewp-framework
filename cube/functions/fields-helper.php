@@ -663,7 +663,7 @@ if ( ! function_exists("cwp_render_dropdown_input")) {
 			'extra_attrs'  => '',
 		);
 		$attrs       = wp_parse_args($attrs, $defaults);
-		$placeholder = '';
+		$placeholder = esc_html__("Select Option", "cubewp-framework");
 		if (isset($attrs['placeholder']) && ! empty($attrs['placeholder'])) {
 			$placeholder = $attrs['placeholder'];
 		}

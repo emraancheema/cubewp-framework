@@ -41,7 +41,7 @@ class CubeWp_Frontend_Switch_Field extends CubeWp_Frontend {
         
         
         $checked = '';
-        if( isset($args['value']) && $args['value'] == 'yes' ){
+        if( isset($args['value']) && $args['value'] == 'Yes' ){
             $checked = 'checked="checked"';
         }else{
             $args['value'] = '';

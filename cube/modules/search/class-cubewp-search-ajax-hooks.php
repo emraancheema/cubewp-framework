@@ -89,7 +89,7 @@ class CubeWp_Search_Ajax_Hooks{
                 $Map[1] = $Lng;
                 $Map[2] = get_the_title($postid);
                 $Map[3] = get_the_permalink($postid);
-                $Map[4] = get_the_post_thumbnail_url($postid);
+                $Map[4] = cubewp_get_post_thumbnail_url($postid);
                 return $Map;
             }
         }

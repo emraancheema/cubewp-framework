@@ -55,7 +55,6 @@ class CubeWp_Admin_Gallery_Field extends CubeWp_Admin {
             }
             $output .= '<div id="cwp-gallery-'. $args['name'] .'" class="cwp-custom-field cwp-gallery-field" data-id="'. $args['name'] .'">
                 <div class="cwp-field">
-                    <input type="hidden" name="'. $input_name .'[]" value="">
                     <div class="cwp-gallery">
                         <ul class="cwp-gallery-list">
                             '. $attachments_list .'

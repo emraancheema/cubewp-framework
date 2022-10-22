@@ -12,18 +12,6 @@
 				<?php echo esc_html__("Docs", "cubewp-framework"); ?>
 				<a href="https://support.cubewp.com/" target="_blank"></a>
 			</li>
-			<li><span class="dashicons dashicons-groups"></span>
-				<?php echo esc_html__("Community", "cubewp-framework"); ?>
-				<a href="https://support.cubewp.com/forums/forum/community/" target="_blank"></a>
-			</li>
-			<li><span class="dashicons dashicons-smiley"></span>
-				<?php echo esc_html__("Feedback", "cubewp-framework"); ?>
-				<a href="https://support.cubewp.com/forums/forum/feedback/" target="_blank"></a>
-			</li>
-			<li><span class="dashicons dashicons-sos"></span>
-				<?php echo esc_html__("Helpdesk", "cubewp-framework"); ?>
-				<a href="https://help.cubewp.com/help/2649704793" target="_blank"></a>
-			</li>
 		</ul>
 	</div>
 </div>

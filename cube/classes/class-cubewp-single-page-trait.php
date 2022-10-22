@@ -51,13 +51,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_text($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-text-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-text">
-                <p>' . esc_html($args['value']) . '</p>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-text-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-text">
+					<p>' . esc_html($args['value']) . '</p>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/text', $output, $args);
 	}
 	
@@ -71,13 +73,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_number($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-number-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-number">
-                ' . esc_html($args['value']) . '
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-number-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-number">
+					' . esc_html($args['value']) . '
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/number', $output, $args);
 	}
 	
@@ -91,13 +95,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_email($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-email-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-email">
-                <a href="mailto:' . esc_html($args['value']) . '">' . esc_html($args['value']) . '</a>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-email-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-email">
+					<a href="mailto:' . esc_html($args['value']) . '">' . esc_html($args['value']) . '</a>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/email', $output, $args);
 	}
 	
@@ -111,13 +117,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_url($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-url-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-url">
-                <a href="' . esc_url($args['value']) . '">' . esc_url($args['value']) . '</a>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-url-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-url">
+					<a href="' . esc_url($args['value']) . '">' . esc_url($args['value']) . '</a>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/url', $output, $args);
 	}
 	
@@ -131,13 +139,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_password($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-password-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-password">
-                <input type="password" value="' . esc_html($args['value']) . '" readonly disabled>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-password-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-password">
+					<input type="password" value="' . esc_html($args['value']) . '" readonly disabled>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/password', $output, $args);
 	}
 	
@@ -151,13 +161,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_textarea($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-textarea-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-textarea">
-                <p>' . wp_kses_post($args['value']) . '</p>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-textarea-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-textarea">
+					<p>' . wp_kses_post($args['value']) . '</p>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/textarea', $output, $args);
 	}
 	
@@ -171,13 +183,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_wysiwyg_editor($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-wysiwyg_editor-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-wysiwyg_editor">
-	            ' . wp_kses_post($args['value']) . '
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-wysiwyg_editor-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-wysiwyg_editor">
+					' . wp_kses_post($args['value']) . '
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/wysiwyg_editor', $output, $args);
 	}
 	
@@ -191,6 +205,7 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_oembed($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
+		$output = null;
         if(!empty(wp_oembed_get($args['value']))){
 		$output = '<div class="cwp-cpt-single-oembed-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
             <h4>' . $args['label'] . '</h4>
@@ -244,6 +259,7 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_file($args = array()) {
         $args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
+		$output = null;
 		$fileItemURL = wp_get_attachment_url($args['value']);
         if(!empty($fileItemURL)){
 		$output      = '<div class="cwp-cpt-single-file-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
@@ -268,13 +284,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_switch($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-switch-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-switch">
-                <p>' . esc_html($args['value']) . '</p>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-switch-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-switch">
+					<p>' . esc_html($args['value']) . '</p>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/switch', $output, $args);
 	}
 	
@@ -288,19 +306,21 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_dropdown($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-switch-dropdown cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <ul>';
-				if (is_array($args['value'])) {
-					foreach ($args['value'] as $dropdownValue):
-						$output .= '<li>' . esc_html($dropdownValue) . '</li>';
-					endforeach;
-				} else {
-					$output .= '<li>' . esc_html($args['value']) . '</li>';
-				}
-			$output .= '</ul>
-		</div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-switch-dropdown cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<ul>';
+					if (is_array($args['value'])) {
+						foreach ($args['value'] as $dropdownValue):
+							$output .= '<li>' . esc_html($dropdownValue) . '</li>';
+						endforeach;
+					} else {
+						$output .= '<li>' . esc_html($args['value']) . '</li>';
+					}
+				$output .= '</ul>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/dropdown', $output, $args);
 	}
 	
@@ -314,6 +334,7 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_checkbox($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
+		$output = null;
         if (! empty($args['value']) && is_array($args['value'])){
 		$output = '<div class="cwp-cpt-single-switch-checkbox cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
             <h4>' . $args['label'] . '</h4>';
@@ -341,13 +362,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_radio($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-switch-radio cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <ul>
-                <li>' . esc_html($args['value']) . '</li>
-            </ul>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-switch-radio cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<ul>
+					<li>' . esc_html($args['value']) . '</li>
+				</ul>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/radio', $output, $args);
 	}
 	
@@ -402,13 +425,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_date_picker($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-date_picker cwp-cpt-single-field-container '.esc_attr($args['container_class']).' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-date_picker">
-                <p>' . date_i18n(get_option('date_format'), $args['value']) . '</p>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-date_picker cwp-cpt-single-field-container '.esc_attr($args['container_class']).' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-date_picker">
+					<p>' . date_i18n(get_option('date_format'), $args['value']) . '</p>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/date_picker', $output, $args);
 	}
 	
@@ -422,13 +447,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_date_time_picker($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-date_time_picker cwp-cpt-single-field-container '.esc_attr($args['container_class']).' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-date_time_picker">
-                <p>' . date_i18n(get_option('date_format') . ' ' . get_option('time_format'), $args['value']) . '</p>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-date_time_picker cwp-cpt-single-field-container '.esc_attr($args['container_class']).' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-date_time_picker">
+					<p>' . date_i18n(get_option('date_format') . ' ' . get_option('time_format'), $args['value']) . '</p>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/date_time_picker', $output, $args);
 	}
 	
@@ -442,13 +469,15 @@ trait CubeWp_Single_Page_Trait {
 	 */
 	private static function field_time_picker($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
-		$output = '<div class="cwp-cpt-single-time_picker cwp-cpt-single-field-container '.esc_attr($args['container_class']).' '.esc_attr($args['field_size']).'">
-            <h4>' . $args['label'] . '</h4>
-            <div class="cwp-cpt-single-time_picker">
-			<p>' . date_i18n(get_option('time_format'), strtotime($args['value'])) . '</p>
-            </div>
-        </div>';
-
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-time_picker cwp-cpt-single-field-container '.esc_attr($args['container_class']).' '.esc_attr($args['field_size']).'">
+				<h4>' . $args['label'] . '</h4>
+				<div class="cwp-cpt-single-time_picker">
+				<p>' . date_i18n(get_option('time_format'), strtotime($args['value'])) . '</p>
+				</div>
+			</div>';
+		}
 		return apply_filters('cubewp/singlecpt/field/time_picker', $output, $args);
 	}
 	

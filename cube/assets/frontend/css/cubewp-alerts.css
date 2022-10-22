@@ -1,129 +1,107 @@
 .cwp-alert {
-    max-width: 650px;
-    margin: 0 auto 15px auto;
-    padding: 1rem 3rem 1rem 1rem;
+    background: transparent 0 0 no-repeat padding-box;
     border: 1px solid transparent;
-    border-radius: .25rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
+    border-radius: 4px;
+    padding: 15px 30px;
+    margin: 0 0 30px 0;
     position: relative;
 }
-.cwp-alert.cwp-alert-primary {
-    color: #084298;
-    background-color: #cfe2ff;
-    border-color: #b6d4fe;
-}
-.cwp-alert.cwp-alert-success {
-    color: #0f5132;
-    background-color: #d1e7dd;
-    border-color: #badbcc;
-}
-.cwp-alert.cwp-alert-warning {
-    color: #664d03;
-    background-color: #fff3cd;
-    border-color: #ffecb5;
-}
-.cwp-alert.cwp-alert-danger {
-    color: #842029;
-    background-color: #f8d7da;
-    border-color: #f5c2c7;
-}
-.cwp-alert svg {
-    width: 30px;
-    height: 30px;
-    margin-right: 15px;
-}
-.cwp-alert .cwp-alert-close {
-    box-sizing: content-box;
-    width: 30px;
-    height: 30px;
-    padding: 0 !important;
-    color: #000 !important;
-    border: 0;
-    border-radius: .25rem;
-    opacity: .5;
-    background: transparent !important;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-}
-.cwp-alert .cwp-alert-close svg {
-    margin-right: 0;
-}
-/* Start Notification Style */
-.cwp-notification-area {
-    display: block;
+.cwp-alert.cwp-js-alert {
     position: fixed;
-    border-left: 15px solid #ccc;
-    -webkit-box-shadow: 0 1px 5px 0 rgb(234 236 238);
-    -moz-box-shadow: 0 1px 5px 0 rgba(234, 236, 238, 1);
-    box-shadow: 0 1px 5px 0 rgb(234 236 238);
-    bottom: -150px;
-    transition: all .5s;
-    z-index: 100;
-    background-color: #fff;
-    width: 550px;
+    bottom: 10%;
     left: 50%;
-    margin-left: -250px;
+    transform: translateX(-50%);
+    width: 650px;
+    max-width: 100vw;
+    box-shadow: 10px 10px 20px -15px #000;
+    display: none;
+    z-index: 99999;
+}
+.cwp-alert.cwp-js-alert:not(.shown) {
+    display: none;
+}
+.cwp-alert .cwp-alert-heading {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 23px;
+    color: transparent;
+    margin: 0 0 0 0;
     text-transform: capitalize;
 }
-.cwp-notification-area .cwp-notification-wrap {
-    border: 1px solid #e9ebf2;
-    border-left-color: rgb(233, 235, 242);
-    border-left-style: solid;
-    border-left-width: 1px;
-    border-left: 0;
-    display: inline-block;
-    width: 100%;
-    padding: 0 20px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: row-reverse;
+.cwp-alert .cwp-alert-content {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 24px;
+    color: transparent;
+    margin: 10px 0 0 0;
+    padding: 0 0 0 0;
 }
-.cwp-notification-area .cwp-notification-icon{
-    display: flex;
-    align-items: center;
+.cwp-alert .cwp-alert-content * {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
-.cwp-notification-area .cwp-notification-icon img{
-    margin-top: 0;
-    margin-right: 20px;
-    width: 25px;
-    color: #b3c0ce;
+.cwp-alert .cwp-alert-close {
+    background: transparent;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    border: none;
     cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
-.cwp-notification-area .cwp-notification-content{
-    width: 90%;
-    display: inline-block;
+.cwp-alert.cwp-alert-warning {
+    background-color: #FFFAF3;
+    border-color: #CCBEA0;
 }
-.cwp-notification-area .cwp-notification-content h4{
-    font-size: 18px;
-    color: #333;
+.cwp-alert.cwp-alert-warning .cwp-alert-heading {
+    color: #7A4D05;
 }
-.cwp-notification-area.cwp-notification-error {
-    border-left: 15px solid #ff4a7a;
+.cwp-alert.cwp-alert-warning .cwp-alert-content {
+    color: #7A4D05CC;
 }
-.cwp-notification-area.cwp-notification-warning {
-    border-left: 15px solid #fd0;
+.cwp-alert.cwp-alert-warning .cwp-alert-close svg {
+    fill: #7A4D05;
 }
-.cwp-notification-area.cwp-notification-success {
-    border-left: 15px solid #73d500;
+.cwp-alert.cwp-alert-info {
+    background-color: #F8FFFF;
+    border-color: #BEDFE6;
 }
-.cwp-notification-area.cwp-notification-info {
-    border-left: 15px solid #17a2b8 !important;
+.cwp-alert.cwp-alert-info .cwp-alert-heading {
+    color: #0E566C;
 }
-
-.cwp-notification-area.active-wrap {
-    bottom: 220px;
+.cwp-alert.cwp-alert-info .cwp-alert-content {
+    color: #0E566C;
 }
-
+.cwp-alert.cwp-alert-info .cwp-alert-close svg {
+    fill: #0E566C;
+}
+.cwp-alert.cwp-alert-success {
+    background-color: #FCFFF5;
+    border-color: #A8C599;
+}
+.cwp-alert.cwp-alert-success .cwp-alert-heading {
+    color: #1E561F;
+}
+.cwp-alert.cwp-alert-success .cwp-alert-content {
+    color: #1E561FCC;
+}
+.cwp-alert.cwp-alert-success .cwp-alert-close svg {
+    fill: #1E561F;
+}
+.cwp-alert.cwp-alert-danger {
+    background-color: #FFF6F6;
+    border-color: #953836;
+}
+.cwp-alert.cwp-alert-danger .cwp-alert-heading {
+    color: #973937;
+}
+.cwp-alert.cwp-alert-danger .cwp-alert-content {
+    color: #973937;
+}
+.cwp-alert.cwp-alert-danger .cwp-alert-close svg {
+    fill: #973937;
+}
 .cubewp-post-author-actions {
     position: fixed;
     bottom: 50px;

@@ -295,7 +295,7 @@ class CubeWp_Single_Cpt {
             }
         }
         if(empty($value)){
-            return esc_html__('N/A','cubewp-framework');
+            return '';
         }
         return $value;
     }

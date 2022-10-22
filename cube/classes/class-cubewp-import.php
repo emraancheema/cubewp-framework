@@ -108,10 +108,10 @@ class CubeWp_Import {
     public function cwp_import_data_callback(){
 
         if($_FILES["file"]["name"]) {
-            $import_file = CubeWp_Sanitize_Dynamic_Array($_FILES);
-            $filename = $import_file["file"]["name"];
+            $import_file = $_FILES;
+            $filename = sanitize_file_name($import_file["file"]["name"]);
             $source = $import_file["file"]["tmp_name"];
-            $type = $import_file["file"]["type"];
+            $type = sanitize_file_name($import_file["file"]["type"]);
 
             $name = explode(".", $filename);
             $accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');

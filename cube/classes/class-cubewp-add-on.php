@@ -3,10 +3,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
-class CubeWp_Add_On {
+class CubeWp_Add_Onsfsfsf {
 
 	// API route
-	public static $route   = 'http://192.168.100.3/cube';
+	public static $route   = 'https://cubewp.com';
 
 	// Cubewp CONST
 	const CUBEWP   = 'cubewp';
@@ -16,6 +16,12 @@ class CubeWp_Add_On {
 	const ACTI   = 'acti';
 
 	const VATION   = 'vation';
+
+	const DIS   = 'disabled';
+
+	const LIC   = 'lic';
+
+	const ENSE   = 'ense';
 
 	// API Action
 	public static $action   = 'edd_action';
@@ -34,19 +40,26 @@ class CubeWp_Add_On {
 	public static function cubewp_add_ons() {
 
 		return array(
-			'cubewp-builder' => array(
-				'slug' => 'cubewp-builder',
-				'id'   => 9,
-				'base' => 'cubewp-builder/cubewp-frontend.php',
-				'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-builder/cube/',
+			'cubewp-addon-frontend-pro' => array(
+				'slug' => 'cubewp-addon-frontend-pro',
+				'id'   => 81,
+				'base' => 'cubewp-addon-frontend-pro/cubewp-frontend.php',
+				'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-frontend-pro/cube/',
 				'load' => CUBEWP.'_Frontend_Load',
 			),
-			'cubewp-payments' => array(
-				'slug' => 'cubewp-payments',
-				'id'   => 30,
-				'base' => 'cubewp-payments/cubewp-payments.php',
-				'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-payments/cube/',
-				'load' => CUBEWP.'Payments_Load',
+			'cubewp-addon-payments' => array(
+				'slug' => 'cubewp-addon-payments',
+				'id'   => 157,
+				'base' => 'cubewp-addon-payments/cubewp-payments.php',
+				'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-payments/cube/',
+				'load' => CUBEWP.'_Payments_Load',
+			),
+			'cubewp-addon-booster' => array(
+				'slug' => 'cubewp-addon-booster',
+				'id'   => 216,
+				'base' => 'cubewp-addon-booster/cubewp-booster.php',
+				'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-booster/cube/',
+				'load' => CUBEWP.'_Booster_Load',
 			),
 		);
 
@@ -102,6 +115,8 @@ class CubeWp_Add_On {
 		$add_ons = self::cubewp_add_ons();
 		if(function_exists('CWP')){
 
+			$not_our_plugin 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x69\x73\x20\x6e\x6f\x74\x20\x22\x43\x75\x62\x65\x57\x50\x22\x20\x70\x6c\x75\x67\x69\x6e");
+
 			if(isset($add_ons[$plugin])){
 
 				$path = $add_ons[$plugin]['path'];
@@ -113,12 +128,12 @@ class CubeWp_Add_On {
 					$lic_is_not_valid 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x59\x6f\x75\x72\x20\x6c\x69\x63\x65\x6e\x73\x65\x20\x69\x73\x20\x6e\x6f\x74\x20\x76\x61\x6c\x69\x64\x2c\x20\x45\x72\x72\x6f\x72\x20\x63\x6f\x64\x65\x20\x69\x73\x3a");
 					$file_is_not_valid 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x70\x6c\x75\x67\x69\x6e\x20\x66\x69\x6c\x65\x20\x69\x73\x20\x6e\x6f\x74\x20\x76\x61\x6c\x69\x64");
 					$need_fresh_file 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x70\x6c\x75\x67\x69\x6e\x20\x66\x69\x6c\x65\x20\x68\x61\x73\x20\x61\x6c\x72\x65\x61\x64\x79\x20\x75\x73\x65\x64\x2c\x20\x50\x6c\x65\x61\x73\x65\x20\x64\x6f\x77\x6e\x6c\x6f\x61\x64\x20\x66\x72\x65\x73\x68\x20\x66\x69\x6c\x65\x20\x66\x6f\x72\x20\x66\x72\x65\x73\x68\x20\x69\x6e\x73\x74\x61\x6c\x6c\x61\x74\x69\x6f\x6e\x2e");
-					$not_our_plugin 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x69\x73\x20\x6e\x6f\x74\x20\x22\x43\x75\x62\x65\x57\x50\x22\x20\x70\x6c\x75\x67\x69\x6e");
+					
 					if ( file_exists ( $file ) ) {
 
 						$key = file_get_contents ( $file );
 						$response = self::cubewp_check_licence( $key, $id, 'activate_license' );
-
+						
 						if(is_object($response) && $response->success != true){
 							$message = isset($response->error) ? $response->error : '';
 							//Lic not good
@@ -140,7 +155,7 @@ class CubeWp_Add_On {
 							CWP()->update_cubewp_options($response->item_id.'_key', $key);
 
 						}
-						unlink ( $license_file );
+						unlink ( $file );
 
 					}else{
 						//file not good
@@ -191,12 +206,10 @@ class CubeWp_Add_On {
 	 * @version 1.1
 	 */
 	public function check_for_plugin_update( $checked_data ) {
-
 		global $wp_version;
-			
-		if ( empty( $checked_data->checked ) )
-			return;
 
+		if ( !empty( $checked_data->checked ) )
+			return;
 
 		$add_ons = self::cubewp_add_ons();
 		
@@ -207,40 +220,79 @@ class CubeWp_Add_On {
 				$id = $add_on['id'];
 				$slug = $add_on['slug'];
 				$base = $add_on['base'];
-				$key = CWP()->cubewp_options($id.'_key');
+				$Lkey = CWP()->cubewp_options($id.'_key');
+				if($Lkey){
+					$response = self::cubewp_check_licence( $Lkey, $id, 'get_version' );
 
-				$response = self::cubewp_check_licence( $key, $id, 'get_version' );
+					if(!$this->update_plugin_data($slug,$Lkey,$id))
+					return $checked_data;
 
-				if(is_object($response) && $response->slug == $slug){
-					
-					if ( is_object( $response ) && ! empty( $response ) ){
-						$response = (object) array(
-							'id' => 'cubewp.com/plugins/'.$response->slug,
-							'slug' => $response->slug,
-							'plugin' => $base,
-							'new_version' => $response->new_version,
-							'url' => $response->url,
-							'package' => $response->package,
-							'icons' => Array(),
-							'banners' => Array(),
-							'banners_rtl' => Array(),
-							'requires' => '',
-							'tested' => '6.0.2',
-							'requires_php' => '7.0',
-						);
-						
-						
-						$checked_data->response[ $base ] = $response;
+					if(is_object($response) && $response->slug == $slug) {
+						$plugin = get_plugin_data( plugin_dir_path( dirname(dirname(__DIR__)) ).$base, false, false );
+						if ( isset($response->stable_version) && $plugin['Version'] < $response->stable_version ){
+							$response = (object) array(
+								'id' => 'cubewp.com/plugins/'.$response->slug,
+								'plugin' => $base,
+								'new_version' => $response->new_version,
+								'url' => $response->url,
+								'package' => $response->package,
+								'icons' => Array(),
+								'banners' => Array(),
+								'banners_rtl' => Array(),
+								'requires' => '',
+								'tested' => '6.0.2',
+								'requires_php' => '7.0',
+							);
+							
+							$checked_data->response[ $base ] = $this->update_core_page_check($response);
+						}
 
 					}
-
 				}
 			}
 
 		}
-
+		
 		return $checked_data;
 
+	}
+
+	private function update_core_page_check( $response) {
+		global $pagenow;
+
+		if ( 'update-core.php' === $pagenow ) {
+			$response->slug = '';
+		}
+		return $response;
+	}
+
+
+	private function update_plugin_data($slug = '',$Lkey = '',$id = ''){
+		if(empty($slug))
+		return false;
+
+		$check = self::cubewp_check_licence( $Lkey, $id, 'check_license' );
+
+		if(!is_object($check)) {
+			return false;
+		}
+
+		if(is_object($check) && $check->license == 'invalid') {
+			return false;
+		}
+
+		if(isset($check->license) && $check->license == 'expired'){
+			CWP()->update_cubewp_options($slug, 'expired');
+		}else{
+			CWP()->update_cubewp_options($slug, '');
+		}
+
+		if(isset($check->license) && $check->license == self::DIS){
+			CWP()->update_cubewp_options($check->item_id, '');
+			return false;
+		}
+
+		return true;
 	}
 
     public static function init() {

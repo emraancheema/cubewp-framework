@@ -854,11 +854,11 @@ a.ui-datepicker-next {
 	cursor: pointer;
 	font-size: 18px;
 	font-weight: 500;
-	margin: 0 10px 20px 0;
+	margin: 0 auto 20px;
 	padding: 12px;
 	text-decoration: none;
 	text-shadow: none;
-	width: 100%;
+	width: calc(100% - 20px);
 }
 
 .cwp-frontend-form-container input[type=submit]:hover {

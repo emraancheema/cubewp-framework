@@ -139,10 +139,13 @@ class CubeWp_frontend {
      * @since  1.0.0
      */
     public static function cwp_frontend_conditional_attributes(array $args) {
+
         if(isset($args['conditional']) && 
            !empty($args['conditional']) && 
            !empty($args['conditional_field']))
         {
+            $conditional_value = isset($args['conditional_value']) && !empty($args['conditional_value']) ? $args['conditional_value'] : '';
+            $condi_val = $args['conditional_operator'] != '!empty' && 'empty' !=  $args['conditional_operator'] ? $conditional_value : '';
             if (
                 has_shortcode(get_the_content(), 'cwpSearch') ||
                 has_shortcode(get_the_content(), 'cwpFilters') ||
@@ -155,10 +158,10 @@ class CubeWp_frontend {
                 $attr['style'] = ' style="display:none"';
             }
             
-            $attr['class'] = ' conditional-logic '.$args['conditional_field'];
+            $attr['class'] = ' conditional-logic '.$args['conditional_field'].$conditional_value;
             $attr['data']  = ' data-field="'.$args['conditional_field'].'"';
             $attr['data'] .= ' data-operator="'.$args['conditional_operator'].'"';
-            $attr['data'] .= ' data-value="'.$args['conditional_value'].'"';
+            $attr['data'] .= ' data-value="'.$condi_val.'"';
             return $attr;
         }
         return '';

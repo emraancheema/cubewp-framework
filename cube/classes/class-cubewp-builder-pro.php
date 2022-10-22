@@ -33,23 +33,23 @@ class CubeWp_Builder_Pro {
     public function CubeWp_Empty_Form_Builder() {
         wp_enqueue_style('cwp-form-builder');
         if( current_cubewp_page() == 'cubewp_user_registration_form'){
-            $page_header="CubeWP User Registration Form Builder";
+            $page_header="User Signup Form Builder";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/single-layout-screen.png';
         }
         elseif( current_cubewp_page() == 'cubewp_user_profile_form'){
-            $page_header="CubeWP User Profile Form Builder";
+            $page_header="User Profile Form Builder";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/single-layout-screen.png';
         }
         elseif( current_cubewp_page() == 'cubewp_post_types_form'){
-            $page_header="CubeWP Post Type Form Builder";
+            $page_header="Post Types Form Builder";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/single-layout-screen.png';
         }
         elseif( current_cubewp_page() == 'cubewp_single_layout'){
-            $page_header="CubeWP single page Layout";
+            $page_header="Post Types Single Layout Builder";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/single-layout-screen.png';
         }
         elseif( current_cubewp_page() == 'cubewp_user_dashboard'){
-            $page_header="CubeWP User Dashboard";
+            $page_header="User Dashboard Builder";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/single-layout-screen.png';
         }
         echo'<div id="cubewp-title-bar">

@@ -36,8 +36,7 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_User_Custom_Fields{
     
     private static function add_new_group() {
         if(isset($_GET['action']) && ('new' == $_GET['action'] || 'edit' == $_GET['action'])){
-            self::edit_group();            
-            self::add_new_field_btn();
+            self::edit_group();
         }
     }
     private static function _title() {
@@ -48,7 +47,6 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_User_Custom_Fields{
         }
     }
          
-    
     public static function edit_group() {
         
         $group = self::get_group();
@@ -165,6 +163,7 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_User_Custom_Fields{
                                     <?php echo self::get_fields($group['fields'], $group['sub_fields']) ?>
                             </div>
                         </div>
+                        <?php self::add_new_field_btn(); ?>
                         <div class='clear'></div>
                     </div>
                 </div>

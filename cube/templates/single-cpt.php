@@ -34,7 +34,9 @@ do_action('cubewp_single_page_notification', get_the_ID());
                     </div>
                 </div>
                 <div class="cwp-col-12 cwp-col-lg-4">
-					<?php $single->get_single_sidebar_area(); ?>
+                    <div class="cwp-right-single-groups">
+                        <?= $single->get_single_sidebar_area(); ?>
+                    </div>
                 </div>
             </div>
         </div>

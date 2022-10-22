@@ -238,8 +238,8 @@ h3.cwp-widget-title {
     width: 100%;
 	margin-bottom: 15px;
 }
-.cwp-post-row, .cwp-user-row {
-    width:100%;
+.cwp-cpt-single-post-container, .cwp-cpt-single-user-container {
+    display: unset;
 }
 .cwp-cpt-single-user-container .cwp-single-widget.cwp-admin-widget {
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.102218));
@@ -446,6 +446,7 @@ h5.cwp-widget-title {
 }
 .cwp-single-widget.cwp-admin-widget ul li {
     list-style: none;
+    margin: 0;
 }
 .cwp-single-widget.cwp-admin-widget ul li svg {
     margin-right: 5px;
@@ -475,6 +476,7 @@ p.cwp-author-uname {
     display: none;
     border-radius: 5px;
     box-shadow: 0px 5px 15px #44444f1a;
+    word-break: keep-all;
 }
 p.cwp-author-uname:after {
     border-left: 8px solid rgba(0, 0, 0, 0);
@@ -547,7 +549,7 @@ ul.cwp-single-category-widget-inner li {
 .cwp-single-left-side .cwp-single-widget.cwp-admin-widget {
     padding: 0;
 }
-.cwp-single-left-side .cwp-single-category-widget.cwp-single-widget {
+.cwp-single-left-side .cwp-single-category-widget.cwp-single-widget,.cwp-right-single-groups .cwp-post-row .cwp-col-md-6 {
     width: 100%;
 }
 .cwp-single-left-side h5.cwp-widget-title {
@@ -567,74 +569,6 @@ ul.cwp-single-category-widget-inner li {
 .cwp-single-left-side .cwp-single-category-widget.cwp-single-widget ul.cwp-single-category-widget-inner li a p {
     margin: 0;
     font-size: 14px;
-}
-
-/*-----CWP Inbox--------*/
-.cwp-cpt-single-messages-form-container h4{
-    width: 100%;
-    margin-bottom: 15px;
-}
-.cwp-cpt-single-messages-form {
-    width: 100%;
-}
-.cwp-cpt-single-messages-form label {
-    width: 100%;
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 10px 0;
-    display: block;
-}
-.cwp-cpt-single-messages-form textarea#msg_content {
-    width: 100%;
-    min-height: 145px;
-    padding: 10px 15px;
-    line-height: 20px;
-    border-radius: 5px;
-    border: 1px solid #e0e0e0;
-	font-size: 14px;
-}
-.cwp-cpt-single-messages-form textarea#msg_content:focus-visible {
-	border: 1px solid #007BFF;
-	outline:none;
-}
-button.cwp-message-form-submit-btn {
-    background: #007bff;
-    border: 1px solid #007BFF;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    height: 38px;
-    margin: 20px 10px 20px 0;
-    padding: 0;
-    text-decoration: none;
-    text-shadow: none;
-    width: 100%;
-}
-button.cwp-message-form-submit-btn:hover {
-    background: #2271b1;
-}
-.cwp-popup-alert.alert-success {
-    background: #fff;
-    width: 100%;
-    height: 80px;
-    border-radius: 0 10px 10px 0;
-    box-shadow: 0 1px 5px 0 rgb(234 236 238);
-    margin: 25px 0 0 0;
-    padding: 20px;
-    font-size: 16px;
-	border: 1px solid #e0e0e0;
-	position:relative;
-}
-.cwp-popup-alert.alert-success::before {
-    position: absolute;
-    content: "";
-    top: 0;
-    bottom: 0;
-	left:0;
-    width: 6px;
-    background: #007BFF;
-    border-radius: 6px;
 }
 
 /*-----Responsive---*/

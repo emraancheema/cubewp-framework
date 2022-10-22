@@ -41,13 +41,14 @@ class CubeWp_Settings_Fields {
         foreach ($postTypes as $postType => $postTypeLabel) {
             $args['id'] = $fieldID . '[' . $postType . ']';
             $args['options'] = apply_filters( "cubewp/settings/pages/options", $args['options'], $args );
+            $value = isset($args['value'][$postType]) ? $args['value'][$postType] : '';
             $output .= '<fieldset id="cwp-' . esc_attr( $args['id'] ) . '" class="cwp-field-container cwp-' . esc_attr( $args['type'] ) . '-container" data-id="' . esc_attr( $args['id'] ) . '" data-type="' . esc_attr( $args['type'] ) . '" style="margin-bottom: 10px;">';
             $field_args = array(
                 'id'          => $args['id'],
                 'name'        => $args['id'],
                 'placeholder' => $args['placeholder'] == '' ? esc_html__( 'Select Option', "cubewp-framework" ) : '',
                 'class'       => $args['class'],
-                'value'       => $args['value'][$postType],
+                'value'       => $value,
                 'options'     => $args['options'],
                 'extra_attrs' => $args['extra_attrs'],
             );

@@ -46,7 +46,7 @@ jQuery(document).ready(function ($) {
         if (cubewp_admin_fields_validation() === false) {
             wp.data.dispatch('core/editor').lockPostSaving('cubewp_have_required_fields');
         }
-        jQuery(document).on('input change', '.cwp-validation .required', function (event) {
+        jQuery(document).on('input change', '.cwp-validation .required', function () {
             if (cubewp_admin_fields_validation() === false) {
                 wp.data.dispatch( 'core/editor' ).lockPostSaving( 'cubewp_have_required_fields' );
             }else {
@@ -61,6 +61,16 @@ jQuery(document).ready(function ($) {
                 wp.data.dispatch( 'core/editor' ).unlockPostSaving( 'cubewp_have_required_fields' );
             }
             cubewp_admin_fields_validation();
+        });
+        jQuery(document).on('click', '.cwp-remove-repeating-field', function () {
+            setTimeout(function () {
+                if (cubewp_admin_fields_validation() === false) {
+                    wp.data.dispatch( 'core/editor' ).lockPostSaving( 'cubewp_have_required_fields' );
+                }else {
+                    wp.data.dispatch( 'core/editor' ).unlockPostSaving( 'cubewp_have_required_fields' );
+                }
+                cubewp_admin_fields_validation();
+            }, 1000)
         });
     }else if (jQuery('form#createuser').length > 0) {
         jQuery(document).on('submit', 'form#createuser', function (event) {
@@ -148,6 +158,21 @@ jQuery(document).ready(function ($) {
                             validation_msg = 'This field is required.';
                         }
                         _thisObj.closest('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                    }else {
+                        if (typeof wp !== 'undefined' && typeof wp.blocks !== 'undefined') {
+                            if (_thisObj.attr('type') === 'email') {
+                                const validateEmail = (email) => {
+                                    return email.match(
+                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                    );
+                                };
+                                if ( ! validateEmail(_thisObj.val())) {
+                                    is_valid = false;
+                                    validation_msg = 'Please enter valid email.';
+                                    _thisObj.closest('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                                }
+                            }
+                        }
                     }
                 }
             }

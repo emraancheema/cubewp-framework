@@ -35,9 +35,10 @@ class CubeWp_User_Meta {
             foreach($fields as $field){
                 $SingleFieldOption = $fieldOptions[$field];
                 
-                $fieldBox[$SingleFieldOption['name']] = $SingleFieldOption;
+                $fieldBox[$SingleFieldOption['name']] = $SingleFieldOption;                
                 if(isset($sub_fields[$SingleFieldOption['name']]) && !empty($sub_fields[$SingleFieldOption['name']])){
-                    foreach($sub_fields[$SingleFieldOption['name']] as $sub_field){
+                    $fieldBox[$SingleFieldOption['name']]['sub_fields'] = array();
+                    foreach($sub_fields[$SingleFieldOption['name']] as $key => $sub_field){
                         $fieldBox[$SingleFieldOption['name']]['sub_fields'][] = $fieldOptions[$sub_field];
                     }
                 }

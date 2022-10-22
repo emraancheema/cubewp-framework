@@ -85,24 +85,26 @@
 	padding: 0;
 }
 .cwp-map-popover {
-	min-width: 200px;
+	width: 150px;
 	min-height: 150px;
 	position: relative;
 	border-radius: 12px;
 	overflow: hidden;
-}
-.cwp-map-popover img {
+ }
+ .cwp-map-popover img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-}
-.cwp-map-popover h3 {
+ }
+ .cwp-map-popover h3 {
 	width: 100%;
 	letter-spacing: 1px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin: 0;
-	padding: 5px 10px;
+	padding: 5px 10px 10px;
 	text-align: center;
-}
+	font-size: 12px;
+	line-height: 20px;
+	margin: 0 0 0 0;
+ }

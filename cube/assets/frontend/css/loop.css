@@ -23,7 +23,7 @@
 select#cwp-sorting-filter {
     cursor: pointer;
     font-size: 14px;
-    padding: 5px 0;
+    padding: 5px;
     width: auto;
     color: #777777;
     min-width: 155px;

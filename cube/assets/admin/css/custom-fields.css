@@ -251,6 +251,9 @@ input[type=date], input[type=datetime-local], input[type=datetime], input[type=e
 	width: 100%;
 	z-index: 2;
 }
+.cubewp_page_taxonomy-custom-fields tbody.cwp-field-set td:first-child label {
+    font-weight: 500;
+}
 .cubewp-locked-field span {
 	cursor: pointer;
 	position: absolute;

@@ -30,7 +30,7 @@ a {
 	padding-left: 15px;
 }
 
-.sub-fields-holder .add-sub-field {
+.sub-fields-holder .add-sub-field, .sub-fields-holder .add-user-sub-field {
 	float: right;
 	margin-top: 15px;
 }
@@ -294,10 +294,10 @@ a {
 }
 
 .nav-tab {
-	background: transparent;
+	background: #01a0d2;
 	border: none;
 	border-top: 3px solid transparent;
-	color: #000000;
+	color: #fff;
 	font-size: 13px;
 	font-weight: 400;
 	padding: 16px 15px;
@@ -306,6 +306,7 @@ a {
 .nav-tab-active,
 .nav-tab-active:hover {
 	background: #ffffff;
+	color: #000000;
 	border: none;
 	border-top: 3px solid #01a0d2 !important;
 	margin-bottom: 0;
@@ -991,3 +992,18 @@ cwp-unlock-feature a{
 	padding: 8px 10px;
 	text-shadow: none;
 }
+.drop-left .cwp-ctp-toolTip {
+	left: unset;
+	right: 35px;
+ }
+ 
+ .drop-left .cwp-ctp-toolTip::after {
+	display: none;
+ }
+ 
+ .drop-left .cwp-ctp-toolTip::before {
+	left: unset;
+	right: -17px;
+	border-left: 0;
+	border-bottom: 0;
+ }

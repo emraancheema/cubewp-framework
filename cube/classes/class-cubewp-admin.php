@@ -49,6 +49,13 @@ class CubeWp_Admin {
             $cubewp_admin_notices->cubewp_load_default_notices();
 
             add_action('admin_print_scripts', array($this, 'cubewp_admin_css'));
+
+            if( !class_exists( 'CubeWp_Frontend_Load' ) ) {
+                add_action('cubewp_loaded', array('CubeWp_Builder_Pro', 'init'));
+            }
+
+            add_filter( 'post_updated_messages', array( $this, 'cubewp_updated_post_type_messages' ) );
+            
         }
 
     }
@@ -172,6 +179,35 @@ class CubeWp_Admin {
 			$module->register( new $tag() );
 		}
 	}
+
+    public function cubewp_updated_post_type_messages( $messages ) {
+        global $post, $post_ID;
+        $post_types = get_post_types( array( 'show_ui' => true, '_builtin' => false ), 'objects' );
+        foreach ( $post_types as $post_type => $post_object ) {
+           $messages[ $post_type ] = array(
+              0  => '', // Unused. Messages start at index 1.
+              1  => sprintf( __( '%s updated. <a href="%s">View %s</a>' ), $post_object->labels->singular_name, esc_url( get_permalink( $post_ID ) ), $post_object->labels->singular_name ),
+              2  => __( 'Custom field updated.' ),
+              3  => __( 'Custom field deleted.' ),
+              4  => sprintf( __( '%s updated.' ), $post_object->labels->singular_name ),
+              5  => isset( $_GET['revision'] ) ? sprintf( __( '%s restored to revision from %s' ), $post_object->labels->singular_name, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+              6  => sprintf( __( '%s published. <a href="%s">View %s</a>' ), $post_object->labels->singular_name, esc_url( get_permalink( $post_ID ) ), $post_object->labels->singular_name ),
+              7  => sprintf( __( '%s saved.' ), $post_object->labels->singular_name ),
+              8  => sprintf( __( '%s submitted. <a target="_blank" href="%s">Preview %s</a>' ), $post_object->labels->singular_name, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), $post_object->labels->singular_name ),
+              9  => sprintf( __( '%s scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview %s</a>' ), $post_object->labels->singular_name, date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ), $post_object->labels->singular_name ),
+              10 => sprintf( __( '%s draft updated. <a target="_blank" href="%s">Preview %s</a>' ), $post_object->labels->singular_name, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), $post_object->labels->singular_name ),
+           );
+           if ($post_type == 'price_plan') {
+              $messages[ $post_type ][1] = sprintf( __( '%s updated.' ), $post_object->labels->singular_name );
+              $messages[ $post_type ][6] = sprintf( __( '%s published.' ), $post_object->labels->singular_name );
+              $messages[ $post_type ][8] = sprintf( __( '%s submitted.' ), $post_object->labels->singular_name );
+              $messages[ $post_type ][9] = sprintf( __( '%s scheduled for: <strong>%1$s</strong>.' ), $post_object->labels->singular_name, date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ) );
+              $messages[ $post_type ][10] = sprintf( __( '%s draft updated.' ), $post_object->labels->singular_name );
+           }
+        }
+     
+        return $messages;
+     }
         
     /**
      * Method admin_fields_parameters to pasrse field arguments
@@ -385,11 +421,12 @@ class CubeWp_Admin {
            !empty($args['conditional']) && 
            !empty($args['conditional_field']))
         {
+            $condi_val = $args['conditional_operator'] != '!empty' && 'empty' !=  $args['conditional_operator'] ? $args['conditional_value'] : '';
             $attr = 'style="display:none"';
             $attr .= 'data-field="'.$args['conditional_field'].'"';
             $attr .= 'data-operator="'.$args['conditional_operator'].'"';
-            $attr .= 'data-value="'.$args['conditional_value'].'"';
-            $attr .= 'class="conditional-logic '.$args['conditional_field'].' '.$args['container_class'].'"';
+            $attr .= 'data-value="'.$condi_val.'"';
+            $attr .= 'class="conditional-logic '.$args['conditional_field'].$args['conditional_value'].' '.$args['container_class'].'"';
             return $attr;
         }elseif(!empty($args['container_class'])){
             $args['container_attrs'] = isset($args['container_attrs']) ? $args['container_attrs'] : '';

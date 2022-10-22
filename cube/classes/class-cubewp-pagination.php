@@ -42,18 +42,14 @@ class CubeWp_Pagination{
      * @since  1.0.0
      */
     public function cubewp_archive_pagination( $output = '', array $args ) {
-        
         extract($args);
-        
-        $this->total_posts     = $total_posts;
-        $this->is_archive      = $is_archive;
-        $this->posts_per_page  = $posts_per_page;
-        $this->page_num        = $page_num;
-        
-        if ( $this->total_posts <= $this->posts_per_page ) return;
+        $this->total_posts     = isset($total_posts) ? $total_posts : '';
+        $this->archive_page    = isset($is_archive) ? $is_archive : '';
+        $this->posts_per_page  = isset($posts_per_page) ? $posts_per_page : '';
+        $this->page_num        = isset($page_num) ? $page_num : '';
+        if ( $this->total_posts <= $this->posts_per_page ) return '';
         
         return $this->pagination();
-            
     }
         
     /**

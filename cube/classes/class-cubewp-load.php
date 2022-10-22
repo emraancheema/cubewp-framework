@@ -119,9 +119,7 @@ final class CubeWp_Load {
 	    // Frontend Page Builders
 	    add_action('cubewp_loaded', array('CubeWp_Elementor', 'init'));
         add_action('cubewp_loaded', array('CubeWp_Vc_Elements', 'init'));
-        if( ! class_exists( 'CubeWp_Frontend_Load' ) ) {
-            add_action('cubewp_loaded', array('CubeWp_Builder_Pro', 'init'));
-        }
+        
         if (self::is_request('frontend')) {
             self::frontend_includes();
         }
@@ -149,7 +147,7 @@ final class CubeWp_Load {
         self::load_plugin_textdomain();
         // Set Cubewp settings.
         self::cwp_get_option();
-        add_action('init', array('CubeWp_Add_On', 'init'), 9);
+        add_action('init', array('CubeWp_Add_Ons', 'init'), 9);
     }
     
         
@@ -238,7 +236,7 @@ final class CubeWp_Load {
         if(empty($type)) return '';
         
         $form = $this->cubewp_options(self::$prefix.'_'.$type.'_form');
-        $form =   isset($form) ? $form  : '';
+        $form =   !empty($form) ? $form  : array();
         return $form;
     }
         

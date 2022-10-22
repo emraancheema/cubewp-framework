@@ -56,7 +56,8 @@ class CubeWp_Admin_Taxonomy_Field extends CubeWp_Admin {
 			}
 			$args['options']     = $options;
 			$args['class']       = $args['class'] . ' cubewp-remote-options ';
-			$args['extra_attrs'] = $args['extra_attrs'] . ' data-dropdown-type="taxonomy" data-dropdown-values="' . $args['filter_taxonomy'] . '" ';
+			$extra_attrs = isset($args['extra_attrs']) ? $args['extra_attrs'] : '';
+            $args['extra_attrs'] = $extra_attrs . ' data-dropdown-type="taxonomy" data-dropdown-values="' . $args['filter_taxonomy'] . '" ';
 		} else {
 			$args['options'] = cwp_get_categories_by_taxonomy($args['filter_taxonomy']);
 		}

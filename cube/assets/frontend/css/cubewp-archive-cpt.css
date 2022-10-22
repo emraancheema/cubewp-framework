@@ -5,7 +5,10 @@
 a {
     text-decoration: none;
 }
-
+.cwp-archive-container .leaflet-container a.leaflet-popup-close-button {
+    z-index: 5;
+    color: #3e3e3e;
+}
 @media only screen and (min-width: 768px) {
     .cwp-archive-container .cwp-archive-content-container {
         min-height: 700px;

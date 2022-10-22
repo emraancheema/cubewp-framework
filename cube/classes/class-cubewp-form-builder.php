@@ -87,11 +87,19 @@ class CubeWp_Form_Builder {
 					$comma  = ',';
 				}
 			}
-			$associated_terms = '<small class="cwp-group-taxonomies">' . sprintf(__('Associated Categories (%s)', 'cubewp-framework'), $_terms) . '</small>';
+			$associated_terms = '<div class="cwp-icon-helpTip">
+				<span class="dashicons dashicons-editor-help"></span>
+				<div class="cwp-ctp-toolTips drop-left">
+					<div class="cwp-ctp-toolTip">
+					<h4>' . __('Associated Taxonomies', 'cubewp-framework') . '</h4>
+					<p class="cwp-ctp-tipContent">' . $_terms . '</p>
+				</div>
+				</div>
+			</div>';
 		}
 		
 		$output = '';
-		$active_class = "";
+		$active_class = " " . esc_attr($section["section_class"]) . " ";
 		$icon_active  = "";
 		if (isset($section['open_close_class']) && $section['open_close_class'] == "open") {
 			$active_class = "active-expanded";
@@ -106,8 +114,17 @@ class CubeWp_Form_Builder {
 	        $section_action_edit = '<span class="dashicons dashicons-edit cubewp-builder-section-action-edit"></span>';
         }
         $output .= '<div id="group-' . esc_attr($section["section_id"]) . '" class="cubewp-builder-section cubewp-expand-container ' . esc_attr($active_class) . '">';
-		    $output .= '<div class="cubewp-builder-section-header ' . $move_section_class . '">';
-                $output .= '<h3>' . esc_html($section['section_title']) . ($associated_terms) . '</h3>';
+		$output .= '<div class="cubewp-builder-section-header">';
+		if ($section['form_type'] != 'search_fields' && $section['form_type'] != 'search_filters') {
+			$output .= '<div class="' . $move_section_class . '">
+			  <svg xmlns="SVG namespace" width="20px" height="20px" viewBox="0 0 320 512" fill="#888">
+				 <path d="M40 352c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zm192 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 320l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40zM232 192c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 160l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40L40 32C17.9 32 0 49.9 0 72l0 48c0 22.1 17.9 40 40 40zM232 32c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0z">
+				 </path>
+			  </svg>
+		   </div>';
+		}
+			$output .= '<h3>' . esc_html($section['section_title']) . '</h3>';
+			$output .= $associated_terms;
                 $output .= '<div class="cubewp-builder-section-actions">';
                     $output .= $section_action_delete;
                     $output .= $section_action_edit;
@@ -348,9 +365,13 @@ class CubeWp_Form_Builder {
 		$output .= '<div id="cwpform-field-' . esc_attr($field["name"]) . '" class="cubewp-builder-group-widget cubewp-expand-container ' . esc_attr($field_size) . '">';
             $output .= '<div class="cubewp-builder-group-widget-row-wrapper">';
                 $output .= '<div class="cubewp-builder-group-widget-mover">';
-				$output .= '<svg xmlns="SVG namespace" width="20px" height="20px" viewBox="0 0 320 512" fill="currentColor"><path d="M40 352c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zm192 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 320l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40zM232 192c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 160l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40L40 32C17.9 32 0 49.9 0 72l0 48c0 22.1 17.9 40 40 40zM232 32c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0z"/></svg>';
+				$output .= '<svg xmlns="SVG namespace" width="20px" height="20px" viewBox="0 0 320 512" fill="#BFBFBF"><path d="M40 352c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zm192 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 320l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40zM232 192c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 160l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40L40 32C17.9 32 0 49.9 0 72l0 48c0 22.1 17.9 40 40 40zM232 32c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0z"/></svg>';
                 $output .= '</div>';
-        		$output .= '<img src="' . CWP_PLUGIN_URI . "cube/assets/admin/images/fields/" . $type_icon . ".png" . '" alt="' . esc_html__("Field Type Icon", 'cubewp-framework') . '" class="cubewp-builder-group-widget-type-icon">';
+				$type_image = CWP_PLUGIN_URI . "cube/assets/admin/images/fields/" . $type_icon . ".png";
+				if( ! file_exists(CWP_PLUGIN_PATH . "cube/assets/admin/images/fields/" . $type_icon . ".png")){
+					$type_image = CWP_PLUGIN_URI . "cube/assets/admin/images/fields/cube.png";
+				}
+				$output .= '<img src="' . $type_image . '" alt="' . esc_html__("Field Type Icon", 'cubewp-framework') . '" class="cubewp-builder-group-widget-type-icon">';
         		$output .= '<p class="cubewp-builder-group-widget-title" title="' . esc_html($field["label"]) . '">' . esc_html($field["label"]) . '</p>';
         		$output .= '<p class="builder-area-content cubewp-builder-group-widget-type">' . esc_html($type) . '</p>';
         		$output .= '<p class="builder-area-content cubewp-builder-group-widget-class">' . esc_html($class) . '</p>';
@@ -603,12 +624,12 @@ class CubeWp_Form_Builder {
 			if (isset($form_relation) && ! empty($form_relation)) {
 				if (isset($_POST['cwpform']) && ! empty($_POST['cwpform'])) {
 					$cwp_forms[$form_relation] = CubeWp_Sanitize_Dynamic_Array($_POST['cwpform'][$form_relation]);
+
 					CWP()->update_form($form_type, $cwp_forms);
 				} else {
 					if (isset($cwp_forms[$form_relation])) {
 						unset($cwp_forms[$form_relation]);
 					}
-					
 					CWP()->update_form($form_type, $cwp_forms);
 				}
 			}

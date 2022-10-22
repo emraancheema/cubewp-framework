@@ -131,6 +131,22 @@ button .dashicons {
     border: 1px dashed #0073af;
     border-radius: 4px;
     padding: 15px 30px;
+    height: 100%;
+    position: relative;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-builder-section-placeholder {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e3e3e3;
+    font-size: 30px;
+    font-weight: bold;
 }
 #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section {
     margin: 15px 0;
@@ -139,10 +155,16 @@ button .dashicons {
     align-items: center;
     background-color: #c9d8e3;
     border-radius: 4px;
-    cursor: pointer;
     display: flex;
     justify-content: flex-start;
     padding: 8px 20px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header .cubewp-builder-section-mover {
+    cursor: move;
+    margin: 5px 10px 0 0;
+}
+#cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-header .cubewp-builder-section-mover {
+    display: none;
 }
 #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header .cubewp-builder-section-actions {
     margin: 0 0 0 auto;
@@ -196,6 +218,10 @@ button .dashicons {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    min-height: 46px;
+}
+#cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-sidebar .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-row-wrapper {
+    padding: 0 10px;
 }
 #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-builder-group-widget-mover {
     height: 20px;
@@ -517,7 +543,7 @@ button .dashicons {
 #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch;
 }
 #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-single-layout-builder-container .cubewp-single-layout-builder-content {
     width: calc(65% - 10px);
@@ -648,17 +674,24 @@ button .dashicons {
     margin: 0 15px 0 0;
 }
 .shoftcode-area .cwpform-shortcode .inner {
-    background: #000;
+    background: #e0f2c8;
+    border: 1px solid #90c154;
     padding: 0 15px;
     border-radius: 4px;
-    color: #fff;
+    color: #1a2432;
     font-size: 16px;
-    line-height: 19px;
+    line-height: 30px;
     height: 30px;
-    user-select: all;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.shoftcode-area .cwpform-shortcode .inner.copy-to-clipboard {
+    user-select: all;
+    cursor: pointer;
+}
+.shoftcode-area .cwpform-shortcode .inner svg {
+    margin: 0 10px 0 0;
 }
 @media only screen and (max-width: 1026px) {
     #cwpform-builder .cubewp-builder-sidebar {
@@ -914,15 +947,13 @@ button .dashicons {
     font-size: 14px;
     margin: 2px -1px -3px 0;
 }
-@media only screen and (max-width: 1400px) {
-    .cubewp-subscription-form {
-        margin-bottom: 24%;
-    }
-    .cubewp-subscription-form {
-        transform: translateY(-36%);
-        top: 50%;
-    }
+.cubewp-builder-sections-importer {
+    margin: 0 10px 0 auto;
+    padding: 0 10px 0 0;
+    border-right: 1px solid #8c8f94;
 }
+
+
 .cubewp-subscription-main {
     position: absolute;
     text-align: center;
@@ -934,4 +965,14 @@ button .dashicons {
 .cubewp-subscription-bottom-contant .cubewp-logo img {
     width: 170px;
     height: auto;
+}
+
+@media only screen and (max-width: 1400px) {
+    .cubewp-subscription-form {
+        margin-bottom: 24%;
+    }
+    .cubewp-subscription-form {
+        transform: translateY(-36%);
+        top: 50%;
+    }
 }

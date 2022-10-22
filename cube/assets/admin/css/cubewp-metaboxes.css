@@ -4,6 +4,23 @@
 .cwp-metaboxes tr:last-child{
     border-bottom: none;
 }
+
+input[type=date],
+input[type=datetime-local],
+input[type=datetime],
+input[type=email],
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=time],
+input[type=url],
+input[type=week]
+{
+    width: 100%;
+}
 .cwp-metaboxes tr input[type="text"],
 .cwp-metaboxes tr input[type="number"],
 .cwp-metaboxes tr input[type="email"],
