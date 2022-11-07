@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CubeWp_Add_Ons {
 
 	// API route
-	public $route   = 'https://cubewp.com';
+	public $route   = 'http://127.0.0.1:8888/test';
 
     // store URL
 	public $purchase_url   = 'https://cubewp.com/store';
@@ -228,46 +228,50 @@ class CubeWp_Add_Ons {
             if ( get_transient( $slug . '_checking' ) )
             return;
             
-            $Lkey = CWP()->cubewp_options($slug.'_key');
-            if($Lkey){
-                $api_params = array(
-                    'edd_action' => 'check_license',
-                    'license' => $Lkey,
-                    'item_name' => urlencode( $item_name ),
-                    'url'       => get_bloginfo( 'url' ),
-                );
+			if(is_plugin_active($base)){
+				$Lkey = CWP()->cubewp_options($slug.'_key');
+				if($Lkey){
+					$api_params = array(
+						'edd_action' => 'check_license',
+						'license' => $Lkey,
+						'item_name' => urlencode( $item_name ),
+						'url'       => get_bloginfo( 'url' ),
+					);
 
-                // Call the custom API.
-                $response = wp_remote_post(
-                    $this->route,
-                    array(
-                        'timeout' => 15,
-                        'sslverify' => false,
-                        'body' => $api_params
-                    )
-                );
-                
-                if ( is_wp_error( $response ) )
-                    return false;
-        
-                $license_data = json_decode(
-                    wp_remote_retrieve_body( $response )
-                );
+					// Call the custom API.
+					$response = wp_remote_post(
+						$this->route,
+						array(
+							'timeout' => 15,
+							'sslverify' => false,
+							'body' => $api_params
+						)
+					);
+					
+					if ( is_wp_error( $response ) )
+						return false;
+			
+					$license_data = json_decode(
+						wp_remote_retrieve_body( $response )
+					);
 
-                if ( $license_data->license != 'valid' ) {
-                    $this->update_plugin_data($slug, $license_data->license);
-                }else{
-                    CWP()->update_cubewp_options($slug.'-status', $license_data->license);
-                }
-        
-                // Set to check again in 12 hours
-                set_transient(
-                    $slug . '_checking',
-                    $license_data,
-                    ( 60 * 60 * 12 )
-                );
-                
-            }
+					if ( isset($license_data->license)){
+						if ( $license_data->license != 'valid' ) {
+							$this->update_plugin_data($slug, $license_data->license);
+						}else{
+							CWP()->update_cubewp_options($slug.'-status', $license_data->license);
+						}
+					}
+			
+					// Set to check again in 12 hours
+					set_transient(
+						$slug . '_checking',
+						$license_data,
+						( 60 * 60 * 12 )
+					);
+					
+				}
+			}
         }        
     }
 

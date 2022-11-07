@@ -23,13 +23,18 @@ jQuery(document).ready(function ($){
     jQuery(document).on('click', '.cwp-file-upload-button', function (e) {
         e.preventDefault();
         var thisObj = jQuery(this),
-        custom_uploader = wp.media({
+            allowed_types = 'application/pdf,application/zip,text/plain,text/calendar,application/gzip,application/x-7z-compressed,application/x-zip-compressed,multipart/x-zip,application/x-compressed',
+            custom_allowed_types = thisObj.attr("data-allowed-types");
+        if (custom_allowed_types !== '') {
+            allowed_types = custom_allowed_types;
+        }
+        var custom_uploader = wp.media({
             multiple: false,
-            library : {type : 'application/pdf,application/zip,text/plain,text/calendar,application/gzip,application/x-7z-compressed,application/x-zip-compressed,multipart/x-zip,application/x-compressed'},
+            library : {type : allowed_types},
         }).on('select', function(){
-            var attachment = custom_uploader.state().get('selection').first().toJSON();
-            var allowed_mime = Array('application/gzip','text/calendar','application/pdf','text/plain','application/zip','application/x-7z-compressed', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
-            if(jQuery.inArray( attachment.mime, allowed_mime) !== -1 ){
+            var attachment = custom_uploader.state().get('selection').first().toJSON(),
+                allowed_types_arr = allowed_types.split(",");
+            if(jQuery.inArray( attachment.mime, allowed_types_arr) !== -1 ){
                 thisObj.closest('.cwp-upload-field').find('input[type="text"]').val(attachment.url).trigger("input");
                 thisObj.closest('.cwp-upload-field').find('input[type="hidden"]').val(attachment.id);
                 thisObj.closest('.cwp-upload-field').find('.cwp-remove-upload-button').show();
@@ -41,12 +46,18 @@ jQuery(document).ready(function ($){
     
     jQuery(document).on('click', '.cwp-image-upload-button', function (e) {
         e.preventDefault();
-        var thisObj = jQuery(this), custom_uploader = wp.media({
+        var thisObj = jQuery(this),
+            allowed_types = "image/png,image/jpg,image/gif,image/jpeg",
+            custom_allowed_types = thisObj.attr("data-allowed-types");
+        if (custom_allowed_types !== '') {
+            allowed_types = custom_allowed_types;
+        }
+        var custom_uploader = wp.media({
             multiple: false,
-            library : {type : 'image'},
+            library : {type : allowed_types},
         }).on('select', function () {
             var attachment = custom_uploader.state().get('selection').first().toJSON();
-            var allowed_mime = Array('image/png','image/jpg','image/gif','image/jpeg');
+            var allowed_mime = allowed_types.split(",");
             if(jQuery.inArray( attachment.mime, allowed_mime) !== -1 ){
                 thisObj.closest('.cwp-upload-field').find('input[type="text"]').val(attachment.url).trigger("input");
                 thisObj.closest('.cwp-upload-field').find('input[type="hidden"]').val(attachment.id);
@@ -87,9 +98,14 @@ jQuery(document).ready(function ($){
     
         var thisObj    = jQuery(this),
         gallery_id = thisObj.closest('.cwp-gallery-field').data('id'),
-        custom_uploader = wp.media({
+            allowed_types = "image/png,image/jpg,image/gif,image/jpeg",
+            custom_allowed_types = thisObj.attr("data-allowed-types");
+        if (custom_allowed_types !== '') {
+            allowed_types = custom_allowed_types;
+        }
+        var custom_uploader = wp.media({
             title: 'Add Images to Gallery',
-            library : {type : 'image'},
+            library : {type : allowed_types},
             multiple: true
         }).on('select', function() {
             var attachments = custom_uploader.state().get('selection').map(function( attachment_data ) {
@@ -547,11 +563,25 @@ function cubewp_init_date_time_pickers(date_time_pickers) {
     });
 }
 
+function cubewp_init_range_pickers(range_picker) {
+    range_picker.each(function () {
+        var thisObj = jQuery(this),
+            current_value_input = thisObj.closest("td");
+        if (!current_value_input.find('.cubewp-current-value').length) {
+            current_value_input.append("<span class='cubewp-current-value'>" + thisObj.val() + "</span>");
+            thisObj.on("input", function () {
+                jQuery(this).closest("td").find(".cubewp-current-value").text(jQuery(this).val());
+            });
+        }
+    });
+}
+
 function cubewp_init_resources() {
     var cwp_select2 = jQuery(".cwp-select2 select"),
         data_pickers = jQuery(".cwp-date-picker"),
         time_pickers = jQuery(".cwp-time-picker"),
-        date_time_pickers = jQuery(".cwp-date-time-picker");
+        date_time_pickers = jQuery(".cwp-date-time-picker"),
+        range_picker = jQuery(".cwp-field-range");
 
     /**
      * Initializing Select2 On Select2 UI Dropdowns
@@ -572,6 +602,12 @@ function cubewp_init_resources() {
      */
     if (time_pickers.length > 0) {
         cubewp_init_time_pickers(time_pickers);
+    }
+    /**
+     * Initializing range field
+     */
+    if (range_picker.length > 0) {
+        cubewp_init_range_pickers(range_picker);
     }
 
     /**

@@ -33,7 +33,7 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
      * @return object
      * @since  1.0.0
      */
-    public static function process_add_field() {
+    public static function process_poststype_add_field() {
         check_ajax_referer( 'cubewp_custom_fields_nonce', 'nonce' );
         if( true )
             wp_send_json_success(self::add_new_field());
@@ -54,7 +54,23 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
         }else{
             wp_send_json_error( array( 'error' => $custom_error ) );
         }
-    }    
+    }
+
+    /**
+     * Method cwp_duplicate_posttype_custom_field
+     *
+     * @return object
+     * @since  1.0.0
+     */
+    public static function cwp_duplicate_posttype_custom_field(){
+        check_ajax_referer( 'cubewp_custom_fields_nonce', 'nonce' );
+        if( true ){
+            wp_send_json_success(self::get_duplicate_field($_POST['field_id']));
+        }else{
+            wp_send_json_error( array( 'error' => $custom_error ) );
+        }
+    }
+
     /**
      * Method add_new_group
      *
@@ -222,7 +238,27 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                         </div>
                     </div>
                     <div class="cwp-group-fields cwp-validation">
-                    <?php echo self::get_fields($group['fields'], $group['sub_fields']); ?>
+                        <div class="cwp-group-fields-head">
+                            <div class="cwp-field-order-head">
+                            </div> 
+                            <div class="cwp-fields-title-head">   
+                                <div class="cwp-field-label-head">
+                                    <?php esc_html_e('Field Label', 'cubewp-framework'); ?>
+                                </div>
+                                <div class="cwp-field-name-head">
+                                    <?php esc_html_e('Field Name', 'cubewp-framework'); ?>
+                                </div>
+                                <div class="cwp-field-type-head">
+                                    <?php esc_html_e('Field Type', 'cubewp-framework'); ?>
+                                </div>
+                            </div>
+                            <div class="cwp-fields-actions-head">
+                                <?php esc_html_e('Actions', 'cubewp-framework'); ?>
+                            </div>
+                        </div>
+                        <div class="cwp-group-fields-content">
+                            <?php echo self::get_fields($group['fields'], $group['sub_fields']); ?>
+                        </div>
                     </div>
                 </div>
                 <?php self::add_new_field_btn(); ?>
@@ -313,8 +349,12 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
             'name'                    =>   'cwp_field_'. rand(10000000,1000000000000),
             'type'                    =>   '',
             'description'             =>   '',
-            'map_use'             =>   '',
+            'map_use'                 =>   '',
             'default_value'           =>   '',
+            'minimum_value'           =>   0,
+            'maximum_value'           =>   100,
+            'steps_count'             =>   1,
+            'file_types'              =>   '',
             'placeholder'             =>   '',
             'filter_post_types'       =>   '',
             'filter_taxonomy'         =>   '',
@@ -343,27 +383,39 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
         $hide_class   = (isset($FieldData['label']) && $FieldData['label'] != '') ? 'hidden' : '';
         $field_type   = (isset($FieldData['type']) && $FieldData['type'] == '') ? 'text' : $FieldData['type'];
         $field_type   = isset($field_types[$field_type]) ? $field_types[$field_type] : $field_type;
-        $group_secure = cubewp_custom_field_group_secure($_GET['groupid']);
+        $group_secure = isset($_GET['groupid']) ? cubewp_custom_field_group_secure($_GET['groupid']) : false;
         $secure_class = ($group_secure == true) ? 'group_visibility_secure' : '';
+        $counter = isset($FieldData["counter"]) ? $FieldData["counter"] : 1;
 
         $html = '
         <div class="parent-field cwp-field-set cwp-add-form-feild '. $secure_class .'">
-            <div class="field-header '. $closed_class .'">
-                <div class="field-title" data-label="'. esc_html__('Field Name', 'cubecubewp-frameworkwp') .'">
-                    <div class="field-order"><span class="dashicons dashicons-move"></span></div>
+            <div class="parent-field-header field-header '. $closed_class .'">
+                
+                <div class="field-order-counter">
+                    <div class="field-order">
+                        <svg xmlns="SVG namespace" width="22px" height="22px" viewBox="0 0 320 512" fill="#BFBFBF">
+                            <path d="M40 352c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zm192 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 320l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40zM232 192c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0zM40 160l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40L40 32C17.9 32 0 49.9 0 72l0 48c0 22.1 17.9 40 40 40zM232 32c-22.1 0-40 17.9-40 40l0 48c0 22.1 17.9 40 40 40l48 0c22.1 0 40-17.9 40-40l0-48c0-22.1-17.9-40-40-40l-48 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="field-counter"><span>' . $counter . '</span></div>
+                </div>
+                <div class="field-title" data-label="'. esc_html__('Field Name', 'cubewp-framework') .'">
                     <div class="field-label">'. esc_html($field_name) .'</div>
-                    <div class="field-type">'. esc_html($field_type) .'</div>
                     <div class="field-slug">'. esc_html($FieldData['name']) .'</div>
+                    <div class="field-type">'. esc_html($field_type) .'</div>
                 </div>
                 <div class="field-actions">
-                    <a class="edit-field" href="javascript:void(0);"><span class="dashicons dashicons-edit"></span></a>';
+                    
+                    <a class="duplicate-field" data-field_type="posttype" data-field_id='. esc_html($FieldData['name']) .' href=""><span class="dashicons dashicons-admin-page"></span></a>';
                     if(!$group_secure){
                         $html .= '<a class="remove-field" href="javascript:void(0);"><span class="dashicons dashicons-trash"></span></a>';
                     }
-       $html .= '</div>
+                    
+       $html .= '   <a class="edit-field" href="javascript:void(0);"><span class="dashicons dashicons-arrow-down-alt2"></span></a>
+                </div>
             </div>
             <div class="cwp-collapsible-inner '. $hide_class .'">
-                <table>
+                <table class="parent-fields">
                     <tbody>';
                     $field_settings['field_label'] = array(
                                 'label' => esc_html__('Field Label', 'cubewp-framework'),
@@ -397,6 +449,7 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                                 'placeholder' => '',
                                 'option-class' => 'form-option option',
                                 'class' => 'field-type',
+                                'required'    =>    true,
                             );
                     $field_settings['field_map_use'] = array(
                                 'label' => esc_html__('Do you want to use this field for archive map', 'cubewp-framework'),
@@ -431,7 +484,51 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                                 'tr_class' => 'conditional-field',
                                 'class' => 'field-default-value',
                                 'id' => '',
-                                'tr_extra_attr' => 'data-equal="text,textarea"',
+                                'tr_extra_attr' => 'data-equal="text,textarea,color,range"',
+                            );
+                    $field_settings['field_minimum_value'] = array(
+                                'label' => esc_html__('Minimum Value', 'cubewp-framework'),
+                                'name' => 'cwp[fields]['.$FieldData['name'].'][minimum_value]',
+                                'type' => 'text',
+                                'id'          => '',
+                                'placeholder' => esc_html__('Minimum Value', 'cubewp-framework'),
+                                'value' => $FieldData['minimum_value'],
+                                'tr_class' => 'conditional-field',
+                                'class' => 'field-minimum-value',
+                                'tr_extra_attr' => 'data-equal="range"',
+                            );
+                    $field_settings['field_maximum_value'] = array(
+                                'label' => esc_html__('Maximum Value', 'cubewp-framework'),
+                                'name' => 'cwp[fields]['.$FieldData['name'].'][maximum_value]',
+                                'type' => 'text',
+                                'id'          => '',
+                                'placeholder' => esc_html__('Maximum Value', 'cubewp-framework'),
+                                'value' => $FieldData['maximum_value'],
+                                'tr_class' => 'conditional-field',
+                                'class' => 'field-maximum-value',
+                                'tr_extra_attr' => 'data-equal="range"',
+                            );
+                    $field_settings['field_steps_count'] = array(
+                                'label' => esc_html__('Step', 'cubewp-framework'),
+                                'name' => 'cwp[fields]['.$FieldData['name'].'][steps_count]',
+                                'type' => 'text',
+                                'id'          => '',
+                                'placeholder' => esc_html__('Step', 'cubewp-framework'),
+                                'value' => $FieldData['steps_count'],
+                                'tr_class' => 'conditional-field',
+                                'class' => 'field-step-count',
+                                'tr_extra_attr' => 'data-equal="range"',
+                            );
+                    $field_settings['field_file_types'] = array(
+                                'label' => esc_html__('File Types', 'cubewp-framework'),
+                                'name' => 'cwp[fields]['.$FieldData['name'].'][file_types]',
+                                'type' => 'text',
+                                'id'          => '',
+                                'placeholder' => esc_html__('Enter Allowed File Types. EG: (image/png,text/plain)', 'cubewp-framework'),
+                                'value' => $FieldData['file_types'],
+                                'tr_class' => 'conditional-field',
+                                'class' => 'field-file-types',
+                                'tr_extra_attr' => 'data-equal="gallery,file,image"',
                             );
                     $field_settings['field_placeholder'] = array(
                                 'label' => esc_html__('Placeholder', 'cubewp-framework'),
@@ -566,7 +663,7 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                                 'id'          => '',
                                 'checked' => $FieldData['required'],
                                 'type_input' => 'checkbox',
-                                'class' => 'field-required-checkbox checkbox',
+                                'class' => 'field-required-checkbox checkbox cwp-switch-check',
                                 'id' => 'field-required-'. str_replace('cwp_field_', '', $FieldData['name']),
                                 'tr_class' => 'conditional-field',
                                 'tr_extra_attr' => 'data-not_equal="gallery,repeating_field,switch"',
@@ -620,14 +717,15 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                                 'label' => esc_html__('Conditional Logic', 'cubewp-framework'),
                                 'name' => 'cwp[fields]['.$FieldData['name'].'][conditional]',
                                 'value' => '1',
-                                'id'          => '',
+                                'id' => 'field-conditional-'. str_replace('cwp_field_', '', $FieldData['name']),
                                 'placeholder' => '',
                                 'type' => 'text',
                                 'checked' => $FieldData['conditional'],
                                 'type_input' => 'checkbox',
-                                'class' => 'field-conditional',
+                                'class' => 'field-conditional cwp-switch-check',
                                 'tr_class' => 'conditional-field',
                                 'tr_extra_attr' => 'data-not_equal="gallery,repeating_field"',
+                                'extra_label' => esc_html__('Conditional', 'cubewp-framework'),
                             );
                     $conditional_rule_hide_row = 'cwp-hide-row';
                     if( isset($FieldData['conditional']) && $FieldData['conditional'] == 1 ){
@@ -744,6 +842,7 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                         'placeholder' => '',
                         'option-class' => 'form-option option',
                         'class' => 'field-type',
+                        'required'    =>    true,
         );
         $field_settings['field_desc'] = array(
                         'label' => esc_html__('description', 'cubewp-framework'),
@@ -929,7 +1028,7 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
                 </div>
             </div>
             <div class="cwp-sub-field-inner '. $hide_class .'">
-                <table>
+                <table class="subfields">
                     <tbody>';
                     foreach( $field_settings as $field_setting ){
                         $fields = apply_filters("cubewp/admin/posttype/{$field_setting['type']}/customfield", '', $field_setting);
@@ -963,6 +1062,8 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
         $field_types['image']               = esc_html__('Image', 'cubewp-framework');
         $field_types['gallery']             = esc_html__('Gallery', 'cubewp-framework');
         $field_types['switch']              = esc_html__('Switch', 'cubewp-framework');
+        $field_types['color']               = esc_html__('Color', 'cubewp-framework');
+        $field_types['range']               = esc_html__('Range', 'cubewp-framework');
         $field_types['dropdown']            = esc_html__('Dropdown', 'cubewp-framework');
         $field_types['checkbox']            = esc_html__('Checkbox', 'cubewp-framework');
         $field_types['radio']               = esc_html__('Radio Button', 'cubewp-framework');
@@ -994,6 +1095,8 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Posttype_Custom_Field
         $field_types['image']          = esc_html__('Image', 'cubewp-framework');
         $field_types['gallery']         = esc_html__('Gallery', 'cubewp-framework');
         $field_types['switch']         = esc_html__('Switch', 'cubewp-framework');
+        $field_types['color']          = esc_html__('Color', 'cubewp-framework');
+        $field_types['range']          = esc_html__('Range', 'cubewp-framework');
         $field_types['dropdown']       = esc_html__('Dropdown', 'cubewp-framework');
         $field_types['checkbox']       = esc_html__('Checkbox', 'cubewp-framework');
         $field_types['radio']          = esc_html__('Radio Button', 'cubewp-framework');

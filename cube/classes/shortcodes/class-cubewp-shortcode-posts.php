@@ -94,7 +94,7 @@ class CubeWp_Shortcode_Posts {
 		if ( ! empty($title)) {
 			$output .= '<h2 class="cwp-widget-shortcode-heading">' . $title . '</h2>';
 		}
-		$output .= apply_filters('cubewp_shortcode_taxonomy_output', '', $parameters);
+		$output .= apply_filters('cubewp_shortcode_posts_output', '', $parameters);
 		$output .= '</div>';
 
 		return $output;

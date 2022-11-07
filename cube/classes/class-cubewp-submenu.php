@@ -116,6 +116,41 @@ class CubeWp_Submenu {
                 'callback'     => 'cubewp-admin-search-fields',
             ),
             array(
+                'id'           =>  'cubewp-user-registration-form',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('User Signup Form', 'cubewp'),
+                'callback'     =>  'cubewp-user-registration-form',
+                'position'     => 8
+            ),
+            array(
+                'id'           =>  'cubewp-user-profile-form',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('User Profile Form', 'cubewp'),
+                'callback'     =>  'cubewp-user-profile-form',
+                'position'     => 9
+            ),
+            array(
+                'id'           =>  'cubewp-post-types-form',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('Post Types Form', 'cubewp'),
+                'callback'     =>  'cubewp-post-types-form',
+                'position'     => 10
+            ),
+            array(
+                'id'           =>  'cubewp-single-layout',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('Single Layout', 'cubewp'),
+                'callback'     =>  'cubewp-single-layout',
+                'position'     => 11
+            ),
+            array(
+                'id'           =>  'cubewp-user-dashboard',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('User Dashboard', 'cubewp'),
+                'callback'     =>  'cubewp-user-dashboard',
+                'position'     => 12
+            ),
+            array(
                 'id'        => 'cubewp-settings', // Expected to be overridden if dashboard is enabled.
                 'parent'    => 'cube_wp_dashboard',
                 'title'     => esc_html__('CubeWP Settings', 'cubewp-framework'),

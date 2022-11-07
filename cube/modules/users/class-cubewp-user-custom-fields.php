@@ -29,9 +29,32 @@ class CubeWp_User_Custom_Fields{
         $fields       = json_decode($fields, true);
         $fieldOptions = CWP()->get_custom_fields( 'user' );
         $html = '';
-        foreach ($fields as $field) {
+        $counter = 1;
+        if(!empty($fields)){
+            foreach ($fields as $field) {
+                $SingleFieldOption = $fieldOptions[$field];
+                $SingleFieldOption['sub_fields'] = $sub_fields;
+                $SingleFieldOption['counter'] = $counter;
+                $counter++;
+                $html .= CubeWp_User_Custom_Fields_UI::add_new_field($SingleFieldOption);
+            }
+        }
+        return $html;
+    }
+
+    protected static function get_duplicate_field($field = '') {
+        if (!$field) {
+            return;
+        }
+        
+        $fieldOptions = CWP()->get_custom_fields( 'user' );
+        $html = '';
+        if(!empty($field)){
             $SingleFieldOption = $fieldOptions[$field];
-            $SingleFieldOption['sub_fields'] = $sub_fields;
+            if(isset($SingleFieldOption['sub_fields'])){
+                $SingleFieldOption['sub_fields'] = json_encode(array($SingleFieldOption['name']=>explode(",",$SingleFieldOption['sub_fields'])));
+            }
+            $SingleFieldOption['label'] = $SingleFieldOption['label'].' - copy';
             $html .= CubeWp_User_Custom_Fields_UI::add_new_field($SingleFieldOption);
         }
         return $html;
@@ -49,6 +72,7 @@ class CubeWp_User_Custom_Fields{
         if(isset($sub_fields[$parent_field]) && !empty($sub_fields[$parent_field])){
             foreach ($sub_fields[$parent_field] as $sub_field) {
                 $SingleFieldOption          = $fieldOptions[$sub_field];
+                
                 $html .= CubeWp_User_Custom_Fields_UI::add_new_sub_field($SingleFieldOption, $parent_field);
             }
         }
@@ -69,6 +93,8 @@ class CubeWp_User_Custom_Fields{
         $field_types['file']                = esc_html__('File', 'cubewp-framework');
         $field_types['image']               = esc_html__('Image', 'cubewp-framework');
         $field_types['gallery']             = esc_html__('Gallery', 'cubewp-framework');
+        $field_types['color']               = esc_html__('Color', 'cubewp-framework');
+        $field_types['range']               = esc_html__('Range', 'cubewp-framework');
         $field_types['switch']              = esc_html__('Switch', 'cubewp-framework');
         $field_types['dropdown']            = esc_html__('Dropdown', 'cubewp-framework');
         $field_types['checkbox']            = esc_html__('Checkbox', 'cubewp-framework');
@@ -93,6 +119,8 @@ class CubeWp_User_Custom_Fields{
         $field_types['url']            = esc_html__('URL', 'cubewp-framework');
         $field_types['textarea']       = esc_html__('Textarea', 'cubewp-framework');
         $field_types['file']           = esc_html__('File', 'cubewp-framework');
+        $field_types['color']          = esc_html__('Color', 'cubewp-framework');
+        $field_types['range']          = esc_html__('Range', 'cubewp-framework');
         $field_types['switch']         = esc_html__('Switch', 'cubewp-framework');
         $field_types['dropdown']       = esc_html__('Dropdown', 'cubewp-framework');
         $field_types['checkbox']       = esc_html__('Checkbox', 'cubewp-framework');
@@ -127,7 +155,6 @@ class CubeWp_User_Custom_Fields{
     public static function save_group() {
         
         if (isset($_POST['cwp']['group'])) {
-            
             $group           = isset($_POST['cwp']['group'])   ? $_POST['cwp']['group']      : array();
             $groupID         = isset($group['id'])             ? sanitize_text_field($group['id'])          : '';
             $groupName       = isset($group['name'])           ? sanitize_text_field($group['name'])        : '';

@@ -12,9 +12,15 @@ class CubeWp_Shortcode_Taxonomy {
 		add_filter( 'cubewp_shortcode_taxonomy_output', array( $this, 'cubewp_taxonomy_output' ), 10, 2 );
 	}
 
-	public static function cubewp_taxonomy_output( $output, array $parameters ) {
+	public static function cubewp_taxonomy_output( $output, $parameters = array()) {
+		if(empty($parameters) || count($parameters) == 0)
+		return;
+
 		wp_enqueue_style( 'cwp-taxonomy-shortcode' );
-		$taxonomy        = $parameters['taxonomy'];
+		$taxonomy        = isset($parameters['taxonomy']) ? $parameters['taxonomy'] : '';
+		if(empty($taxonomy))
+		return;
+
 		$terms_per_page  = $parameters['terms_per_page'];
 		$output_style    = $parameters['output_style'];
 		$_child_terms    = $parameters['child_terms'];

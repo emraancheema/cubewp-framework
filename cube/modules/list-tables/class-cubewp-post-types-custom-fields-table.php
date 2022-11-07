@@ -72,6 +72,7 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
         $actions = [
             'edit' => sprintf( '<a href="%s">'. esc_html__('Edit', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','edit', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_edit_group' ))),
             'delete' => sprintf( '<a href="%s">'. esc_html__('Delete', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','delete', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_delete_group' ))),
+            'duplicate' => sprintf( '<a href="%s">'. esc_html__('Duplicate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','duplicate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_duplicate_group' ))),
         ];
         return $title . $this->row_actions( $actions );
     }
@@ -124,6 +125,15 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
                 wp_redirect( CubeWp_Submenu::_page_action('custom-fields') );
             }
         }
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'duplicate') {
+            $nonce = esc_html( $_REQUEST['_wpnonce'] );
+            if(wp_verify_nonce( $nonce, 'cwp_duplicate_group')) {
+                if(isset($_REQUEST['groupid'])){
+                    self::duplicate_group($_REQUEST['groupid']);
+                }
+                wp_redirect( CubeWp_Submenu::_page_action('custom-fields') );
+            }
+        }
         
 		
 	}
@@ -134,7 +144,7 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
 		/*
 		 * First, lets decide how many records per page to show
 		 */
-		$per_page = 5;
+		$per_page = 20;
 
 		/*
 		 * REQUIRED. Now we need to define our column headers. This includes a complete
@@ -281,5 +291,80 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
         $group['group_order'] = get_post_meta( $GroupID, '_cwp_group_order', true );
 
         return $group;        
+    }
+    /**
+     * Method save_group
+     *
+     * @return void
+     * @since  1.0.0
+     */
+    protected static function duplicate_group($groupID) {
+        $post = get_post( $groupID );
+            
+        $groupName       = $post->post_title.' - Copy';
+        $groupDesc       = $post->post_content;
+        $groupOrder      = get_post_meta($groupID, '_cwp_group_order', true);
+        $groupTypes      = get_post_meta($groupID, '_cwp_group_types', true);
+        $groupTerms      = get_post_meta($groupID, '_cwp_group_terms', true);
+        $group_fields    = get_post_meta($groupID, '_cwp_group_fields', true);
+        $group_sub_fields    = get_post_meta($groupID, '_cwp_group_sub_fields', true);
+
+        if (!empty($groupName)) {
+            $post_id = wp_insert_post(array(
+                'post_type' => 'cwp_form_fields',
+                'post_title' => $groupName,
+                'post_content' => $groupDesc,
+                'post_status' => 'publish',
+            ));
+            
+            update_post_meta($post_id, '_cwp_group_order', $groupOrder);
+            update_post_meta($post_id, '_cwp_group_types', $groupTypes);
+            update_post_meta($post_id, '_cwp_group_terms', $groupTerms);
+            
+            if(isset($group_fields) && !empty($group_fields)){
+                $group_fields = explode(',', $group_fields);
+                foreach($group_fields as $field){
+                    $field = get_field_options($field);
+                    $fieldName = $field['name'];
+                    $field['name'] = $field['name'].'copy';
+                    $field['group_id'] = $post_id;
+                    
+                    if(isset($group_sub_fields) && !empty($group_sub_fields)){
+                        $sub_fieldsdata = json_decode($group_sub_fields, true);
+                        if(isset($sub_fieldsdata[$fieldName])){
+                            foreach($sub_fieldsdata[$fieldName] as $sub_field){
+                                
+                                $sub_field = get_field_options($sub_field);
+                                $sub_field['name'] = $sub_field['name'].'copy';
+                                $sub_field['group_id'] = $post_id;
+                                $sub_field_names[$field['name']][] = $sub_field['name'];
+                                self::set_option($sub_field['name'], $sub_field);
+                                $sub_fields[] = $sub_field['name'];
+                            }
+                            $field['sub_fields'] = implode(',', $sub_fields);
+                        }
+                    }
+                    
+                    self::set_option($field['name'], $field);
+                    $field_names[] = $field['name'];
+                }
+                $field_names = implode(",", $field_names);            
+                update_post_meta($post_id, '_cwp_group_fields', $field_names);
+                if(isset($sub_field_names) && !empty($sub_field_names)){
+                    update_post_meta($post_id, '_cwp_group_sub_fields', json_encode($sub_field_names) );
+                }
+            }
+        }
+    }
+
+    public static function set_option($name, $val) {
+        if ($name) {
+            $options = CWP()->get_custom_fields( 'post_types' );
+            $options = $options == '' ? array() : $options;
+            $options[$name] = $val;
+            return CWP()->update_custom_fields( 'post_types', $options );
+        } else {
+            return false;
+        }
     }
 }

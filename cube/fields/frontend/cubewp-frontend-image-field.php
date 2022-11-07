@@ -10,9 +10,15 @@ class CubeWp_Frontend_Image_Field extends CubeWp_Frontend {
 	}
 
 	function render_image_field($output = '', $args = array()) {
+		$args = apply_filters('cubewp/frontend/field/parametrs', $args);
 		$args['container_class'] = 'cubewp-have-image-field';
 		$args['type'] = 'file';
-		$args['extra_attrs'] = 'accept="image/png,image/jpg,image/jpeg,image/gif" data-error-msg="' . esc_html__("is not acceptable in this field.", "cubewp-framework") . '"';
+		if (isset($args["file_types"]) && !empty($args["file_types"])) {
+			$accept = 'accept="' . $args["file_types"] . '"';
+		 }else {
+			$accept = 'accept="image/png,image/jpg,image/jpeg,image/gif"';
+		 }
+		 $args['extra_attrs'] = $accept . ' data-error-msg="' . esc_html__("is not acceptable in this field.", "cubewp-framework") . '"';
 
 		return apply_filters("cubewp/frontend/file/field", $output, $args);
     }

@@ -78,10 +78,12 @@ class CubeWp_Update_Frontend_Forms{
                 if(self::$GROUP_OPTIONS == true){
                     $options = CWP()->get_custom_fields( 'post_types' );
                     if($options){
-                        foreach($group_fields as $group_field){
-                            unset($options[$group_field]);
+                        if(!empty($group_fields)){
+                            foreach($group_fields as $group_field){
+                                unset($options[$group_field]);
+                            }
+                            CWP()->update_custom_fields( 'post_types', $options );
                         }
-                        CWP()->update_custom_fields( 'post_types', $options );
                     }
                 }
                                                 

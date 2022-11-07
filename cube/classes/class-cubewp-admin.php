@@ -77,6 +77,34 @@ class CubeWp_Admin {
               display: block;
            }
         </style>';
+        if( ! class_exists( 'CubeWp_Frontend_Load' ) ) {
+            echo '<style>
+               .wp-submenu li a[href="admin.php?page=cubewp-user-registration-form"]::after,
+               .wp-submenu li a[href="admin.php?page=cubewp-user-profile-form"]::after,
+               .wp-submenu li a[href="admin.php?page=cubewp-post-types-form"]::after,
+               .wp-submenu li a[href="admin.php?page=cubewp-single-layout"]::after,
+               .wp-submenu li a[href="admin.php?page=cubewp-user-dashboard"]::after
+                {
+                    content: "\f160";
+                    margin-left:5px;
+                    font-family: dashicons;
+                    display: inline-block;
+                    line-height: 1;
+                    font-weight: 400;
+                    font-style: normal;
+                    speak: never;
+                    text-decoration: inherit;
+                    text-transform: none;
+                    text-rendering: auto;
+                    width: 16px;
+                    height: 16px;
+                    font-size: 16px;
+                    vertical-align: top;
+                    text-align: center;
+                    transition: color .1s ease-in;
+               }
+            </style>';
+        }
         
     }
 
@@ -130,6 +158,7 @@ class CubeWp_Admin {
             'email', 
             'url', 
             'color', 
+            'range',
             'password', 
             'textarea', 
             'wysiwyg-editor', 
@@ -227,6 +256,10 @@ class CubeWp_Admin {
             'name'                  =>    '',
             'custom_name'           =>    '',
             'value'                 =>    '',
+            'minimum_value'           =>   0,
+            'maximum_value'           =>   100,
+            'steps_count'             =>   1,
+            'file_types'              =>   '',
             'placeholder'           =>    '',
             'label'                 =>    '',
             'description'           =>    '',

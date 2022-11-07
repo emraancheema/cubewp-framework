@@ -692,7 +692,7 @@ if ( ! function_exists("cwp_get_fields_by_group_id")) {
  */
 if ( ! function_exists("cubewp_core_data")) {
 	function cubewp_core_data($data = '') {
-		if (empty($data)) {
+		if (empty($data) || is_array($data) || is_object($data)) {
 			return;
 		}
 
@@ -837,7 +837,7 @@ if ( ! function_exists("CubeWp_Sanitize_Muli_Array")) {
  */
 if ( ! function_exists("cwp_get_opt_hook")) {
 	function cwp_get_opt_hook($type = '') {
-		$opt_name = '';
+		$opt_name = CWP()->prefix() . '_'.$type;
 		switch ($type) {
 			case 'post_types':
 				$opt_name = CWP()->prefix() . '_custom_fields';
@@ -884,6 +884,9 @@ if ( ! function_exists("get_field_value")) {
 	function get_field_value($field = '') {
 		if (empty($field)) {
 			return;
+		}
+		if ( ! CWP()->is_cubewp_display( 'is_singular' ) ) {
+			return esc_html__("This value will display only on 'Single Post' page.", "cubewp-framework");
 		}
 		if ( ! is_array($field)) {
 			$field = get_field_options($field);
@@ -1457,6 +1460,46 @@ if ( ! function_exists("_get_post_type")) {
 }
 
 /**
+ *
+ * @param string $type
+ *
+ * @return array
+ * @since  1.0.0
+ */
+if ( ! function_exists( 'get_single_page_settings' ) ) {
+	function get_single_page_settings( string $post_type ){
+		$form_options = CWP()->get_form( "single_layout" );
+		if (isset($form_options[$post_type]['form']) && ! empty($form_options[$post_type]['form'])) {
+				return $form_options[$post_type]['form'];
+		}
+		return array();
+	}
+}
+
+if ( ! function_exists( 'is_cubewp_single_page_builder_active' ) ) {
+	function is_cubewp_single_page_builder_active( $post_type ) {
+		if ( ! did_action('elementor/loaded')) {
+			return false;
+		}
+		$single_page_settings = get_single_page_settings( $post_type );
+		if (isset($single_page_settings["single_page"]) && ! empty($single_page_settings["single_page"]) && is_numeric($single_page_settings["single_page"])) {
+			return true;
+		}
+ 
+		return false;
+	}
+}
+ 
+if ( ! function_exists( 'cubewp_single_page_builder_output' ) ) {
+	function cubewp_single_page_builder_output( $post_type ) {
+		$single_page_settings = CWP()->get_single_page_settings( $post_type );
+		$target_page_id = $single_page_settings["single_page"];
+		$elementor_frontend_builder = new Elementor\Frontend();
+		return $elementor_frontend_builder->get_builder_content( $target_page_id );
+	}
+}
+
+/**
  * Method _get_map_settings
  *
  * @return array
@@ -1511,19 +1554,25 @@ if ( ! function_exists("cwp_custom_mime_types")) {
 
 if ( ! function_exists("cubewp_add_user_roles_caps")) {
 	function cubewp_add_user_roles_caps() {
-		$roles = array(
-			"subscriber",
-			"contributor"
-		);
-		foreach ( $roles as $role ) {
-		$role_obj = get_role( $role );
-		// Add a new capability.
-		$role_obj->add_cap( 'edit_posts' );
-		$role_obj->add_cap( 'read' );
-		$role_obj->add_cap( 'delete_posts' );
+		 $roles = array(
+			 "subscriber",
+			 "contributor"
+		 );
+		 foreach ( $roles as $role ) {
+			 $role_obj = get_role( $role );
+			 // Add a new capability.
+			if (cwp()->is_request("frontend")) {
+				 $role_obj->add_cap( 'edit_posts' );
+				 $role_obj->add_cap( 'read' );
+				 $role_obj->add_cap( 'delete_posts' );
+			}else {
+			   $role_obj->remove_cap( 'edit_posts' );
+			   $role_obj->remove_cap( 'read' );
+			   $role_obj->remove_cap( 'delete_posts' );
+			}
 		}
 	}
-	
+ 
 	add_action('init', 'cubewp_add_user_roles_caps');
 }
 

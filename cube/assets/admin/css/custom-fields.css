@@ -1,3 +1,6 @@
+*{
+	box-sizing:border-box;
+}
 .cwp-postbox-holder {
 	margin: 10px 20px 0 2px;
 }
@@ -156,11 +159,23 @@ input[type=date], input[type=datetime-local], input[type=datetime], input[type=e
 .cwp-group-fields #post-body-content {
 	margin-bottom: 0;
 }
+
 .field-header .field-order {
 	cursor: move;
 	float: left;
-	margin: 0 10px 0 0;
-	width: 2%;
+	margin: 0 20px 0 0;
+	width: 20px;
+}
+.field-counter {
+	float: left;
+    margin: 0 30px 0 0;
+    width: 32px;
+}
+.field-counter span {
+    padding: 4px 12px;
+    border: 1px solid #ccd0d4;
+    font-size: 14px;
+    font-weight: 500;
 }
 .field-header .sub-field-order {
 	cursor: move;
@@ -169,14 +184,20 @@ input[type=date], input[type=datetime-local], input[type=datetime], input[type=e
 }
 .field-header .field-label {
 	float: left;
-	width: 30%;
+	width: 40%;
+	font-weight: 600;
+    color: #3194C0;
 }
 .field-header .field-label,
 .field-header .field-type {
 	text-transform: capitalize;
 }
-.field-header .field-type,
 .field-header .field-slug {
+	float: left;
+	font-weight: 400;
+	width: 40%;
+}
+.field-header .field-type {
 	float: left;
 	font-weight: 400;
 	width: 20%;
@@ -208,6 +229,12 @@ input[type=date], input[type=datetime-local], input[type=datetime], input[type=e
 .cwp-group-fields .field-header .field-title {
 	flex-grow: 1;
 	margin: 0;
+}
+.field-actions a span {
+    color: #000;
+}
+.field-actions .remove-field span {
+    color: #A7AAAE;
 }
 .conditional-rule tbody td.conditional-rule-field select {
 	min-width: 250px;

@@ -204,7 +204,12 @@ class CubeWp_Frontend_Search_Filter {
         }
         self::get_filters_fields($search_filter,$field_name);
     }
-
+    
+    /**
+     * Method get_hidden_field_if_tax
+     *
+     * @return void
+     */
     private static function get_hidden_field_if_tax(){
         if(is_tax() && !is_search()){
             if(!is_page()){
@@ -218,6 +223,31 @@ class CubeWp_Frontend_Search_Filter {
             }
         }
     }
+
+    /**
+     * Method get_filters_style_scripts
+     *
+     * @return void
+     * @since  1.0.0
+     */
+    private static function get_filters_style_scripts(){
+        CubeWp_Enqueue::enqueue_script( 'cwp-search-filters' );
+        CubeWp_Enqueue::enqueue_script( 'select2' );
+        CubeWp_Enqueue::enqueue_style( 'select2' );
+        CubeWp_Enqueue::enqueue_style( 'archive-cpt-styles' );
+        CubeWp_Enqueue::enqueue_style( 'loop-style' );
+        CubeWp_Enqueue::enqueue_script( 'jquery-ui-datepicker' );
+        CubeWp_Enqueue::enqueue_style( 'frontend-fields' );
+
+        // Archive map script and style.
+        CubeWp_Enqueue::enqueue_style( 'cwp-map-cluster' );
+        CubeWp_Enqueue::enqueue_style( 'cwp-leaflet-css' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-map' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet-cluster' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet-fullscreen' );
+        CubeWp_Enqueue::enqueue_script('cwp-frontend-fields');
+    }
         
     /**
      * Method get_filters this function uses to get filters directly without shortcode
@@ -229,8 +259,10 @@ class CubeWp_Frontend_Search_Filter {
      * @since  1.0.0
      */
     public static function get_filters($type='',$page_num=''){
-        wp_enqueue_script('cwp-frontend-fields');
         
+         /* Calling all css and JS files for filters */
+         self::get_filters_style_scripts();
+
         $sorting_fields = array();
         $post_type =   !empty($type) ? $type : _get_post_type();
         $cwp_search_filters = CWP()->get_form('search_filters');
@@ -265,21 +297,9 @@ class CubeWp_Frontend_Search_Filter {
      * @since  1.0.0
      */
     public static function get_shortcode_filters($type='',$page_num=''){
-        CubeWp_Enqueue::enqueue_script( 'cwp-search-filters' );
-        CubeWp_Enqueue::enqueue_script( 'select2' );
-        CubeWp_Enqueue::enqueue_style( 'select2' );
-        CubeWp_Enqueue::enqueue_style( 'archive-cpt-styles' );
-        CubeWp_Enqueue::enqueue_style( 'loop-style' );
-        CubeWp_Enqueue::enqueue_script( 'jquery-ui-datepicker' );
-        CubeWp_Enqueue::enqueue_style( 'frontend-fields' );
 
-        // Archive map script and style.
-        CubeWp_Enqueue::enqueue_style( 'cwp-map-cluster' );
-        CubeWp_Enqueue::enqueue_style( 'cwp-leaflet-css' );
-        CubeWp_Enqueue::enqueue_script( 'cubewp-map' );
-        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet' );
-        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet-cluster' );
-        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet-fullscreen' );
+        /* Calling all css and JS files for filters */
+       self::get_filters_style_scripts();
 
         $type =   !empty($type) ? $type : _get_post_type();
         ob_start();

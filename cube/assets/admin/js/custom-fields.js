@@ -27,11 +27,13 @@ jQuery(document).ready(function ($){
     jQuery('#cwp-add-new-field-btn').click(function (e){
         e.preventDefault();
         var data = {
-            action: 'process_add_field',
+            action: 'process_poststype_add_field',
             nonce: cubewp_custom_fields_params.nonce
         };
         jQuery.post(cubewp_custom_fields_params.url, data, function (response){
-            jQuery('#poststuff #post-body .cwp-group-fields').append(response.data);
+            jQuery('#poststuff #post-body .cwp-group-fields .cwp-group-fields-content').append(response.data);
+            var new_field = jQuery('.parent-field.cwp-field-set').last();
+            new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);
             cwp_update_custom_field_type();
             cwp_find_group_field();
             cwp_find_sub_fields();
@@ -46,14 +48,73 @@ jQuery(document).ready(function ($){
             nonce: cubewp_custom_fields_params.nonce
         };
         jQuery.post(cubewp_custom_fields_params.url, data, function (response){
-            jQuery('#poststuff #post-body .cwp-group-fields').append(response.data);
+            jQuery('#poststuff #post-body .cwp-group-fields .cwp-group-fields-content').append(response.data);
+            var new_field = jQuery('.parent-field.cwp-field-set').last();
+            new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);
             cwp_update_custom_field_type();
             cwp_find_group_field();
             cwp_find_sub_fields();
             cwp_fields_sortable();
         });
     });
-    
+
+    jQuery('.duplicate-field').click(function (e){
+        e.preventDefault();
+        var e_this = jQuery(this);
+        var field_id = e_this.data('field_id');
+        var field_type = e_this.data('field_type');
+        var data = {
+            action: 'cwp_duplicate_'+field_type+'_custom_field',
+            field_id: field_id,
+            nonce: cubewp_custom_fields_params.nonce
+        };
+        jQuery.ajax({
+            type: 'POST',
+            url: cubewp_custom_fields_params.url,
+            data: data,
+            success: function (response) {
+                jQuery('#poststuff #post-body .cwp-group-fields .cwp-group-fields-content').append(response.data);
+                cwp_update_custom_field_type();
+                cwp_find_group_field();
+                cwp_find_sub_fields();
+                cwp_fields_sortable();
+                var id = new Date().getTime().toString(20);
+                var new_field = jQuery('.parent-field.cwp-field-set').last();
+                new_field.addClass('duplicate-field-' +field_id);
+                new_field.find('.parent-field-header').find('.field-slug').html(field_id+id);
+                new_field.find('.parent-fields').find('input.field-name').val(field_id+id);
+                new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);
+                new_field.find('input').each(function(){
+                    var ethis = jQuery(this),
+                        name  = ethis.attr('name');
+                    ethis.attr('name',name.replace(field_id,field_id+id));
+                });
+                new_field.find('select').each(function(){
+                    var ethis = jQuery(this),
+                        name  = ethis.attr('name');
+                    ethis.attr('name',name.replace(field_id,field_id+id));
+                });
+                new_field.find('.sub-fields .cwp-field-set').each(function(){
+                    var ethis = jQuery(this);
+                    
+                    var sub_field_id = ethis.find('.field-title .field-slug').html();
+                    ethis.find('.field-title .field-slug').html(sub_field_id+id);
+                    ethis.find('input.field-name').val(sub_field_id+id);
+                    ethis.find('input').each(function(){
+                        var ethis = jQuery(this),
+                            name  = ethis.attr('name');
+                        ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
+                    });
+                    ethis.find('select').each(function(){
+                        var ethis = jQuery(this),
+                            name  = ethis.attr('name');
+                        ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
+                    });
+                });
+            }
+        });
+    });
+
     jQuery(document).on('click', '.add-sub-field', function (e) {
         e.preventDefault();
         var e_this = jQuery(this);
@@ -296,7 +357,7 @@ function cwp_find_sub_fields() {
 
 function cwp_fields_sortable(){
     
-    jQuery(".cwp-group-fields").sortable({
+    jQuery(".cwp-group-fields-content").sortable({
         items: ".cwp-add-form-feild",
         handle: '.field-order'
     }).disableSelection();

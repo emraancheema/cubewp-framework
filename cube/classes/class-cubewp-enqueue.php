@@ -63,25 +63,6 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 			CubeWp_Enqueue::enqueue_style( 'cwp-alert-ui' );
 			CubeWp_Enqueue::enqueue_script( 'cwp-alert-ui' );
 		}
-        
-		// Global frontend scripts.
-		if ( CWP()->is_cubewp_display( 'is_archive' ) ) {
-			self::enqueue_script( 'cwp-search-filters' );
-			self::enqueue_script( 'select2' );
-			self::enqueue_style( 'select2' );
-			self::enqueue_style( 'archive-cpt-styles' );
-			self::enqueue_style( 'loop-style' );
-			self::enqueue_script( 'jquery-ui-datepicker' );
-			self::enqueue_style( 'frontend-fields' );
-
-			// Archive map script and style.
-			self::enqueue_style( 'cwp-map-cluster' );
-			self::enqueue_style( 'cwp-leaflet-css' );
-			self::enqueue_script( 'cubewp-map' );
-			self::enqueue_script( 'cubewp-leaflet' );
-			self::enqueue_script( 'cubewp-leaflet-cluster' );
-         	self::enqueue_script( 'cubewp-leaflet-fullscreen' );
-		}
 
 		// CSS Styles.
 		$enqueue_styles = self::get_styles();

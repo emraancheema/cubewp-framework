@@ -262,6 +262,9 @@ trait CubeWp_Builder_Ui {
 	protected static function CubeWp_build_post_type_switcher(array $data) {
 		$title   = $data['switcher_title'];
 		$options = self::$tab_options;
+		if (empty($options)) {
+			return '<h3 style="text-align: center;">' . esc_html__("No Custom Post Type Found.", "cubewp-framework") . '</h3>';
+		 }
 		$name    = "cubewp-builder-cpt";
 		$class   = "cubewp-tab-switcher cubewp-tab-switcher-trigger-on-load cubewp-tab-switcher-have-child";
 		$output  = '<div class="cubewp-builder-sidebar-option">';
@@ -378,6 +381,7 @@ trait CubeWp_Builder_Ui {
 		if ($data['form_type'] == 'single_layout') {
 			$output .= self::cubewp_builder_area_topbar($slug, $data) . '
             <div class="cubewp-builder-area">
+			' . self::builder_settings($slug,$data) . '
                 <div class="cubewp-single-layout-builder-container single-layout-builder">
                     <div class="cubewp-single-layout-builder-content">
                         <div class="cubewp-builder-sections">
@@ -455,7 +459,13 @@ trait CubeWp_Builder_Ui {
 				$output .= self::cubewp_builder_area_content($slug, $data);
 				$output .= '</div>';
             }
-        }
+        }else {
+			$output .= '<div id="type-temp" class="cubewp-type-container cubewp-switcher-tab-temp cubewp-tab-switcher-target active-tab">';
+			$output .= '<div class="cubewp-builder-area">';
+			$output .= self::cubewp_builder_no_section(true);
+			$output .= '</div>';
+			$output .= '</div>';
+		 }
 
         return $output;
 	}
@@ -528,6 +538,9 @@ trait CubeWp_Builder_Ui {
 	 * @since  1.0.0
 	 */
 	protected static function builder_get_shortcode() {
+		if (empty(self::$tab_options)) {
+			return '';
+		}
 		$button_text = esc_html__("Save Changes", "cubewp-framework");
 		return '<div class="shoftcode-area">
 			<div class="cwpform-shortcode"></div>
@@ -546,14 +559,15 @@ trait CubeWp_Builder_Ui {
 	 * @since  1.0.0
 	 */
 	protected static function builder_form_settings_btn($FormType) {
-		if ($FormType != 'single_layout') {
-			return '<button class="button form-settings-form">
-                <span class="dashicons dashicons-admin-generic"></span>
-                ' . esc_html__("Form Settings", "cubewp-framework") . '
-            </button>';
+		$setting_text = esc_html__("Form Settings", "cubewp-framework");
+		if ($FormType == 'single_layout') {
+		   $setting_text = esc_html__("Single Page Settings", "cubewp-framework");
 		}
-
-        return '';
+	 
+		return '<button class="button form-settings-form">
+				<span class="dashicons dashicons-admin-generic"></span>
+				' . $setting_text . '
+			</button>';
 	}
 
 	/**
@@ -562,30 +576,34 @@ trait CubeWp_Builder_Ui {
 	 * @return string html
 	 * @since  1.0.0
 	 */	
-	protected static function cubewp_builder_no_section() {
+	protected static function cubewp_builder_no_section($no_cpt = false) {
 		$FormType = self::$FORM_TYPE;
 		$output = '';
 		if ($FormType != 'search_filters' && $FormType != 'search_fields') {
-			$output .= '<div class="cubewp-builder-no-section hidden">
-				<img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/no-section.png" alt="' . esc_html__("No Section Image", "cubewp-framework") . '">
-				<h3>' . esc_html__("Let’s build something awesome today!", "cubewp-framework") . '</h3>';
-				$output .= '<div class="cubewp-builder-no-section-steps">';
-				if ($FormType == 'post_type' || $FormType == 'single_layout') {
-						$output .= '<p><span>' . esc_html__( "1", "cubewp-framework" ) . '</span>' . esc_html__( "Select a Post Type", "cubewp-framework" ) . '</p>';
+		   $output .= '<div class="cubewp-builder-no-section hidden">
+			  <img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/no-section.png" alt="' . esc_html__("No Section Image", "cubewp-framework") . '">';
+			  if ( ! $no_cpt) {
+				 $output .= '<h3>' . esc_html__("Let's build something awesome today!", "cubewp-framework") . '</h3>';
+				 $output .= '<div class="cubewp-builder-no-section-steps">';
+					if ($FormType == 'post_type' || $FormType == 'single_layout') {
+					   $output .= '<p><span>' . esc_html__( "1", "cubewp-framework" ) . '</span>' . esc_html__( "Select a Post Type", "cubewp-framework" ) . '</p>';
 					}else {
-						$output .= '<p><span>' . esc_html__( "1", "cubewp-framework" ) . '</span>' . esc_html__( "Select a User Role", "cubewp-framework" ) . '</p>';
+					   $output .= '<p><span>' . esc_html__( "1", "cubewp-framework" ) . '</span>' . esc_html__( "Select a User Role", "cubewp-framework" ) . '</p>';
 					}
 					$output .= '<p><span>' . esc_html__("2", "cubewp-framework") . '</span>' . esc_html__("Create a Section", "cubewp-framework") . '</p>
 					<p><span>' . esc_html__("3", "cubewp-framework") . '</span>' . esc_html__("Drag a Form Field", "cubewp-framework") . '</p>
 					<p><span>' . esc_html__( "4", "cubewp-framework" ) . '</span>' . esc_html__( "Hit Save Changes", "cubewp-framework" ) . '</p>
-				</div>';
-				$output .= '<button class="button button-primary cubewp-trigger-add-section">
-	                <span class="dashicons dashicons-plus"></span>
-	                ' . esc_html__("Create Section", "cubewp-framework") . '
-	            </button>
-			</div>';
+				 </div>
+				 <button class="button button-primary cubewp-trigger-add-section">
+						<span class="dashicons dashicons-plus"></span>
+						' . esc_html__( "Create Section", "cubewp-framework" ) . '
+					</button>';
+			  }else {
+				 $output .= '<h3>' . esc_html__("No Custom Post Type Found.", "cubewp-framework") . '</h3>';
+			  }
+		   $output .= '</div>';
 		}
-
+	 
 		return $output;
 	}
 }

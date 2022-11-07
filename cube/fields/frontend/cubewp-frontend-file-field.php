@@ -38,7 +38,12 @@ class CubeWp_Frontend_File_Field extends CubeWp_Frontend {
 		$required       = !empty($required['class']) ? $required['class'] : '';
 		$output        = self::cwp_frontend_post_field_container($args);
 		$output        .= self::cwp_frontend_field_label($args);
-		$args['extra_attrs'] = !empty($args['extra_attrs']) ? $args['extra_attrs'] : 'accept="application/gzip,text/calendar,application/pdf,text/plain,application/zip,application/x-7z-compressed,application/x-zip-compressed,multipart/x-zip,application/x-compressed" data-error-msg="' . esc_html__("is not acceptable in this field.", "cubewp-framework") . '"';
+		if (isset($args["file_types"]) && !empty($args["file_types"])) {
+			$accept = 'accept="' . $args["file_types"] . '"';
+		 }else {
+			$accept = 'accept="application/gzip,text/calendar,application/pdf,text/plain,application/zip,application/x-7z-compressed,application/x-zip-compressed,multipart/x-zip,application/x-compressed"';
+		 }
+		 $args['extra_attrs'] = !empty($args['extra_attrs']) ? $args['extra_attrs'] : $accept . ' data-error-msg="' . esc_html__("is not acceptable in this field.", "cubewp-framework") . '"';
 		ob_start();
 		?>
 		<div class="cwp-file-field-container">

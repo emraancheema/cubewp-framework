@@ -68,12 +68,18 @@ class CubeWp_Custom_Fields {
         
         new CubeWp_Ajax( '',
             self::CFP,
-            'process_add_field'
+            'process_poststype_add_field'
         );
         new CubeWp_Ajax( '',
             self::CFP,
             'cwp_add_custom_sub_field'
         );
+
+        new CubeWp_Ajax( '',
+            self::CFP,
+            'cwp_duplicate_posttype_custom_field'
+        );
+
         new CubeWp_Ajax( '',
             self::CFP,
             'cwp_get_taxonomies_by_post_types'
@@ -138,6 +144,11 @@ class CubeWp_Custom_Fields {
         new CubeWp_Ajax( '',
             self::CFU,
             'cwp_add_user_custom_field'
+        );
+
+        new CubeWp_Ajax( '',
+            self::CFU,
+            'cwp_duplicate_user_custom_field'
         );
         
         new CubeWp_Ajax( '',

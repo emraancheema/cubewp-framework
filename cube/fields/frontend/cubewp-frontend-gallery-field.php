@@ -57,13 +57,18 @@ class CubeWp_Frontend_Gallery_Field extends CubeWp_Frontend {
 						'value' => $rand_id,
 					);
 					echo cwp_render_hidden_input($input_attrs);
+					if (isset($args["file_types"]) && !empty($args["file_types"])) {
+						$accept = 'accept="' . $args["file_types"] . '"';
+					}else {
+						$accept = 'accept="image/png,image/jpg,image/jpeg,image/gif"';
+					}
 					$input_attrs = array(
 						'type'        => 'file',
 						'id'          => $rand_id,
 						'class'       => 'form-control ' . $args['class'].' '.$required,
 						'name'        => ! empty($args['custom_name']) ? $args['custom_name'] . '[' . $rand_id . '][]' : $args['name'],
 						'value'       => '',
-						'extra_attrs' => 'accept="image/png,image/jpg,image/jpeg,image/gif" multiple="multiple"',
+						'extra_attrs' => $accept , ' multiple="multiple"',
 					);
 					echo cwp_render_file_input($input_attrs);
 					?>

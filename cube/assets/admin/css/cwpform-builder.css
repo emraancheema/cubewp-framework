@@ -655,6 +655,7 @@ button .dashicons {
     align-items: center;
     margin: 10px 0;
     width: 100%;
+    flex-wrap: wrap;
 }
 .form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field label {
     width: 200px;
@@ -662,7 +663,14 @@ button .dashicons {
     white-space: nowrap;
     overflow: hidden;
 }
-.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field input {
+.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field input,
+.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field select
+{
+    width: calc(100% - 202px);
+    max-width: 100%;
+}
+.form-settings .cwpform-settings .cwpform-setting-fields .cwpform-setting-field p {
+    margin: 5px 0 0 auto;
     width: calc(100% - 200px);
 }
 .shoftcode-area {

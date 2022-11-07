@@ -34,8 +34,12 @@ jQuery(document).ready(function () {
 
 function cwp_notification_ui(notification_type, notification_content) {
     var $cwp_alert = jQuery(".cwp-alert.cwp-js-alert"),
-        $alert_class = '';
-
+        $alert_class = '',
+        $cwp_alert_content = $cwp_alert.find('.cwp-alert-content');
+        
+    if ($cwp_alert.is(":visible") && $cwp_alert_content.html() === notification_content) {
+        return false;
+    }
     if ( notification_type === 'success' ) {
         $alert_class = 'cwp-alert-success';
     } else if ( notification_type === 'warning' ) {
@@ -47,7 +51,7 @@ function cwp_notification_ui(notification_type, notification_content) {
     }
     $cwp_alert.removeClass("cwp-alert-danger cwp-alert-success cwp-alert-warning cwp-alert-info").addClass($alert_class);
     $cwp_alert.find('.cwp-alert-heading').text(notification_type + "!");
-    $cwp_alert.find('.cwp-alert-content').html(notification_content);
+    $cwp_alert_content.html(notification_content);
     $cwp_alert.slideDown();
     setTimeout(function () {
         $cwp_alert.find('.cwp-alert-close').trigger("click");

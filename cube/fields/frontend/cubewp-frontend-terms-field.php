@@ -46,8 +46,8 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                 $output .= self::cwp_frontend_field_label($args);
                 $output .= '<div class="cwp-field-checkbox-container">';
                     foreach($options as $value => $label){
-                        $value = $label['term_id'];
                         if(!empty($label)){
+                            $value = isset($label['term_id']) && !empty($label['term_id']) ? $label['term_id'] : 0;
                             $output .= '<div class="cwp-field-checkbox">';
                                 $input_attrs = array(
                                     'type'         =>  'checkbox',

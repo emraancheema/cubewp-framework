@@ -653,6 +653,52 @@ trait CubeWp_Single_Page_Trait {
 
 		return apply_filters('cubewp/singlecpt/field/image', $output, $args);
 	}
+
+
+
+   /**
+    * Method field_color
+    *
+    * @param array $args field data
+    *
+    * @return string html
+    * @since  1.0.0
+    */
+	private static function field_color($args = array()) {
+		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-color-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+		  <h4>' . $args['label'] . '</h4>
+		  <div class="cwp-cpt-single-text">
+			 <p style="color: ' . $args['value'] . ';">' . esc_html($args['value']) . '</p>
+		  </div>
+	   </div>';
+		}
+		return apply_filters('cubewp/singlecpt/field/text', $output, $args);
+	}
+ 
+	/**
+	 * Method field_range
+	 *
+	 * @param array $args field data
+	 *
+	 * @return string html
+	 * @since  1.0.0
+	 */
+	private static function field_range($args = array()) {
+		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
+		$output = null;
+		if(!empty($args['value'])){
+			$output = '<div class="cwp-cpt-single-range-container cwp-cpt-single-field-container ' . esc_attr($args['container_class']) . ' '.esc_attr($args['field_size']).'">
+		  <h4>' . $args['label'] . '</h4>
+		  <div class="cwp-cpt-single-text">
+			 <p>' . esc_html($args['value']) . '</p>
+		  </div>
+	   </div>';
+		}
+		return apply_filters('cubewp/singlecpt/field/text', $output, $args);
+	}
         
     /**
      * Method get_post_share_button

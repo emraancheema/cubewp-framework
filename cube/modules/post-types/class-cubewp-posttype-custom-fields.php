@@ -31,9 +31,30 @@ class CubeWp_Posttype_Custom_Fields {
         $fieldOptions = CWP()->get_custom_fields( 'post_types' );
 
         $html = '';
+        $counter = 1;
         foreach ($fields as $field) {
             $SingleFieldOption = $fieldOptions[$field];
             $SingleFieldOption['sub_fields'] = $sub_fields;
+            $SingleFieldOption['counter'] = $counter;
+            $counter++;
+            $html .= CubeWp_Posttype_Custom_Fields_Display::add_new_field($SingleFieldOption);
+        }
+        return $html;
+    }
+
+    protected static function get_duplicate_field($field = '') {
+        if (!$field) {
+            return;
+        }
+        
+        $fieldOptions = CWP()->get_custom_fields( 'post_types' );
+        $html = '';
+        if(!empty($field)){
+            $SingleFieldOption = $fieldOptions[$field];
+            if(isset($SingleFieldOption['sub_fields'])){
+                $SingleFieldOption['sub_fields'] = json_encode(array($SingleFieldOption['name']=>explode(",",$SingleFieldOption['sub_fields'])));
+            }
+            $SingleFieldOption['label'] = $SingleFieldOption['label'].' - copy';
             $html .= CubeWp_Posttype_Custom_Fields_Display::add_new_field($SingleFieldOption);
         }
         return $html;
@@ -128,7 +149,7 @@ class CubeWp_Posttype_Custom_Fields {
     protected static function save_group() {
         
         if (isset($_POST['cwp']['group'])) {
-            
+
             $groupID         = sanitize_text_field($_POST['cwp']['group']['id']);
             $groupName       = sanitize_text_field($_POST['cwp']['group']['name']);
             $groupDesc       = wp_strip_all_tags( wp_unslash( $_POST['cwp']['group']['description'] ));

@@ -17,6 +17,7 @@ class CubeWp_Pagination{
     
     protected $total_posts     = '';
     protected $archive_page = '';
+    protected $extra_query = '';
     protected $posts_per_page  = '10';
     protected $page_num        = 1;
     protected $total_page      = 0;
@@ -44,7 +45,8 @@ class CubeWp_Pagination{
     public function cubewp_archive_pagination( $output = '', array $args ) {
         extract($args);
         $this->total_posts     = isset($total_posts) ? $total_posts : '';
-        $this->archive_page    = isset($is_archive) ? $is_archive : '';
+        $this->archive_page    = isset($archive) ? $archive : '';
+        $this->extra_query    = isset($query_string) ? $query_string : '';
         $this->posts_per_page  = isset($posts_per_page) ? $posts_per_page : '';
         $this->page_num        = isset($page_num) ? $page_num : '';
         if ( $this->total_posts <= $this->posts_per_page ) return '';
@@ -127,7 +129,7 @@ class CubeWp_Pagination{
     public function prev_page( ) {
         
         if ( $this->page_num > 1 ) {
-            if($this->is_archive == 'false'){
+            if($this->archive_page == 'false'){
                 $output = '<li><a href="?page_num=' . ($this->page_num - 1) .'">';
             }
             else{
@@ -148,7 +150,7 @@ class CubeWp_Pagination{
     public function to_first_page( ) {
         
         if( $this->page_num > 3 && $this->total_page > 5 ){
-            if($this->is_archive == 'false'){
+            if($this->archive_page == 'false'){
                 $output = '<li><a href="?page_num=1">';
             }
             else{
@@ -185,8 +187,8 @@ class CubeWp_Pagination{
         if( $this->total_page > 1 ){
             for( $i = $this->loop_start; $i <= $this->loop_end; $i ++ ){
                 if( $i != $this->page_num ){
-                    if($this->is_archive == 'false'){
-                        $output = '<li><a href="?page_num=' . $i .'">';
+                    if($this->archive_page == 'false'){
+                        $output = '<li><a href="?page_num=' . $i .$this->extra_query.'">';
                     }
                     else{
                         $output .= '<li><a href="javascript:void(0);" onclick="cubewp_posts_pagination_ajax(\'' . ($i) . '\');">';
@@ -224,7 +226,7 @@ class CubeWp_Pagination{
     public function to_last_page( ) {
         
         if( $this->loop_end != $this->total_page ) {
-            if($this->is_archive == 'false'){
+            if($this->archive_page == 'false'){
                 $output = '<li><a href="?page_num=' . $this->total_page .'">';
             }
             else{
@@ -245,7 +247,7 @@ class CubeWp_Pagination{
     public function next_page( ) {
         
         if( $this->total_posts > 0 && $this->page_num < ($this->total_posts / $this->posts_per_page) ){
-            if($this->is_archive == 'false'){
+            if($this->archive_page == 'false'){
                 $output = '<li><a href="?page_num=' . ($this->page_num + 1) .'">';
             }
             else{

@@ -36,6 +36,12 @@ select,
 	padding: 10px;
 	width: 100%;
 }
+.cwp-field-container.cwp-field-color input[type=color] {
+    width: 66px;
+    height: 27px;
+    cursor: pointer;
+    padding: 1px 2px;
+}
 
 select {
 	background: #ffffff;
@@ -858,7 +864,7 @@ a.ui-datepicker-next {
 	padding: 12px;
 	text-decoration: none;
 	text-shadow: none;
-	width: calc(100% - 20px);
+	width: 100%;
 }
 
 .cwp-frontend-form-container input[type=submit]:hover {
@@ -933,25 +939,6 @@ a.ui-datepicker-next {
 .cubewp-address-manually.cubewp-active {
 	color: #000;
 }
-
-.cubewp-processing-ajax,
-.cubewp-processing-ajax:hover,
-.cwp-frontend-form-container [type=submit].cubewp-processing-ajax,
-.cwp-frontend-form-container [type=submit].cubewp-processing-ajax:hover
-{
-   pointer-events: none;
-   background-size: 100px 100%;
-   background-image: linear-gradient(45deg,#588cb7 33%,#6297c2 0,#6297c2 70%,#588cb7 0);
-   border-color: #2271b1;
-   animation: cubewp-active-ajax-animation 2s linear infinite;
-}
-
-@keyframes cubewp-active-ajax-animation {
-   0% {
-      background-position: 200px 0;
-   }
-}
-
 /*responsive*/
 
 @media screen and (max-width: 480px) {

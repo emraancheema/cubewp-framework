@@ -6,7 +6,8 @@ a {
 }
 
 .cwp-add-form-feild table {
-	width: 100%
+	width: 100%;
+	border-spacing: 0;
 }
 
 .cwp-add-form-feild table label {
@@ -18,8 +19,7 @@ a {
 }
 
 .sub-fields-holder .sub-fields {
-	border: 1px solid #ccd0d4;
-	border-bottom: none;
+	border: unset;
 }
 
 #poststuff .sub-fields-holder h2 {
@@ -41,16 +41,69 @@ a {
 	padding: 15px
 }
 
+.cwp-group-fields {
+    background: #fff;
+    border: 1px solid #dddddd;
+    margin-bottom: 20px;
+}
+
+.cwp-group-fields-head {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-bottom: 2px solid #dddddd;
+    font-size: 14px;
+    font-weight: bold;
+	padding: 15px 25px;
+}
+
+.cwp-fields-title-head {
+    width: calc(100% - 172px);
+    display: flex;
+}
+
+.cwp-field-order-head,.field-order-counter {
+    width: 102px;
+}
+
+.cwp-field-label-head {
+    width: 40%;
+}
+
+.cwp-field-name-head {
+    width: 40%;
+}
+
+.cwp-field-type-head {
+    width: 20%;
+}
+
+.cwp-fields-actions-head {
+    width: 70px;
+}
+
+.cwp-group-fields-content {
+    background: #fff;
+    padding: 18px 10px;
+}
+
 .cwp-group-fields .cwp-field-set {
 	border: none;
 	box-shadow: none;
-	margin-bottom: 20px;
+	margin-bottom: 0;
 	padding: 0;
 	width: 100%;
 }
+.cwp-group-fields .cwp-field-set:not(:last-child){
+	margin-bottom:10px;
+}
 
-.cwp-group-fields .cwp-field-set .cwp-collapsible-inner {
-	padding: 20px;
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner, .cwp-group-fields .cwp-field-set .cwp-sub-field-inner {
+    padding: 0;
+    border: 1px solid #ccd0d4;
+    border-top: 0;
+    border-left: 7px solid #1486B8;
+    border-radius: 0 0 5px 5px;
 }
 
 .cwp-hide {
@@ -105,23 +158,28 @@ a {
 
 .cwp-group-fields .field-header {
 	align-items: center;
-	border-bottom: 1px solid #ccd0d4;
-	border-top: 1px solid #ccd0d4;
+	border: 1px solid #ccd0d4;
 	color: #23282d;
 	display: flex;
-	font-size: 1.3em;
+	font-size: 14px;
 	justify-content: space-between;
 	margin: 0;
-	padding: 15px;
+	padding: 15px 15px;
+    border-radius: 5px 5px 0 0;
 }
 
 .cwp-group-fields .field-header.closed {
-	border-bottom: none;
+	border: 1px solid #ccd0d4;
+    border-radius: 3px;
+    padding: 15px 15px;
+	background: #FDFDFD;
 }
 
 .cwp-group-fields .field-header .field-title {
+	width: calc(100% - 190px);
 	flex-grow: 1;
 	margin: 0;
+	font-size: 14px;
 }
 
 .conditional-rule tbody td.conditional-rule-field select {
@@ -139,6 +197,72 @@ a {
 
 .cwp-add-form-feild .field-options-table .clone-option {
 	display: none !important;
+}
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td:first-child {
+    background: #F8F8F8;
+    border-color: #000;
+    border: 0;
+    margin: 0;
+    border-right: 1px solid #ccd0d4;
+    padding: 15px 20px;
+	font-size: 14px;
+    font-weight: bold;
+}
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner tr:first-child td:first-child, .cwp-group-fields .cwp-field-set .cwp-collapsible-inner tr:first-child td {
+    padding-top: 30px;
+}
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td.conditional-rule-field {
+    background: unset;
+    border: unset;
+    font-weight: unset;
+}
+
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td{
+    padding: 15px 20px;
+}
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td.conditional-rule-field,
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td.conditional-rule-operator,
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td.conditional-rule-value{
+    padding: 0 10px 20px 0;
+}
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner tr:first-child td.conditional-rule-field:first-child {
+    padding-top: 0px;
+}
+input.cwp-switch-check {
+    display: none !important;
+}
+.cwp-switch-check + label {
+	border: 1px solid #D8D8D8;
+    border-radius: 15px;
+    cursor: pointer;
+    height: 20px;
+    opacity: 0.56;
+    position: relative;
+    transition: 300ms;
+    width: 40px;
+    background: #D8D8D8;
+    font-size: 0;
+    display: block;
+}
+.cwp-switch-check + label:before {
+    background: #ffffff;
+    border-radius: 50%;
+    content: "";
+    height: 15px;
+    left: 3px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 300ms;
+    width: 15px;
+}
+.cwp-switch-check:checked ~ label {
+    background: #077CB2;
+    border-color: #077CB2;
+    opacity: 1;
+}
+.cwp-switch-check:checked ~ label:before {
+    transform: translate(19px, -50%);
 }
 
 /*new css*/
@@ -332,16 +456,17 @@ a {
 	border-bottom: 1px solid #dddddd !important;
 }
 
+.postbox table.form-table tr th {
+    font-size: 14px;
+    font-weight: bold;
+}
+
 .cwp-save-edit-post-button {
 	position: relative !important;
 }
 
 .margin-bottom-0 {
 	margin-bottom: 0 !important;
-}
-
-.postbox-container-top {
-	margin-top: 30px !important;
 }
 
 .cwp-postbox-holder #poststuff .postbox-container {
@@ -353,11 +478,6 @@ p.search-box,
 .cwp-pagination,
 .actions.bulkactions {
 	display: flex;
-}
-
-.sub-fields-holder .sub-fields {
-	border: 1px solid #ccd0d4;
-	border-bottom: none;
 }
 
 .cwp-notic.cwp-notic-video {

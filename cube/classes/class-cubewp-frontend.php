@@ -80,7 +80,7 @@ class CubeWp_frontend {
      */
     public function include_fields(){
         $frontend_fields = array(
-            'text', 'number', 'email', 'url', 'password', 'textarea', 'wysiwyg-editor', 'oembed', 'file', 'image', 'gallery', 'dropdown', 'checkbox', 'radio', 'switch', 'google-address', 'date-picker', 'date-time-picker', 'time-picker', 'post', 'taxonomy', 'terms', 'user', 'repeater'
+            'text', 'number','color', 'range', 'email', 'url', 'password', 'textarea', 'wysiwyg-editor', 'oembed', 'file', 'image', 'gallery', 'dropdown', 'checkbox', 'radio', 'switch', 'google-address', 'date-picker', 'date-time-picker', 'time-picker', 'post', 'taxonomy', 'terms', 'user', 'repeater'
         );
         foreach($frontend_fields as $frontend_field){
             $field_path = CWP_PLUGIN_PATH . "cube/fields/frontend/cubewp-frontend-{$frontend_field}-field.php";
@@ -110,6 +110,10 @@ class CubeWp_frontend {
             'name'                  =>    '',
             'custom_name'           =>    '',
             'value'                 =>    '',
+            'minimum_value'           =>   0,
+            'maximum_value'           =>   100,
+            'steps_count'             =>   1,
+            'file_types'              =>   '',
             'placeholder'           =>    '',
             'label'                 =>    '',
             'description'           =>    '',

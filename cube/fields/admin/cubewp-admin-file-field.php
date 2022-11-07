@@ -42,12 +42,19 @@ class CubeWp_Admin_File_Field extends CubeWp_Admin {
 			$validation_msg = isset($args['validation_msg']) ? $args['validation_msg'] : '';
 			$attr .= 'required data-validation_msg="' . $validation_msg . '"';
 		}
-        $attr   .= 'placeholder="'.esc_html__('Allowed only: PDF, zip, txt, word and other file types ', 'cubewp-framework').'"';
+        $accept_types = '';
+        if (isset($args["file_types"]) && !empty($args["file_types"])) {
+            $accept = $args["file_types"];
+            $accept_types = $accept;
+        }else {
+            $accept = esc_html__("PDF, zip, txt, word and other file types", 'cubewp-framework');
+        }
+        $attr   .= 'placeholder="'.sprintf(esc_html__("Allowed only: '%s'.", 'cubewp-framework'), $accept).'"';
 		$output .= '<div class="cwp-custom-field cwp-upload-field">
             <div class="cwp-field">
                 <input type="text" class="' . $class . '" id="' . $args['id'] . '" value="' . wp_get_attachment_url($args['value']) . '" readonly="readonly" ' . $attr . ' />
                 <input type="hidden" name="' . $input_name . '" value="' . $args['value'] . '"/>
-                <a href="javascript:void(0);" class="button cwp-file-upload-button">' . esc_html__('Insert File', 'cubewp-framework') . '</a>
+                <a href="javascript:void(0);" class="button cwp-file-upload-button" data-allowed-types="' . $accept_types . '">' . esc_html__('Insert File', 'cubewp-framework') . '</a>
                 <a href="javascript:void(0);" class="button cwp-remove-upload-button" ' . $remove_button . '><span class="dashicons dashicons-trash"></span></a>
             </div>
         </div>';
