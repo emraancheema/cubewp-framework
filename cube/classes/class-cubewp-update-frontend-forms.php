@@ -24,7 +24,7 @@ class CubeWp_Update_Frontend_Forms{
     
     protected static $TAX_SLUG = '';
     
-    protected static $FORM_TYPE = 'post';
+    protected static $FORM_TYPE = 'post_types';
     
     protected static $GROUP_OPTIONS = '';
     
@@ -41,7 +41,7 @@ class CubeWp_Update_Frontend_Forms{
         self::$GROUP_ID       = $args['group_id'];
         self::$UPDATED_FIELDS = $args['existing_fields'];
         self::$TAX_SLUG       = $args['taxnomoy_slug'];
-        self::$FORM_TYPE      = !empty($args['form_type']) ? $args['form_type']: 'post';
+        self::$FORM_TYPE      = !empty($args['form_type']) ? $args['form_type']: 'post_types';
         self::$GROUP_OPTIONS  = $args['group_options'];
         
         $this->cwp_check_fields_if_deleted();
@@ -61,7 +61,7 @@ class CubeWp_Update_Frontend_Forms{
             
             if(isset($group_fields) && !empty($group_fields)){
                 
-                if(self::$FORM_TYPE == 'post'){
+                if(self::$FORM_TYPE == 'post_types'){
                     $group_fields = explode(',',$group_fields);
                     self::$GROUP_FIELDS = $group_fields;
                     self::cwpform_search_fields_check();
@@ -154,6 +154,9 @@ class CubeWp_Update_Frontend_Forms{
                     }
                 }else{
                     foreach($option as $PlanID => $data){
+                        if ( empty( $data['groups'] ) || ! is_array( $data['groups'] ) ) {
+                            continue;
+                        }
                         foreach($data['groups'] as $sectionID => $sectionData){
                             if(isset($sectionData['fields']) && count($sectionData['fields'])>0){
                                 $fields = self::cwpform_update_value($sectionData['fields']);
@@ -276,7 +279,6 @@ class CubeWp_Update_Frontend_Forms{
      * @since  1.0.0
      */
     private static function cwpform_update_value(array $fields ){
-        
         $group_fields = self::$GROUP_FIELDS;
         $updatedFields = self::$UPDATED_FIELDS;
         if(!empty(self::$TAX_SLUG)){
@@ -287,23 +289,26 @@ class CubeWp_Update_Frontend_Forms{
                     if(is_array($updatedFields) && count($updatedFields)>0){
                         $Fields_ids = self::cwpform_field_ids($fields);
                         if( (in_array($group_field, $Fields_ids)) ){
-                            if(self::$FORM_TYPE == 'post'){
+                            if(self::$FORM_TYPE == 'post_types'){
                                 $field_options = get_field_options($group_field);
                             }elseif(self::$FORM_TYPE == 'user'){
                                 $field_options = get_user_field_options($group_field);
                             }
-                            $new_options = array(
-                                'label'             => $field_options['label'],
-                                'class'             => $field_options['class'],
-                                'container_class'   => $field_options['container_class'],
-                                'name'              => $field_options['name'],
-                                'display_ui'        => $field_options['type'],
-                                'type'              => $field_options['type'],
-                            );
-                            if(isset($fields[$group_field]['field_size'])){
-                                $new_options['field_size'] = $fields[$group_field]['field_size'];
+                            if(!empty($field_options)){
+                                $new_options = array(
+                                    'label'             => $field_options['label'],
+                                    'class'             => $field_options['class'],
+                                    'container_class'   => $field_options['container_class'],
+                                    'name'              => $field_options['name'],
+                                    'display_ui'        => $field_options['type'],
+                                    'type'              => $field_options['type'],
+                                );
+                            
+                                if(isset($fields[$group_field]['field_size'])){
+                                    $new_options['field_size'] = $fields[$group_field]['field_size'];
+                                }
+                                $fields[$group_field]=$new_options;
                             }
-                            $fields[$group_field]=$new_options;
                         }
                         if( (!in_array($group_field, $updatedFields)) ){        
                             unset($fields[$group_field]);

@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * CubeWp_Form_Builder
  */
 class CubeWp_Form_Builder {
+    
     public function __construct() {
         add_action( 'wp_ajax_cwpform_save_shortcode', array( $this, 'cwpform_save_shortcode' ), 9 );
         add_action( 'wp_ajax_cwpform_add_section', array( $this, 'cwpform_add_section' ) );
@@ -31,7 +32,12 @@ class CubeWp_Form_Builder {
             $cwp_forms = CWP()->get_form( $form_type );
             if ( isset( $form_relation ) && ! empty( $form_relation ) ) {
                 if ( isset( $_POST['cwpform'] ) && ! empty( $_POST['cwpform'] ) ) {
-                    $cwp_forms[ $form_relation ] = CubeWp_Sanitize_Dynamic_Array( $_POST['cwpform'][ $form_relation ] );
+                    
+                    if ( $form_type == 'loop_builder' ) {
+                        $cwp_forms[ $form_relation ] = $_POST['cwpform'][ $form_relation ];
+                    }else {
+                        $cwp_forms[ $form_relation ] = CubeWp_Sanitize_Dynamic_Array( $_POST['cwpform'][ $form_relation ] );
+                    }
 
                     CWP()->update_form( $form_type, $cwp_forms );
                 } else {
@@ -51,20 +57,18 @@ class CubeWp_Form_Builder {
      * @since  1.0.0
      */
     public function cwpform_add_section() {
-        $section_id          = isset( $_POST['section_id'] ) ? sanitize_text_field( $_POST['section_id'] ) : '';
-        $section_title       = isset( $_POST['section_title'] ) ? sanitize_text_field( $_POST['section_title'] ) : '';
-        $section_description = isset( $_POST['section_description'] ) ? sanitize_text_field( wp_unslash( $_POST['section_description'] ) ) : '';
-        $section_type        = isset( $_POST['section_type'] ) ? sanitize_text_field( $_POST['section_type'] ) : '';
-        $section_class       = isset( $_POST['section_class'] ) ? sanitize_text_field( $_POST['section_class'] ) : '';
-        $section_id          = $section_id == '' ? rand( 123456789, 111111111 ) : $section_id;
-        $section_html        = $this->cwpform_form_section( array(
-            'section_id'          => $section_id,
-            'section_title'       => $section_title,
-            'section_description' => $section_description,
-            'section_type'        => $section_type,
-            'section_class'       => $section_class,
-            'open_close_class'    => 'open'
-        ) );
+        $section_args = [];
+        if(isset($_POST['action'])){
+            unset($_POST['action']);
+            unset($_POST['section_id']);
+        }
+        if(isset($_POST['form_relation']) && isset($_POST['form_type'])){
+            foreach($_POST as $key => $POST){
+                $section_args[$key] = $POST;
+            }
+        }
+        $section_args['open_close_class'] = 'open';
+        $section_html = $this->cwpform_form_section($section_args);
 
         wp_send_json( array( 'section_html' => $section_html ) );
     }
@@ -90,7 +94,7 @@ class CubeWp_Form_Builder {
             'fields'              => '',
             'terms'               => '',
         );
-        $section          = wp_parse_args( $args, $defaults );
+        $section = wp_parse_args( $args, $defaults );
         $associated_terms = '';
         if ( isset( $section['terms'] ) && ! empty( $section['terms'] ) ) {
             $comma  = '';
@@ -164,51 +168,20 @@ class CubeWp_Form_Builder {
      * @since  1.0.0
      */
     private function cwpform_section_fields( array $section ) {
-        $output      = '';
-        $input_attrs = array(
-            'class'       => 'section-field section-id',
-            'name'        => 'section_id',
-            'value'       => $section['section_id'],
-            'extra_attrs' => 'data-name="section_id"',
-        );
-        $output      .= cwp_render_hidden_input( $input_attrs );
-        if ( isset( $section['section_title'] ) ) {
-            $input_attrs = array(
-                'class'       => 'section-field section-title',
-                'name'        => 'section_title',
-                'value'       => $section['section_title'],
-                'extra_attrs' => 'data-name="section_title"',
-            );
-            $output      .= cwp_render_hidden_input( $input_attrs );
+        $fields = $this->cwpform_section_fields_list($section['form_type']);
+        $output = '';
+        unset($fields['form_type']);
+        unset($fields['form_relation']);
+        foreach($fields as $input_attr){
+            if(isset($input_attr['name']) && isset($section[$input_attr['name']])){
+                $input_attr['label'] = '';
+                $input_attr['class'] = 'section-field '.str_replace("_","-",$input_attr['id']);
+                $input_attr['type'] = 'hidden';
+                $input_attr['value'] = $section[$input_attr['name']];
+                $input_attr['extra_attrs'] = 'data-name="'.$input_attr['name'].'"';
+                $output .= cwp_render_hidden_input( $input_attr );
+            }
         }
-        if ( isset( $section['section_description'] ) ) {
-            $input_attrs = array(
-                'class'       => 'section-field section-description',
-                'name'        => 'section_description',
-                'value'       => $section['section_description'],
-                'extra_attrs' => 'data-name="section_description"',
-            );
-            $output      .= cwp_render_hidden_input( $input_attrs );
-        }
-        if ( isset( $section['section_type'] ) ) {
-            $input_attrs = array(
-                'class'       => 'section-field section-type',
-                'name'        => 'section_type',
-                'value'       => $section['section_type'],
-                'extra_attrs' => 'data-name="section_type"',
-            );
-            $output      .= cwp_render_hidden_input( $input_attrs );
-        }
-        if ( isset( $section['section_class'] ) ) {
-            $input_attrs = array(
-                'class'       => 'section-field section-class',
-                'name'        => 'section_class',
-                'value'       => $section['section_class'],
-                'extra_attrs' => 'data-name="section_class"',
-            );
-            $output      .= cwp_render_hidden_input( $input_attrs );
-        }
-
         return $output;
     }
 
@@ -241,6 +214,7 @@ class CubeWp_Form_Builder {
                                     'switch',
                                     'google_address',
                                     'radio',
+                                    'range',
                                     'checkbox',
                                     'dropdown',
                                     'number',
@@ -256,7 +230,7 @@ class CubeWp_Form_Builder {
                 if ( isset( $field ) && is_array( $field ) ) {
                     $field['form_relation'] = $section['form_relation'];
                     $field['form_type']     = $section['form_type'];
-                    $output                 .= $this->cwpform_form_field( $field );
+                    $output .= $this->cwpform_form_field( $field );
                 }
             }
         }
@@ -317,7 +291,9 @@ class CubeWp_Form_Builder {
         $output .= '</div>';
         $output .= '<div class="builder-area-content cubewp-builder-group-widget-settings cubewp-expand-target">';
         $output .= self::cwpform_group_fields( $field );
-        $output .= self::cwpform_placeholder_field( $field );
+        if ( $field['form_type'] != "single_layout" ) {
+            $output .= self::cwpform_placeholder_field( $field );
+        }
         $output .= self::cwpform_ui_field( $field );
         $output .= self::cwpform_type_field( $field );
         $output .= self::cwpform_required_field( $field );
@@ -361,49 +337,63 @@ class CubeWp_Form_Builder {
      * @since  1.0.0
      */
     private function cwpform_group_fields( array $field ) {
-        $output      = '<div class="cubewp-builder-group-widget-setting-field">';
-        $output      .= '<label>' . esc_html__( "Label", "cubewp-framework" ) . '</label>';
-        $input_attrs = array(
+        $field_args['label'] = array(
             'class'       => 'group-field field-label',
-            'name'        => 'label',
+            'label'       => esc_html__( "Label", "cubewp-framework" ),
+            'name'       => 'label',
+            'type'       => 'text',
             'value'       => $field['label'],
             'extra_attrs' => 'data-name="label"',
         );
-        $output      .= cwp_render_text_input( $input_attrs );
-        $output      .= '</div>
-        <div class="cubewp-builder-group-widget-setting-field">
-            <label>' . esc_html__( "Input Class", "cubewp-framework" ) . '</label>';
-        $input_attrs = array(
-            'class'       => 'group-field field-input-class',
-            'name'        => 'class',
-            'value'       => $field['class'],
-            'extra_attrs' => 'data-name="class"',
-        );
-        $output      .= cwp_render_text_input( $input_attrs );
-        $output      .= '</div>
-        <div class="cubewp-builder-group-widget-setting-field">
-            <label>' . esc_html__( "Container Class", "cubewp-framework" ) . '</label>';
-        $input_attrs = array(
+        if ($field['type'] != 'repeating_field' && $field['type'] != 'author' && $field['type'] != 'messages_form') {
+            $field_args['class'] = array(
+                'class'       => 'group-field field-input-class',
+                'label'       => esc_html__( "Input Class", "cubewp-framework" ),
+                'name'       => 'class',
+                'type'       => 'text',
+                'value'       => $field['class'],
+                'extra_attrs' => 'data-name="class"',
+            );
+        }
+        $field_args['container_class'] = array(
             'class'       => 'group-field field-container-class',
-            'name'        => 'container_class',
+            'label'       => esc_html__( "Container Class", "cubewp-framework" ),
+            'name'       => 'container_class',
+            'type'       => 'text',
             'value'       => $field['container_class'],
             'extra_attrs' => 'data-name="container_class"',
         );
-        $output      .= cwp_render_text_input( $input_attrs );
-        $output      .= '</div>';
-        $input_attrs = array(
+        $field_args['name'] = array(
             'class'       => 'group-field field-name',
-            'name'        => 'name',
+            'label'       => '',
+            'name'       => 'name',
+            'type'       => 'hidden',
             'value'       => $field['name'],
             'extra_attrs' => 'data-name="name"',
         );
-        $output      .= cwp_render_hidden_input( $input_attrs );
-
+        $input_attrs = apply_filters( 'cubewp/builder/cubes/fields', $field_args, $field );
+        $output = '';
+        foreach($input_attrs as $input_attr){
+            if($input_attr['type'] == 'hidden'){
+                $output .= call_user_func('cwp_render_hidden_input',$input_attr);
+            }else{
+                $field_type = $input_attr['type'];
+                if(isset($input_attr['input_type']) && !empty($input_attr['input_type'])){
+                    $input_attr['type'] = $input_attr['input_type'];
+                }
+                $output .= '<div class="cubewp-builder-group-widget-setting-field">';
+                if(isset($input_attr['label']) && !empty($input_attr['label'])){
+                    $output .= '<label>' . $input_attr['label'] . '</label>';
+                }
+                $output .= call_user_func('cwp_render_'.$field_type.'_input',$input_attr);
+                $output .= '</div>';
+            }
+        }
         return $output;
     }
 
     /**
-     * Method cwpform_required_field
+     * Method cwpform_placeholder_field
      *
      * @param array $field single field data
      *
@@ -537,7 +527,7 @@ class CubeWp_Form_Builder {
             $input_attrs = array(
                 'class'       => 'group-field field-required',
                 'name'        => 'required',
-                'value'       => isset( $field['required'] ) && ! empty( $field['required'] ) ? $field['required'] : '1',
+                'value'       => isset( $field['required'] ) ? $field['required'] : '1',
                 'options'     => array( '1' => __( "Required" ), '0' => __( "Not required" ) ),
                 'extra_attrs' => 'data-name="required"',
             );
@@ -584,7 +574,7 @@ class CubeWp_Form_Builder {
      * @return string html
      * @since  1.0.0
      */
-    public function cwpform_form_setting_fields( array $form_fields, string $form_type ) {
+    public function cwpform_form_setting_fields( array $form_fields, string $form_type, $key = '' ) {
         $output = '<div class="cwpform-settings">';
         $output .= '<div class="cwpform-setting-label">';
         if ( $form_type == 'single_layout' || empty( $form_type ) ) {
@@ -595,15 +585,17 @@ class CubeWp_Form_Builder {
         $output .= '</div>';
         $output .= '<div class="cwpform-setting-fields">';
 
-        if ( $form_type == 'single_layout' ) {
+        if ( $form_type == 'single_layout' && cubewp_check_if_elementor_active() && ! cubewp_check_if_elementor_active(true) ) {
             $output .= self::cubewp_single_layout_builder_settings( $form_fields );
         } else {
             $output .= self::cubewp_form_builders_settings( $form_fields, $form_type );
             if ( $form_type == 'search_fields' ) {
                 $output .= self::cubewp_search_form_builder_settings( $form_fields );
             }
-            if ( $form_type != 'search_filters' ) {
-                $output .= self::cubewp_search_filters_form_builder_settings( $form_fields );
+            if ( $form_type != 'search_filters' && $form_type != 'search_fields' ) {
+                $form_fields['form_type'] = $form_type;
+                $form_fields['post_type'] = $key;
+                $output .= self::cubewp_form_builder_settings( $form_fields );
             }
         }
         $output .= '</div>';
@@ -614,30 +606,28 @@ class CubeWp_Form_Builder {
 
     public static function cubewp_single_layout_builder_settings( $form_fields ) {
         $output = '';
-        if ( did_action( 'elementor/loaded' ) ) {
-            $output             .= '<div class="cwpform-setting-field">';
-            $output             .= '<label>' . esc_html__( "Single Page Template", "cubewp-framework" ) . '</label>';
-            $pages              = get_pages( array( "fields" => "ids" ) );
-            $options['default'] = __( "Use Default Template", "cubewp-framework" );
-            if ( ! empty( $pages ) ) {
-                foreach ( $pages as $page ) {
-                    $document = Elementor\Plugin::$instance->documents->get( $page->ID );
-                    if ( $document && $document->is_built_with_elementor() && $document->is_editable_by_current_user() ) {
-                        $options[ $page->ID ] = $page->post_title;
-                    }
+        $output             .= '<div class="cwpform-setting-field">';
+        $output             .= '<label>' . esc_html__( "Single Page Template", "cubewp-framework" ) . '</label>';
+        $pages              = get_pages( array( "fields" => "ids" ) );
+        $options['default'] = __( "Use Default Template", "cubewp-framework" );
+        if ( ! empty( $pages ) && !is_null(Elementor\Plugin::$instance->documents)) {
+            foreach ( $pages as $page ) {
+                $document = Elementor\Plugin::$instance->documents->get( $page->ID );
+                if ( $document && $document->is_built_with_elementor() && $document->is_editable_by_current_user() ) {
+                    $options[ $page->ID ] = $page->post_title;
                 }
             }
-            $input_attrs = array(
-                'class'       => 'form-field',
-                'name'        => 'single_page',
-                'value'       => isset( $form_fields['single_page'] ) ? $form_fields['single_page'] : 'default',
-                'options'     => $options,
-                'extra_attrs' => 'data-name="single_page"',
-            );
-            $output      .= cwp_render_dropdown_input( $input_attrs );
-            $output      .= '<p>' . esc_html__( "Note: If you use the custom template the CubeWP Single Layout Builder will be overwritten.", "cubewp-framework" ) . '</p>';
-            $output      .= '</div>';
         }
+        $input_attrs = array(
+            'class'       => 'form-field',
+            'name'        => 'single_page',
+            'value'       => isset( $form_fields['single_page'] ) ? $form_fields['single_page'] : 'default',
+            'options'     => $options,
+            'extra_attrs' => 'data-name="single_page"',
+        );
+        $output      .= cwp_render_dropdown_input( $input_attrs );
+        $output      .= '<p>' . esc_html__( "Note: If you use the custom template the CubeWP Single Layout Builder will be overwritten.", "cubewp-framework" ) . '</p>';
+        $output      .= '</div>';
 
         return $output;
     }
@@ -715,28 +705,43 @@ class CubeWp_Form_Builder {
         return $output;
     }
 
-    public static function cubewp_search_filters_form_builder_settings( $form_fields ) {
-        $output      = '<div class="cwpform-setting-field">';
-        $output      .= '<label>' . esc_html__( "Submit Button Title", "cubewp-framework" ) . '</label>';
-        $input_attrs = array(
+    public static function cubewp_form_builder_settings( $form_fields ) {
+        $field_args = [];
+        $field_args['submit_button_title'] = array(
             'class'       => 'form-field',
-            'name'        => 'submit_button_title',
+            'label'       => esc_html__( "Submit Button Title", "cubewp-framework" ),
+            'name'       => 'submit_button_title',
+            'type'       => 'text',
             'value'       => isset( $form_fields['submit_button_title'] ) ? $form_fields['submit_button_title'] : '',
             'extra_attrs' => 'data-name="submit_button_title"',
         );
-        $output      .= cwp_render_text_input( $input_attrs );
-        $output      .= '</div>';
-        $output      .= '<div class="cwpform-setting-field">';
-        $output      .= '<label>' . esc_html__( "Submit Button Class", "cubewp-framework" ) . '</label>';
-        $input_attrs = array(
+        $field_args['submit_button_class'] = array(
             'class'       => 'form-field',
-            'name'        => 'submit_button_class',
+            'label'       => esc_html__( "Submit Button Class", "cubewp-framework" ),
+            'name'       => 'submit_button_class',
+            'type'       => 'text',
             'value'       => isset( $form_fields['submit_button_class'] ) ? $form_fields['submit_button_class'] : '',
             'extra_attrs' => 'data-name="submit_button_class"',
         );
-        $output      .= cwp_render_text_input( $input_attrs );
-        $output      .= '</div>';
 
+        $input_attrs = apply_filters( 'cubewp/builder/settings/fields', $field_args, $form_fields );
+        $output = '';
+        foreach($input_attrs as $input_attr){
+            if($input_attr['type'] == 'hidden'){
+                $output .= call_user_func('cwp_render_hidden_input',$input_attr);
+            }else{
+                $field_type = $input_attr['type'];
+                if(isset($input_attr['input_type']) && !empty($input_attr['input_type'])){
+                    $input_attr['type'] = $input_attr['input_type'];
+                }
+                $output .= '<div class="cwpform-setting-field">';
+                if(isset($input_attr['label']) && !empty($input_attr['label'])){
+                    $output .= '<label>' . $input_attr['label'] . '</label>';
+                }
+                $output .= call_user_func('cwp_render_'.$field_type.'_input',$input_attr);
+                $output .= '</div>';
+            }
+        }
         return $output;
     }
 
@@ -748,23 +753,8 @@ class CubeWp_Form_Builder {
      * @return void
      * @since  1.0.0
      */
-    public function cwpform_section_popup_ui( string $type ) {
-        if ( $type == 'single_layout' ) {
-            $type = '<div class="section-form-field">
-                <label for="section-type">' . esc_html__( 'Section Type', 'cubewp-framework' ) . '</label>
-                <select id="section_type" class="form-control" name="section_type">
-                    <option value="content">' . esc_html__( 'Content Section', 'cubewp-framework' ) . '</option>
-                    <option value="sidebar">' . esc_html__( 'Sidebar Section', 'cubewp-framework' ) . '</option>
-                </select>
-            </div>';
-            $desc = '';
-        } else {
-            $type = '';
-            $desc = '<div class="section-form-field">
-                <label for="section_description">' . esc_html__( 'Section Description', 'cubewp-framework' ) . '</label>
-                <textarea name="section_description" id="section_description" class="form-control" rows="6"></textarea>
-            </div>';
-        }
+    public function cwpform_section_popup_ui( string $type) {
+        $fields = $this->cwpform_section_fields_list($type);
         ?>
         <div id="cwp-layout-builder-ovelay">
             <div class="layout-builder-content">
@@ -772,30 +762,113 @@ class CubeWp_Form_Builder {
                 <div class="lp-submit-form-add-section">
                     <h2 class="new-section-title"><?php esc_html_e( 'New Section', 'cubewp-framework' ); ?></h2>
                     <form id="section_form" name="section-form" method="post">
-                        <input type="hidden" id="form_relation" name="form_relation" value="">
-                        <input type="hidden" id="form_type" name="form_type" value="">
-                        <input type="hidden" id="section_id" name="section_id" class="form-control" value="">
-                        <div class="section-form-field">
-                            <label for="section_title"><?php esc_html_e( 'Section Title', 'cubewp-framework' ); ?></label>
-                            <input name="section_title" id="section_title" class="form-control" type="text">
-                        </div>
-                        <?php echo cubewp_core_data( $desc ); ?>
-                        <div class="section-form-field">
-                            <label for="section_class"><?php esc_html_e( 'Section Class', 'cubewp-framework' ); ?></label>
-                            <input name="section_class" id="section_class" class="form-control" type="text">
-                        </div>
-                        <?php echo cubewp_core_data( $type ); ?>
+                        <?php 
+                        if(!empty($fields)){
+                            foreach($fields as $input_attr){
+                                if($input_attr['type'] == 'hidden'){
+                                    echo call_user_func('cwp_render_hidden_input',$input_attr);
+                                }else{
+                                    $field_type = $input_attr['type'];
+                                    if(isset($input_attr['input_type']) && !empty($input_attr['input_type'])){
+                                        $input_attr['type'] = $input_attr['input_type'];
+                                    }
+                                    ?>
+                                    <div class="section-form-field">
+                                        <?php if(isset($input_attr['label']) && !empty($input_attr['label'])){ ?>
+                                        <label for="section_class"><?php echo $input_attr['label']; ?></label>
+                                        <?php } ?>
+                                        <?php echo call_user_func('cwp_render_'.$field_type.'_input',$input_attr); ?>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                        }
+                        ?>
                         <div class="form-section-form-btns">
                             <button type="button"
                                     class="cwpform-cancel-section button"><?php esc_html_e( 'Cancel', 'cubewp-framework' ); ?></button>
                             <button type="button"
-                                    class="cwpform-save-section button button-primary"><?php esc_html_e( 'Save', 'cubewp-framework' ); ?></button>
+                                    class="cwpform-save-section button button-primary"><?php esc_html_e( 'Add', 'cubewp-framework' ); ?></button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
         <?php
+    }
+
+    /**
+     * Method cwpform_section_fields_list
+     *
+     * @param string $builder_type form type
+     * @param string $form_relation post type
+     *
+     * @return array
+     * @since  1.0.0
+     */
+    public function cwpform_section_fields_list( string $builder_type ) {
+
+        $field_args = [];
+        $field_args['form_relation'] = array(
+            'class'   => 'section-field',
+            'label'   => esc_html__( "", "cubewp-framework" ),
+            'name'    => 'form_relation',
+            'id'      => 'form_relation',
+            'type'    => 'hidden',
+        );
+        $field_args['form_type'] = array(
+            'class'   => 'section-field',
+            'label'   => esc_html__( "", "cubewp-framework" ),
+            'name'    => 'form_type',
+            'id'      => 'form_type',
+            'type'    => 'hidden',
+        );
+        $field_args['section_id'] = array(
+            'class'   => 'section-field form-control',
+            'label'   => esc_html__( "", "cubewp-framework" ),
+            'name'    => 'section_id',
+            'id'      => 'section_id',
+            'type'    => 'hidden',
+        );
+        $field_args['section_title'] = array(
+            'class'   => 'section-field form-control',
+            'label'   => esc_html__( "Section Title", "cubewp-framework" ),
+            'name'    => 'section_title',
+            'id'      => 'section_title',
+            'type'    => 'text',
+        );
+        $field_args['section_class'] = array(
+            'class'   => 'section-field form-control',
+            'label'   => esc_html__( "Section Class", "cubewp-framework" ),
+            'name'    => 'section_class',
+            'id'      => 'section_class',
+            'type'    => 'text',
+        );
+        if ( $builder_type == 'single_layout' ) {
+            $field_args['section_type'] = array(
+                'class'   => 'section-field form-control',
+                'label'   => esc_html__( "Section Type", "cubewp-framework" ),
+                'name'    => 'section_type',
+                'id'      => 'section_type',
+                'type'    => 'dropdown',
+                'options' => array(
+                    'content' => esc_html__( 'Content Section', 'cubewp-framework' ),
+                    'sidebar' => esc_html__( 'Sidebar Section', 'cubewp-framework' )
+                ),
+            );
+        } else {
+            $field_args['section_description'] = array(
+                'class'   => 'section-field form-control',
+                'label'   => esc_html__( "Section Description", "cubewp-framework" ),
+                'name'    => 'section_description',
+                'id'      => 'section_description',
+                'type'    => 'textarea',
+                'rows'    => '6',
+            );
+        }
+        $input_attrs = apply_filters( 'cubewp/builder/section/fields', $field_args, $builder_type );
+
+        return $input_attrs;
     }
 
     /**

@@ -43,7 +43,7 @@ class CubeWp_Admin_User_Field {
 		    if ( ! empty($args['value']) && is_array($args['value'])) {
 			    foreach ($args['value'] as $user_id) {
 				    $user              = get_userdata($user_id);
-				    $options[$user_id] = esc_html($user->display_name);
+				    $options[$user_id] = is_object($user) ? esc_html($user->display_name) : '';
 			    }
 		    } else if ( ! empty($args['value']) && ! is_array($args['value'])) {
 			    $user                    = get_userdata($args['value']);

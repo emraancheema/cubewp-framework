@@ -9,6 +9,9 @@ a {
     z-index: 5;
     color: #3e3e3e;
 }
+.cwp-archive-container {
+    margin-top: 15px;
+}
 @media only screen and (min-width: 768px) {
     .cwp-archive-container .cwp-archive-content-container {
         min-height: 700px;
@@ -49,7 +52,7 @@ a {
 }
 
 .cwp-search-filters-wrap {
-    padding: 12px 0;
+    padding: 0 0 12px 0;
 }
 
 .cwp-search-filters .cwp-reset-search-filters {
@@ -111,7 +114,7 @@ a {
 #archive-map {
     border-radius: 10px;
     height: 100%;
-    margin: 15px 0;
+    margin: 0 0 15px 0;
     position: relative;
     width: 100%;
 }

@@ -77,6 +77,7 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 		}
 
 		echo apply_filters( 'frontend/script/enqueue', '' );
+		self::cubewp_enqueue_settings_css_js();
 
 	}
 
@@ -98,6 +99,11 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 			),
             'cwp-search-filters'     => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/search-filters.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			),
+			'cwp-tabs'     => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/cwp-tabs.js',
 				'deps'    => array( 'jquery' ),
 				'version' => CUBEWP_VERSION,
 			),
@@ -136,6 +142,26 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'deps'    => array('cubewp-leaflet'),
 				'version' => '',
 			 ),
+			'cwp-form-validation'      => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/frontend-form-validation.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			),
+			'cwp-frontend-fields'      => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/frontend-fields.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			),
+			'cwp-repeating-fields'     => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/repeatable-fields.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			),
+			'cwp-google-address-field' => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/google-address-field.js',
+				'deps'    => array( 'google_map_api' ),
+				'version' => CUBEWP_VERSION,
+			),
 		);
 		$register_scripts = apply_filters( 'frontend/script/register', $register_scripts );
 		foreach ( $register_scripts as $name => $props ) {
@@ -154,18 +180,18 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'version' => CUBEWP_VERSION,
 				'has_rtl' => false,
 			),
-			'loop-style'     => array(
-				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/css/loop.css',
-				'deps'    => array(),
-				'version' => CUBEWP_VERSION,
-				'has_rtl' => false,
-			),
 			'archive-cpt-styles'     => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/css/cubewp-archive-cpt.css',
 				'deps'    => array(),
 				'version' => CUBEWP_VERSION,
 				'has_rtl' => false,
 			),
+			'author-style'     => array(
+                'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/css/cwp-author.css',
+                'deps'    => array(),
+                'version' => CUBEWP_VERSION,
+                'has_rtl' => false,
+      		),
 			'cwp-map-cluster'        => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/css/map-cluster.css',
 				'deps'    => array( 'cwp-leaflet-css' ),
@@ -235,7 +261,14 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'version' => CUBEWP_VERSION,
                 'media'   => 'all',
 				'has_rtl' => false,
-			)
+			),
+			'loop-style'     => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/css/loop.css',
+				'deps'    => array(),
+				'version' => CUBEWP_VERSION,
+				'media'   => 'all',
+				'has_rtl' => false,
+			),
 		);
 
 		return apply_filters( 'cubewp_enqueue_styles', $assets );
@@ -273,6 +306,29 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 
 
 		return apply_filters( 'get_frontend_script_data', $params, $handle );
+	}
+
+	private static function cubewp_enqueue_settings_css_js() {
+		if ( cwp()->is_request( 'frontend' ) ) {
+		   add_action( 'wp_print_styles', function(){
+			  global $cwpOptions;
+			  $cwpOptions = ! empty( $cwpOptions ) && is_array( $cwpOptions ) ? $cwpOptions : get_option( 'cwpOptions' );
+			  $cubewp_css = isset( $cwpOptions['cubewp-css'] ) && ! empty( $cwpOptions['cubewp-css'] ) ? $cwpOptions['cubewp-css'] : '';
+			  echo '<style type="text/css">
+				 ' . $cubewp_css . '
+				</style>';
+		   } );
+	
+		   add_action( 'wp_footer', function(){
+			  global $cwpOptions;
+			  $cwpOptions = ! empty( $cwpOptions ) && is_array( $cwpOptions ) ? $cwpOptions : get_option( 'cwpOptions' );
+			  $cubewp_js = isset( $cwpOptions['cubewp-js'] ) && ! empty( $cwpOptions['cubewp-js'] ) ? $cwpOptions['cubewp-js'] : '';
+			  wp_enqueue_script( 'jquery' );
+			  echo '<script type="text/javascript">
+				 ' . $cubewp_js . '
+				</script>';
+		   } );
+		}
 	}
 
 	/**

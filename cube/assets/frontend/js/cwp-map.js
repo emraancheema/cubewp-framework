@@ -1,24 +1,24 @@
 
 function Tiles() {
-    if(cubewp_map_params.map_option == 'google'){
-        var tiles = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    var tiles = false;
+    if (cubewp_map_params.map_option == 'google') {
+        tiles = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             maxZoom: 18,
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
             noWrap: true,
             attribution: '&copy; Map data ©2022 <a href="https://www.google.com">Google</a>'
         });
-    }else if(cubewp_map_params.map_option == 'openstreet'){
-        var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    } else if (cubewp_map_params.map_option == 'openstreet') {
+        tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
-    }else if(cubewp_map_params.map_option == 'mapbox'){
-        var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/'+cubewp_map_params.map_style+'/tiles/256/{z}/{x}/{y}?access_token='+cubewp_map_params.mapbox_token, {
-                maxZoom: 18,
-                attribution: 'Map data ©<a href="http://openstreetmap.org">OpenStreetMap</a>' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                });
+    } else if (cubewp_map_params.map_option == 'mapbox') {
+        tiles = L.tileLayer('https://api.mapbox.com/styles/v1/' + cubewp_map_params.map_style + '/tiles/256/{z}/{x}/{y}?access_token=' + cubewp_map_params.mapbox_token, {
+            maxZoom: 18,
+            attribution: 'Map data ©<a href="http://openstreetmap.org">OpenStreetMap</a>' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        });
     }
+
     return tiles;
 }
 
@@ -75,6 +75,9 @@ function CWP_Cluster_Map(args ='') {
     if(cwpArchiveMap.length > 0){
         var tiles = Tiles(),
             latlng = L.latLng(cubewp_map_params.map_latitude, cubewp_map_params.map_longitude);
+        if (!tiles) {
+            return false;
+        }
         var MapID = 'archive-map';
         cwpArchiveMap.empty();
         cwpArchiveMap.html('<div id="' + MapID + '"></div>');

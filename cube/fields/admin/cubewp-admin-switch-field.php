@@ -41,7 +41,7 @@ class CubeWp_Admin_Switch_Field extends CubeWp_Admin {
                 $args['value'] = 'No';
             }
 
-            $output .= '<label class="switch" for="cwp-meta-'. $args['id'] .'">';
+            $output .= '<label class="cwp-switch" for="cwp-meta-'. $args['id'] .'">';
                 $input_attrs = array( 
                     'name'         => !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
                     'value'        => $args['value'],
@@ -50,7 +50,7 @@ class CubeWp_Admin_Switch_Field extends CubeWp_Admin {
                 $input_attrs = array( 
                     'type'         => 'checkbox',
                     'id'           => 'cwp-meta-'. $args['id'] .'',
-                    'class'        => 'switch-field',
+                    'class'        => 'cwp-switch-field switch-field',
                     'name'         => '',
                     'value'        => 1,
                     'extra_attrs'  => $checked
@@ -58,9 +58,11 @@ class CubeWp_Admin_Switch_Field extends CubeWp_Admin {
                 if(isset($args['class']) && !empty($args['class'])){
                     $input_attrs['class'] .=  ' '.$args['class'];
                 }
-                            
+
                 $output .= cwp_render_text_input( $input_attrs );
-                $output .= '<span class="slider round"></span>
+                $output .= '<span class="cwp-switch-slider"></span>
+                <span class="cwp-switch-text-no">' . esc_html__("No", "cubewp-framework") . '</span>
+                <span class="cwp-switch-text-yes">' . esc_html__("Yes", "cubewp-framework") . '</span>
             </label>';
                 
         $output .= $this->cwp_field_wrap_end($args);

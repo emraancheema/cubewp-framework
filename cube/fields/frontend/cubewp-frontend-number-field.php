@@ -87,16 +87,21 @@ class CubeWp_Frontend_Number_Field extends CubeWp_Frontend {
      */
     public function render_search_number_field( $output = '', $args = array() ){
         $args = apply_filters( 'cubewp/frontend/field/parametrs', $args );
+
+        $label = '';
+        if(isset($args['label']) && !empty($args['label'])){
+            $label = $args['label'];
+        }
         
-        $output         = self::cwp_frontend_search_field_container($args);
+        $output = self::cwp_frontend_search_field_container($args);
             $output .= self::cwp_frontend_search_field_label($args);
             $output .= '<div class="cwp-range-number-fields">';
                 $output .= '<div class="cwp-range-number-field">';
-                    $output .= '<input type="number" class="form-control '. $args['class'].'" id="min-'. esc_attr($args['name']) .'" placeholder="'.esc_html__( 'Min', 'cubewp-framework' ).'" name="min-'. esc_attr($args['name']) .'">';
+                    $output .= '<input type="number" class="form-control '. $args['class'].'" id="min-'. esc_attr($args['name']) .'" placeholder="'.esc_html__( 'Min ', 'cubewp-framework' ).$label.'" name="min-'. esc_attr($args['name']) .'">';
                 $output .= '</div>';
                 $output .= '<span class="cwp-range-number-field-seprator"> - </span>'."\n";					
                 $output .= '<div class="cwp-range-number-field">';
-                    $output .= '<input type="number" class="form-control '. $args['class'].'" id="max-'. esc_attr($args['name']) .'"placeholder="'.esc_html__( 'Max', 'cubewp-framework' ).'"  name="max-'. esc_attr($args['name']) .'">';
+                    $output .= '<input type="number" class="form-control '. $args['class'].'" id="max-'. esc_attr($args['name']) .'"placeholder="'.esc_html__( 'Max ', 'cubewp-framework' ).$label.'"  name="max-'. esc_attr($args['name']) .'">';
                 $output .= '</div>';						
             $output .= '</div>';
         $output .= '</div>';

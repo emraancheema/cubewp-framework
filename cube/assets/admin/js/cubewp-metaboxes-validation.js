@@ -46,6 +46,20 @@ jQuery(document).ready(function ($) {
         if (cubewp_admin_fields_validation() === false) {
             wp.data.dispatch('core/editor').lockPostSaving('cubewp_have_required_fields');
         }
+        var conditional_fields = jQuery('.conditional-logic');
+        if (conditional_fields.length > 0) {
+            conditional_fields.each(function () {
+                var field_id = jQuery(this).attr('data-field-id');
+                jQuery(document).on('input change', '#' + field_id, function () {
+                    if (cubewp_admin_fields_validation() === false) {
+                        wp.data.dispatch( 'core/editor' ).lockPostSaving( 'cubewp_have_required_fields' );
+                    }else {
+                        wp.data.dispatch( 'core/editor' ).unlockPostSaving( 'cubewp_have_required_fields' );
+                    }
+                    cubewp_admin_fields_validation();
+                });
+            });
+        }
         jQuery(document).on('input change', '.cwp-validation .required', function () {
             if (cubewp_admin_fields_validation() === false) {
                 wp.data.dispatch( 'core/editor' ).lockPostSaving( 'cubewp_have_required_fields' );
@@ -93,11 +107,13 @@ jQuery(document).ready(function ($) {
     function cubewp_admin_fields_validation() {
         var is_valid = true,
             validation_msg;
+            jQuery('.parent-field.cwp-field-set').removeClass('cwp-required-container');
         jQuery(".cwp-validation .required:not([disabled])").each(function () {
             var _thisObj = jQuery(this), tagname = _thisObj.prop("tagName");
-            var hiddenTR = _thisObj.closest('tr').hasClass('hidden');
+            var hiddenTR = _thisObj.closest('tr.conditional-field').is(':hidden');
+            var hiddenRW = _thisObj.closest('tr.conditional-logic').is(':hidden');
             var hiddenPB = _thisObj.closest('.postbox').hasClass('hidden');
-            if(hiddenTR || hiddenPB){              
+            if(hiddenTR || hiddenPB || hiddenRW){            
             }else if (tagname === 'TR') {
                 if (_thisObj.find('input').length > 0) {
                     var haveChecked = false;
@@ -118,6 +134,7 @@ jQuery(document).ready(function ($) {
                             validation_msg = 'This field is required.';
                         }
                         _thisObj.find('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                        _thisObj.closest('.parent-field.cwp-field-set.cwp-add-form-feild').addClass('cwp-required-container');
                     }
                 }else if (_thisObj.find('.wp-editor-wrap').length > 0) {
                     var id = _thisObj.find('.wp-editor-area').attr('id'),
@@ -132,6 +149,7 @@ jQuery(document).ready(function ($) {
                                 validation_msg = 'This field is required.';
                             }
                             _thisObj.find('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                            _thisObj.closest('.parent-field.cwp-field-set.cwp-add-form-feild').addClass('cwp-required-container');
                         }
                     }else {
                         setTimeout(function () {
@@ -149,6 +167,7 @@ jQuery(document).ready(function ($) {
                             validation_msg = 'This field is required.';
                         }
                         _thisObj.closest('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                        _thisObj.closest('.parent-field.cwp-field-set.cwp-add-form-feild').addClass('cwp-required-container');
                     }
                 }else {
                     if (_thisObj.val() === '') {
@@ -158,6 +177,7 @@ jQuery(document).ready(function ($) {
                             validation_msg = 'This field is required.';
                         }
                         _thisObj.closest('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                        _thisObj.closest('.parent-field.cwp-field-set.cwp-add-form-feild').addClass('cwp-required-container');
                     }else {
                         if (typeof wp !== 'undefined' && typeof wp.blocks !== 'undefined') {
                             if (_thisObj.attr('type') === 'email') {
@@ -170,6 +190,7 @@ jQuery(document).ready(function ($) {
                                     is_valid = false;
                                     validation_msg = 'Please enter valid email.';
                                     _thisObj.closest('td').append('<div class="cwp-notice cwp-error-message"><p>' + validation_msg + '</p></div>');
+                                    _thisObj.closest('.parent-field.cwp-field-set.cwp-add-form-feild').addClass('cwp-required-container');
                                 }
                             }
                         }

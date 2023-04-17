@@ -164,7 +164,7 @@ class CubeWp_Taxonomies_List_Table extends WP_List_Table{
 		/*
 		 * First, lets decide how many records per page to show
 		 */
-		$per_page = 5;
+		$per_page = 20;
 
 		/*
 		 * REQUIRED. Now we need to define our column headers. This includes a complete

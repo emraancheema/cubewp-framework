@@ -66,12 +66,20 @@ class CubeWp_User_Custom_Fields_Table extends WP_List_Table{
     * @return string
     */
     function column_group_name( $item ) {
-        $title = sprintf( '<a href="%s"><strong>' . $item['group_name'] . '</strong></a>', CubeWp_Submenu::_page_action('user-custom-fields','edit', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_edit_group' )));
+        $group_status = get_post_status(  $item['ID'] ) == 'inactive' ? '<span class="post-state"><span class="dashicons dashicons-hidden"></span> Inactive</span>' : '';
+        $title = sprintf( '<a href="%s"><strong>' . $item['group_name'] . '</strong></a>'.$group_status, CubeWp_Submenu::_page_action('user-custom-fields','edit', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_edit_group' )));
         $actions = [
             'edit' => sprintf( '<a href="%s">'. esc_html__('Edit', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('user-custom-fields','edit', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_edit_group' ))),
-            'delete' => sprintf( '<a href="%s">'. esc_html__('Delete', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('user-custom-fields','delete', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_delete_group' ))),
             'duplicate' => sprintf( '<a href="%s">'. esc_html__('Duplicate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('user-custom-fields','duplicate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_duplicate_group' ))),
         ];
+        if( ! cubewp_custom_field_group_secure( absint( $item['ID'] ) ) ) {
+            $actions['delete'] = sprintf( '<a href="%s">'. esc_html__('Delete', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('user-custom-fields','delete', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_delete_group' )));
+        }
+        if(!empty($group_status)){
+            $actions['activate'] = sprintf( '<a href="%s">'. esc_html__('activate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('user-custom-fields','activate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_status_group' )));
+        }else{
+            $actions['deactivate'] = sprintf( '<a href="%s">'. esc_html__('deactivate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('user-custom-fields','deactivate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_status_group' )));
+        }
         return $title . $this->row_actions( $actions );
     }
     /**
@@ -131,11 +139,48 @@ class CubeWp_User_Custom_Fields_Table extends WP_List_Table{
                 wp_redirect( CubeWp_Submenu::_page_action('user-custom-fields') );
             }
         }
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'deactivate') {
+            $nonce = esc_html( $_REQUEST['_wpnonce'] );
+            if(wp_verify_nonce( $nonce, 'cwp_status_group')) {
+                if(isset($_REQUEST['groupid'])){
+                    self::deactivate_group($_REQUEST['groupid']);
+                }
+                wp_redirect( CubeWp_Submenu::_page_action('user-custom-fields') );
+            }
+        }
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'activate') {
+            $nonce = esc_html( $_REQUEST['_wpnonce'] );
+            if(wp_verify_nonce( $nonce, 'cwp_status_group')) {
+                if(isset($_REQUEST['groupid'])){
+                    self::activate_group($_REQUEST['groupid']);
+                }
+                wp_redirect( CubeWp_Submenu::_page_action('user-custom-fields') );
+            }
+        }
         
 		
 	}
+
+    public function deactivate_group($post_id = 0){
+        $data = array(
+            'ID' => $post_id,
+            'post_type'   => 'cwp_user_fields',
+            'post_status' => 'inactive',
+        );
+          
+          wp_update_post( $data );
+    }
+    public function activate_group($post_id = 0){
+        $data = array(
+            'ID' => $post_id,
+            'post_type'   => 'cwp_user_fields',
+            'post_status' => 'publish',
+        );
+          
+        wp_update_post( $data );
+    }
     
-   public function prepare_items() {
+    public function prepare_items() {
 		global $wpdb; //This is used only if making any database queries
 
 		/*
@@ -188,7 +233,8 @@ class CubeWp_User_Custom_Fields_Table extends WP_List_Table{
           $args = array(
           'numberposts' => -1,
           'fields'      => 'ids',
-          'post_type'   => 'cwp_user_fields'
+          'post_type'   => 'cwp_user_fields',
+          'post_status' => array('inactive','publish')
         );
 
         $allGroups = get_posts( $args );

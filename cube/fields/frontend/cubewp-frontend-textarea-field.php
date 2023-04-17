@@ -47,6 +47,9 @@ class CubeWp_Textarea_Field extends CubeWp_Frontend {
                 'placeholder'  =>    $args['placeholder'],
                 'extra_attrs'  =>    $args['extra_attrs']
             );
+            if (isset($args['char_limit']) && ! empty($args['char_limit']) && is_numeric($args['char_limit'])) {
+                $input_attrs['extra_attrs'] .= ' maxlength="' . $args['char_limit'] . '" ';
+            }
             $output .= cwp_render_textarea_input( $input_attrs );
 
         $output .= '</div>';

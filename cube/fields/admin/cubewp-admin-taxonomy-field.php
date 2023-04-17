@@ -47,8 +47,10 @@ class CubeWp_Admin_Taxonomy_Field extends CubeWp_Admin {
 			$options = array();
 			if ( ! empty($args['value']) && is_array($args['value'])) {
 				foreach ($args['value'] as $term_id) {
-					$term      = get_term_by('term_id', $term_id, $args['filter_taxonomy']);
-					$options[$term_id] = esc_html($term->name);
+					if(!empty($term_id)){
+						$term      = get_term_by('term_id', $term_id, $args['filter_taxonomy'], true);
+						$options[$term_id] = esc_html($term->name);
+					}
 				}
 			} else if ( ! empty($args['value']) && ! is_array($args['value'])) {
 				$term      = get_term_by('term_id', $args['value'], $args['filter_taxonomy']);

@@ -38,6 +38,8 @@ class CubeWp_Single_Cpt {
 	}
 	public function __construct() {
 		self::set_post_args();
+        add_shortcode( 'cubewp_post_save', array($this, 'get_post_save_button'));
+        add_shortcode( 'cubewp_post_share', array($this, 'get_post_share_button'));
 	}
 	
 	/**
@@ -61,17 +63,25 @@ class CubeWp_Single_Cpt {
      * @return array
      * @since  1.0.0
      */
-    public static function cubewp_post_metas($postid='') {
+    public static function cubewp_post_metas($postid='', $rest_data = false) {
         if (!empty($postid)) self::$post_id = $postid;
-		$output = array();
-        if (is_array(self::$groups)){
-            foreach (self::$groups as $group) {
-                $fields = cwp_get_fields_by_group_id( $group );
-                if (!empty($fields) && is_array($fields)) {
-                    foreach ($fields as $field) {
-                        $field = get_field_options($field);
+		$args = array();
+        $groups = !isset(self::$groups) || empty(self::$groups) ? cwp_get_groups_by_post_id(self::$post_id) : self::$groups;
+        if (is_array($groups)) $groups = array_reverse($groups);
+        foreach ($groups as $group) {
+            $fields = cwp_get_fields_by_group_id( $group );
+            if (!empty($fields) && is_array($fields)) {
+                foreach ($fields as $field) {
+                    $field = get_field_options($field);
+                    $field_rest_permission = $rest_data == true && isset( $field["rest_api"] ) ? $field["rest_api"] : 0;
+                    if($field_rest_permission || $rest_data == false){
                         $field_type = isset( $field["type"] ) ? $field["type"] : "";
                         $meta_key   = isset( $field["name"] ) ? $field["name"] : "";
+                        if($field_type == 'taxonomy'){
+                            if(isset($field) && count($field)>0 && !empty($field['filter_taxonomy'])){
+                                $field_type = 'terms';
+                            }
+                        }
                         if (empty($field_type) || empty($meta_key)) continue;
                         $label = isset( $field["label"] ) ? $field["label"] : "";
                         $value = self::get_single_meta_value($meta_key,$field_type);
@@ -245,16 +255,17 @@ class CubeWp_Single_Cpt {
 			$field_type = isset($options['type']) ? $options['type'] : '';
             $meta_key = isset($options['name']) ? $options['name'] : '';
 			if (empty($field_type) || empty($meta_key)) continue;
-            $label = isset( $options["label"] ) ? $options["label"] : "";
+            if($field_type == 'taxonomy'){
+                if(isset($options) && count($options)>0 && !empty($options['filter_taxonomy'])){
+                    $field_type = 'terms';
+                }
+            }
             $value = self::get_single_meta_value($meta_key,$field_type);
-            $args = array(
-                'type'                  =>    $field_type,
-                'container_class'       =>    isset( $field["container_class"] ) ? $field["container_class"] : "",
-                'value'                 =>    $value,
-                'label'                 =>    $label,
-            );
-			if (method_exists(__CLASS__, 'field_' . $field_type)) {
-                $output .= call_user_func('self::field_' . $field_type, $args);
+            $options['value'] = $value;
+			if(function_exists('cube_' . $field_type)){
+                $output .= call_user_func('cube_' . $field_type, $options);
+            }else if (method_exists(__CLASS__, 'field_' . $field_type)) {
+                $output .= call_user_func('self::field_' . $field_type, $options);
 			}else {
 				$output .= '<p style="color: #ff0000">' . sprintf(esc_html__("Invalid Field Type: %s", "cubewp-framework"), $field_type) . '</p>';
 			}
@@ -277,11 +288,14 @@ class CubeWp_Single_Cpt {
             return '';
         }elseif($field_type == 'taxonomy'){
             $value = get_the_terms( self::$post_id, $meta_key );
+        }elseif($field_type == 'dropdown' || $field_type == 'radio' || $field_type == 'checkbox'){
+            $value = get_post_meta( self::$post_id, $meta_key, true );
+            $value = render_multi_value($meta_key, $value);
         }elseif($field_type == 'repeating_field'){
             $values = get_post_meta( self::$post_id, $meta_key, true );
             if (is_array($values)) {
                 $value  = self::get_repeating_Fields_value($values);
-             }
+            }
         }else{
             $value = get_post_meta( self::$post_id, $meta_key, true );
             if ("google_address" === $field_type) {
@@ -318,7 +332,7 @@ class CubeWp_Single_Cpt {
                     if(count($options)>0){
                         $field_type = $options['type'];
                         $field_label = $options['label'];
-                        
+                        $field_class = $options['class'];
                         if ("google_address" === $field_type) {
                             $lat = $values[$i][$k. '_lat'];
                             $lng = $values[$i][$k. '_lng'];
@@ -328,10 +342,13 @@ class CubeWp_Single_Cpt {
                                 'lat' => $lat,
                                 'lng' => $lng
                             );
+                        }elseif($field_type == 'dropdown' || $field_type == 'radio' || $field_type == 'checkbox'){
+                            $subValue = render_multi_value($k, $subValue);
                         }
                         $value[$i][$k] = array(
                             'type'                  =>    $field_type,
                             'container_class'       =>    "",
+                            'class'                 =>    $field_class,
                             'label'                 =>    $field_label,
                             'value'                 =>    $subValue,
                         );
@@ -342,7 +359,7 @@ class CubeWp_Single_Cpt {
         }
     }
 	
-	/**
+		/**
 	 * Method get_post_groups_callback
 	 *
 	 * @return string html
@@ -354,9 +371,12 @@ class CubeWp_Single_Cpt {
         foreach (self::$groups as $group) {
 	    	$fields = cwp_get_fields_by_group_id( $group );
             if (!empty($fields) && is_array($fields)) {
-	            $output .= '<div class="cwp-single-group">';
-    	            $output .= self::get_post_group_fields_callback($fields);
-	            $output .= '</div>';
+                $fields_ui = self::get_post_group_fields_callback($fields);
+                if(!empty($fields_ui)){
+                    $output .= '<div class="cwp-single-group">';
+                    $output .= $fields_ui;
+		            $output .= '</div>';
+                }
             }
         }
         return $output;

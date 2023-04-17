@@ -23,6 +23,10 @@ class CubeWp_Tag_Dropdown extends \Elementor\Core\DynamicTags\Tag {
                ];
 	}
 
+	public function is_settings_required() {
+		return true;
+	}
+
 	protected function register_controls() {
         
 		$options = get_fields_by_type(array('dropdown'));
@@ -43,7 +47,7 @@ class CubeWp_Tag_Dropdown extends \Elementor\Core\DynamicTags\Tag {
 		if ( ! $field ) {
 			return;
 		}
-        $value = get_field_value( $field );
+        $value = get_field_value( $field);
         if(is_array($value)){
             $value = implode(", ",$value);
         }

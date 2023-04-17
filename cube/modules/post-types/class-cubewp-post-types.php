@@ -154,6 +154,17 @@ class CubeWp_Post_Types {
             }
             register_post_type( $single_cpt['slug'], $args );
         }
+        register_post_status( 'inactive', array(
+            'label'                     => _x( 'Inactive ', 'Inactive', 'cubewp-framework' ),
+            'public'                    => true,
+            'label_count'               => _n_noop( 'Inactive s <span class="count">(%s)</span>', 'Inactive s <span class="count">(%s)</span>', 'cubewp-framework' ),
+            'post_type'                 => array( 'cwp_form_fields','cwp_user_fields' ), 
+            'show_in_admin_all_list'    => true,
+            'show_in_admin_status_list' => true,
+            'show_in_metabox_dropdown'  => true,
+            'show_in_inline_dropdown'   => true,
+            'dashicon'                  => 'dashicons-businessman',
+        ) );
         
     }
     
@@ -638,6 +649,7 @@ class CubeWp_Post_Types {
                         'editor'          => esc_html__('Editor', 'cubewp-framework'),
                         'thumbnail'       => esc_html__('Featured Image', 'cubewp-framework'),
                         'author'          => esc_html__('Author', 'cubewp-framework'),
+                        'excerpt'         => esc_html__('Excerpt', 'cubewp-framework'),
                     );
                     $html = '<tr>
                         <td class="text-left">

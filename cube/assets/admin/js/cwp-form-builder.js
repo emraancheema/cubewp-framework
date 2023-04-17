@@ -90,7 +90,17 @@
             $.cubewp_form_builder.expande_fields(this);
         }
     );
-    
+    $(document).on(
+        'click',
+        '.cwpform-builder .cubewp-builder-group-widget-row-wrapper, .cubewp-builder-section-header',
+        function (event) {
+            var clicked_ele = $(event.target);
+            if (clicked_ele.hasClass('cubewp-builder-group-widget-decrease-size') || clicked_ele.hasClass('cubewp-builder-group-widget-increase-size') || clicked_ele.hasClass('cubewp-expand-trigger') || clicked_ele.hasClass('cubewp-builder-group-widget-delete')) {
+                return false;
+            }
+            $.cubewp_form_builder.expande_fields($(this).find('.cubewp-expand-trigger'));
+        }
+    );
     $(document).on(
         'click',
         '.cwpform-builder .form-settings-form',
@@ -445,7 +455,7 @@
             data: parent.find('.cubewp-builder-area').find(':input').serialize() + '&form_relation=' + form_relation + '&form_type=' + form_type + '&action=cwpform_save_shortcode',
             success: function (data) {
                 var $class = '';
-                if (form_type === 'single_layout') {
+                if (form_type === 'single_layout' || form_type === 'search_filters') {
                     shortcode = data.message;
                 } else {
                     $class = 'copy-to-clipboard';

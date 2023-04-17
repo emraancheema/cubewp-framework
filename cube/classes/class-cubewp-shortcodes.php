@@ -20,6 +20,7 @@ class CubeWp_Shortcodes {
 	public function __construct() {
 		self::load_shortcodes();
 		spl_autoload_register(array($this, 'require_shortcodes_files'));
+		add_shortcode( 'cubewp_post_field', array($this, 'post_type_custom_fields_shortcode') );
 	}
 	
 	/**
@@ -62,6 +63,22 @@ class CubeWp_Shortcodes {
 
 		return $className;
 	}
+	/**
+     * Method post type custom fields shortcode
+     *
+     * @return void
+     * @since  1.0.0
+     */
+    public function post_type_custom_fields_shortcode($params = array(), $content = null){
+        // default parameters
+        extract(shortcode_atts(array(
+            'field' => '',
+            'post_id' => '',
+			), $params)
+		);
+
+		return get_field_value($field,true,$post_id);
+    }
 	
 	/**
 	 * Method init

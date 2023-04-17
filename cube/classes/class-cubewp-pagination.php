@@ -42,7 +42,7 @@ class CubeWp_Pagination{
      * @return string html
      * @since  1.0.0
      */
-    public function cubewp_archive_pagination( $output = '', array $args ) {
+    public function cubewp_archive_pagination( $output = '', $args = array() ) {
         extract($args);
         $this->total_posts     = isset($total_posts) ? $total_posts : '';
         $this->archive_page    = isset($archive) ? $archive : '';
@@ -188,7 +188,7 @@ class CubeWp_Pagination{
             for( $i = $this->loop_start; $i <= $this->loop_end; $i ++ ){
                 if( $i != $this->page_num ){
                     if($this->archive_page == 'false'){
-                        $output = '<li><a href="?page_num=' . $i .$this->extra_query.'">';
+                        $output .= '<li><a href="?page_num=' . $i .$this->extra_query.'">';
                     }
                     else{
                         $output .= '<li><a href="javascript:void(0);" onclick="cubewp_posts_pagination_ajax(\'' . ($i) . '\');">';

@@ -3,7 +3,8 @@
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 15px 30px;
-    margin: 0 0 30px 0;
+	margin: 0 15px 0 0;
+    width: 100%;
     position: relative;
 }
 .cwp-alert.cwp-js-alert {
@@ -134,6 +135,13 @@
     border-color: #1e90ff;
     color: #fff;
 }
+button.cube-post-edit-btn {
+    display: flex;
+    align-items: center;
+}
+button.cube-post-edit-btn svg {
+    margin-right: 4px;
+}
 .cubewp-post-author-actions button:hover,
 .cubewp-post-author-actions .cube-post-edit-btn {
     color: #1e90ff;
@@ -146,11 +154,11 @@
 .cwp-frontend-form-container [type=submit].cubewp-processing-ajax,
 .cwp-frontend-form-container [type=submit].cubewp-processing-ajax:hover
 {
-    pointer-events: none;
-    background-size: 100px 100%;
-    background-image: linear-gradient(45deg,#588cb7 33%,#6297c2 0,#6297c2 70%,#588cb7 0);
-    border-color: #2271b1;
-    animation: cubewp-active-ajax-animation 2s linear infinite;
+    pointer-events: none !important;
+    background-size: 100px 100% !important;
+    background-image: linear-gradient(45deg,#588cb7 33%,#6297c2 0,#6297c2 70%,#588cb7 0) !important;
+    border-color: #2271b1 !important;
+    animation: cubewp-active-ajax-animation 2s linear infinite !important;
 }
 
 @keyframes cubewp-active-ajax-animation {
@@ -158,6 +166,7 @@
         background-position: 200px 0;
     }
 }
+
 @keyframes cwp-slideIn {
     0% {
         right: -100%;
@@ -166,3 +175,40 @@
         right: 0;
     }
 }
+
+/*Modal*/
+.cubewp-modal {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    backdrop-filter: blur(2px);
+    z-index: 9999;
+    display: none;
+}
+.cubewp-modal .cubewp-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 30px -5px #ddd;
+    border-radius: 12px;
+    z-index: 99999;
+    width: auto;
+}
+.cubewp-modal-close {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    text-shadow: 2px 2px 1px #ddd;
+    z-index: 99999;
+}
+/*Modal*/

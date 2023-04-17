@@ -19,6 +19,9 @@ class CubeWp_Frontend_Range_Field extends CubeWp_Frontend {
         add_filter('cubewp/frontend/range/field', array($this, 'render_range_field'), 10, 2);
         add_filter('cubewp/user/registration/range/field', array($this, 'render_range_field'), 10, 2);
         add_filter('cubewp/user/profile/range/field', array($this, 'render_range_field'), 10, 2);
+
+        add_filter('cubewp/search_filters/range/field', array($this, 'render_range_field'), 10, 2);
+        add_filter('cubewp/frontend/search/range/field', array($this, 'render_range_field'), 10, 2);
     }
         
     /**
@@ -42,6 +45,7 @@ class CubeWp_Frontend_Range_Field extends CubeWp_Frontend {
 	    if (isset($args["steps_count"]) && !empty($args["steps_count"])) {
 		    $args['extra_attrs'] .= ' step="' . $args["steps_count"] . '"';
 	    }
+        
 	    return apply_filters("cubewp/frontend/text/field", $output, $args);
     }
     

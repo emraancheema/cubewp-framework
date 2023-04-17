@@ -18,8 +18,7 @@ class CubeWp_Admin_Checkbox_Field extends CubeWp_Admin {
     public function __construct( ) {
         add_filter('cubewp/admin/post/checkbox/field', array($this, 'render_checkbox_field'), 10, 2);
         
-        add_filter('cubewp/admin/posttype/conditional/customfield', array($this, 'render_conditional_custom_field'), 10, 2);
-        add_filter('cubewp/admin/user/conditional/customfield', array($this, 'render_conditional_custom_field'), 10, 2);
+        add_filter('cubewp/admin/conditional/customfield', array($this, 'render_conditional_custom_field'), 10, 2);
     }
 	
 	/**

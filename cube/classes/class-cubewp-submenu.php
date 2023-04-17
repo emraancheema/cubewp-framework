@@ -104,16 +104,16 @@ class CubeWp_Submenu {
                 'callback'  => 'user-custom-fields',
             ),
             array(
-                'id'           => 'cubewp-admin-search-filters', // Expected to be overridden if dashboard is enabled.
-                'parent'       => 'cube_wp_dashboard',
-                'title'        => esc_html__('Search Filter', 'cubewp-framework'),
-                'callback'     => 'cubewp-admin-search-filters',
-            ),
-            array(
                 'id'           => 'cubewp-admin-search-fields', // Expected to be overridden if dashboard is enabled.
                 'parent'       => 'cube_wp_dashboard',
                 'title'        => esc_html__('Search Forms', 'cubewp-framework'),
                 'callback'     => 'cubewp-admin-search-fields',
+            ),
+            array(
+                'id'           => 'cubewp-admin-search-filters', // Expected to be overridden if dashboard is enabled.
+                'parent'       => 'cube_wp_dashboard',
+                'title'        => esc_html__('Search Filter', 'cubewp-framework'),
+                'callback'     => 'cubewp-admin-search-filters',
             ),
             array(
                 'id'           =>  'cubewp-user-registration-form',
@@ -137,9 +137,16 @@ class CubeWp_Submenu {
                 'position'     => 10
             ),
             array(
+                'id'           =>  'cubewp-loop-builder',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('Post Loop Generator', 'cubewp'),
+                'callback'     =>  'cubewp-loop-builder',
+                'position'     => 11
+            ),
+            array(
                 'id'           =>  'cubewp-single-layout',
                 'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('Single Layout', 'cubewp'),
+                'title'        =>  esc_html__('Single-Post Editor', 'cubewp'),
                 'callback'     =>  'cubewp-single-layout',
                 'position'     => 11
             ),
@@ -195,7 +202,13 @@ class CubeWp_Submenu {
                     'position' => null,
                 );
                 $options = wp_parse_args($options, $defaults);
-
+                if ($options['id'] == 'cubewp-single-layout') {
+                    global $cwpOptions;
+                    $is_cubewp_single = (isset($cwpOptions['cubewp_singular']) && ! empty($cwpOptions['cubewp_singular'])) ? $cwpOptions['cubewp_singular'] : '';
+                    if ( ! $is_cubewp_single) {
+                       continue;
+                    }
+                }
                 if (is_null($options['parent'])) {
                     add_menu_page( $options['title'], $options['title'], $options['capability'], $options['callback'], array($this, 'submenu_page_callback'), $options['icon'], $options['position']);
                 } else {

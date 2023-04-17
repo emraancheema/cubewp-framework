@@ -116,6 +116,7 @@ class CubeWp_Frontend_Search_Fields {
                 if($fieldOptions['type'] == 'taxonomy'){
                     $fieldOptions['appearance'] = $fieldOptions['display_ui'];
                 }
+                $fieldOptions['form_type'] = 'search';
 
                 if( isset($this->custom_fields[$name['name']]) && !empty($this->custom_fields[$name['name']]) ){
                     $fieldOptions = wp_parse_args($fieldOptions, $this->custom_fields[$name['name']]);

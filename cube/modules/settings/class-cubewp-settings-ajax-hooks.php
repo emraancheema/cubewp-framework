@@ -61,10 +61,9 @@ class CubeWp_Settings_Ajax_Hooks {
       
         if (isset($values) && !empty($values) && is_array($values)) {
 
-            update_option('cwpOptions', $values);
+            $update = update_option('cwpOptions', $values);
             $status = 'success';
             $msg = esc_html__('Option Saved Successfully.', 'cubewp-framework');
-            do_action( 'cubewp/after/settings/saved', 'saved');
         }
         if ($status != 'success') {
             $class = 'danger';
@@ -78,8 +77,13 @@ class CubeWp_Settings_Ajax_Hooks {
 
         $res = json_encode(array(
             'status' => $status,
-            'html'   => $html
+            'html'   => $html,
+            'update'   => $update,
         ));
+        CWP()->cwp_get_option();
+        if($update == true){
+            do_action( 'cubewp/after/settings/saved', 'saved');
+        }
         die($res);
     }
     

@@ -77,7 +77,7 @@ jQuery(document).ready(function ($){
         thisObj.hide();
     });
     
-    jQuery(document).on('change', '.switch input[class="switch-field"]', function () {
+    jQuery(document).on('change', 'label.cwp-switch input.cwp-switch-field', function () {
         if(jQuery(this).is(":checked")){
             jQuery(this).closest('label').find('input[type="hidden"]').val('Yes').trigger("input");
         }else{
@@ -160,7 +160,7 @@ jQuery(document).ready(function ($){
             data: 'action=cwp_add_repeating_field&id='+ thisObj.data('id'),
             dataType : 'json',
             success: function (resp) {
-                thisObj.closest('.cwp-repeating-field').find('.cwp-repeating-table').append(resp.sub_field_html);
+                var new_row = thisObj.closest('.cwp-repeating-field').find('.cwp-repeating-table').append(resp.sub_field_html);
                 cwp_repreating_fields_county(thisObj);
                 if (typeof wp !== 'undefined' && typeof wp.blocks !== 'undefined') {
                     if (new_row.find(".required").length > 0) {
@@ -312,11 +312,9 @@ function cwp_display_groups_meta_by_user_role(){
         if( group_role != '' ){
             var group_role_arr = group_role.split(",");
             if(jQuery.inArray(selected_role, group_role_arr) !== -1){
-                jQuery(thisObj).find("tr").removeClass("hidden");
-                jQuery(thisObj).prev('h2').show(500);
+                jQuery(thisObj).removeClass("cwp-hide");
             }else{
-                jQuery(thisObj).find("tr").addClass("hidden");
-                jQuery(thisObj).prev('h2').hide(500);
+                jQuery(thisObj).addClass("cwp-hide");
             }
         }
     });
@@ -430,6 +428,45 @@ function cwp_conditional_fields() {
 
 
 jQuery(document).ready(function () {
+    var delete_relation = jQuery('.cubewp-delete-relation');
+    if (delete_relation.length > 0) {
+        delete_relation.on('click', function (event) {
+            event.preventDefault();
+            var $this = jQuery(this),
+                parent = $this.closest('.cubewp-post-relation'),
+                relation_id   = $this.attr('data-relation-id'),
+                relation_of   = $this.attr('data-relation-of'),
+                relation_with = $this.attr('data-relation-with');
+            if ( ! parent.hasClass('cubewp-active-ajax')) {
+                if (confirm(cubewp_metaboxes_params.confirm_remove_relation)) {
+                    parent.addClass('cubewp-active-ajax');
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: cwp_vars_params.ajax_url,
+                        data: {
+                            action: 'cubewp_remove_relation',
+                            'relation_id': relation_id,
+                            'relation_of': relation_of,
+                            'relation_with': relation_with,
+                            'nonce': cubewp_metaboxes_params.remove_relation_nonce
+                        },
+                        dataType : 'json',
+                        success: function (resp) {
+                            if (resp.status === 'success') {
+                                parent.slideUp(function () {
+                                    parent.remove();
+                                });
+                            }else {
+                                alert(resp.msg);
+                                parent.removeClass('cubewp-active-ajax');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     cubewp_init_resources();
 });
 
@@ -568,7 +605,7 @@ function cubewp_init_range_pickers(range_picker) {
         var thisObj = jQuery(this),
             current_value_input = thisObj.closest("td");
         if (!current_value_input.find('.cubewp-current-value').length) {
-            current_value_input.append("<span class='cubewp-current-value'>" + thisObj.val() + "</span>");
+            current_value_input.prepend("<span class='cubewp-current-value'>" + thisObj.val() + "</span>");
             thisObj.on("input", function () {
                 jQuery(this).closest("td").find(".cubewp-current-value").text(jQuery(this).val());
             });

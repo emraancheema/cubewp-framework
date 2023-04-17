@@ -26,31 +26,18 @@ jQuery(document).ready(function ($){
     cwp_conditional_fields();
     jQuery('#cwp-add-new-field-btn').click(function (e){
         e.preventDefault();
+        var e_this = jQuery(this);
+        var fields_type = e_this.data('fields_type');
         var data = {
-            action: 'process_poststype_add_field',
+            action: 'process_add_field',
+            fields_type: fields_type,
             nonce: cubewp_custom_fields_params.nonce
         };
         jQuery.post(cubewp_custom_fields_params.url, data, function (response){
             jQuery('#poststuff #post-body .cwp-group-fields .cwp-group-fields-content').append(response.data);
             var new_field = jQuery('.parent-field.cwp-field-set').last();
             new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);
-            cwp_update_custom_field_type();
-            cwp_find_group_field();
-            cwp_find_sub_fields();
-            cwp_fields_sortable();
-        });
-    });
-    
-    jQuery('#cwp-add-new-user-field-btn').click(function (e){
-        e.preventDefault();
-        var data = {
-            action: 'cwp_add_user_custom_field',
-            nonce: cubewp_custom_fields_params.nonce
-        };
-        jQuery.post(cubewp_custom_fields_params.url, data, function (response){
-            jQuery('#poststuff #post-body .cwp-group-fields .cwp-group-fields-content').append(response.data);
-            var new_field = jQuery('.parent-field.cwp-field-set').last();
-            new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);
+            new_field.find('.duplicate-field').remove();
             cwp_update_custom_field_type();
             cwp_find_group_field();
             cwp_find_sub_fields();
@@ -60,12 +47,15 @@ jQuery(document).ready(function ($){
 
     jQuery('.duplicate-field').click(function (e){
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         var e_this = jQuery(this);
         var field_id = e_this.data('field_id');
-        var field_type = e_this.data('field_type');
+        var fields_type = e_this.data('fields_type');
         var data = {
-            action: 'cwp_duplicate_'+field_type+'_custom_field',
+            action: 'process_duplicate_field',
             field_id: field_id,
+            fields_type: fields_type,
             nonce: cubewp_custom_fields_params.nonce
         };
         jQuery.ajax({
@@ -78,39 +68,7 @@ jQuery(document).ready(function ($){
                 cwp_find_group_field();
                 cwp_find_sub_fields();
                 cwp_fields_sortable();
-                var id = new Date().getTime().toString(20);
-                var new_field = jQuery('.parent-field.cwp-field-set').last();
-                new_field.addClass('duplicate-field-' +field_id);
-                new_field.find('.parent-field-header').find('.field-slug').html(field_id+id);
-                new_field.find('.parent-fields').find('input.field-name').val(field_id+id);
-                new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);
-                new_field.find('input').each(function(){
-                    var ethis = jQuery(this),
-                        name  = ethis.attr('name');
-                    ethis.attr('name',name.replace(field_id,field_id+id));
-                });
-                new_field.find('select').each(function(){
-                    var ethis = jQuery(this),
-                        name  = ethis.attr('name');
-                    ethis.attr('name',name.replace(field_id,field_id+id));
-                });
-                new_field.find('.sub-fields .cwp-field-set').each(function(){
-                    var ethis = jQuery(this);
-                    
-                    var sub_field_id = ethis.find('.field-title .field-slug').html();
-                    ethis.find('.field-title .field-slug').html(sub_field_id+id);
-                    ethis.find('input.field-name').val(sub_field_id+id);
-                    ethis.find('input').each(function(){
-                        var ethis = jQuery(this),
-                            name  = ethis.attr('name');
-                        ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
-                    });
-                    ethis.find('select').each(function(){
-                        var ethis = jQuery(this),
-                            name  = ethis.attr('name');
-                        ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
-                    });
-                });
+                cwp_custom_field_duplicate(field_id);
             }
         });
     });
@@ -120,29 +78,14 @@ jQuery(document).ready(function ($){
         var e_this = jQuery(this);
         var parent_field = e_this.data('parent_field');
         var data = {
-            action: 'cwp_add_custom_sub_field',
+            action: 'process_sub_field',
             parent_field: parent_field,
             nonce: cubewp_custom_fields_params.nonce
         };
         jQuery.post(cubewp_custom_fields_params.url, data, function (response){
             e_this.closest('.sub-fields-holder').find('.sub-fields') .append(response.data);
-            cwp_update_custom_field_type();
-            cwp_find_group_field();
-            cwp_fields_sortable();
-        });
-    });
-    
-    jQuery(document).on('click', '.add-user-sub-field', function (e) {
-        e.preventDefault();
-        var e_this = jQuery(this);
-        var parent_field = jQuery(this).data('parent_field');
-        var data = {
-            action: 'cwp_add_user_custom_sub_field',
-            parent_field: parent_field,
-            nonce: cubewp_custom_fields_params.nonce
-        };
-        jQuery.post(cubewp_custom_fields_params.url, data, function (response){
-            e_this.closest('.sub-fields-holder').find('.sub-fields') .append(response.data);
+            var sub_fields = e_this.closest('.sub-fields-holder').find('.cwp-add-form-feild');
+            sub_fields.last().find('.field-counter span').text(sub_fields.length);
             cwp_update_custom_field_type();
             cwp_find_group_field();
             cwp_fields_sortable();
@@ -182,17 +125,17 @@ jQuery(document).ready(function ($){
     
     jQuery(document).on('change', '.field-required-checkbox', function () {
         if(jQuery(this).is(":checked")){
-            jQuery(this).parent().parent().next('.validation-msg-row').show(300);
+            jQuery(this).closest('.conditional-field').next('.validation-msg-row').show(300);
         }else{
-            jQuery(this).parent().parent().next('.validation-msg-row').hide(300);
+            jQuery(this).closest('.conditional-field').next('.validation-msg-row').hide(300);
         }
     });
     
     jQuery(document).on('change', '.field-conditional', function () {
         if(jQuery(this).is(":checked")){
-            jQuery(this).parent().parent().next('.conditional-rule').show(300);
+            jQuery(this).closest('.conditional-field').next('.conditional-rule').show(300);
         }else{
-            jQuery(this).parent().parent().next('.conditional-rule').hide(300);
+            jQuery(this).closest('.conditional-field').next('.conditional-rule').hide(300);
         }
     });
     
@@ -207,28 +150,39 @@ jQuery(document).ready(function ($){
         cwp_find_sub_fields();
     });
     
-    jQuery(document).on('click', '.field-actions .remove-field', function () {
+    jQuery(document).on('click', '.field-actions .remove-field', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         jQuery(this).closest('.cwp-field-set').slideUp(500, function() {
             jQuery(this).remove();
             cwp_find_group_field();
         });
     });
     
-    jQuery(document).on('click', '.field-actions .edit-field', function () {
-        jQuery(this).closest('.cwp-field-set').find('.cwp-collapsible-inner').slideToggle(300);
-        if(jQuery(this).closest('.parent-field-header').hasClass('closed')){
-            jQuery(this).closest('.parent-field-header').removeClass('closed');
+    jQuery(document).on('click', '.parent-field-header', function () {
+        var $this = jQuery(this),
+            icon = $this.find(".field-actions .edit-field .dashicons");
+        $this.closest('.cwp-field-set').find('.cwp-collapsible-inner').slideToggle(300);
+        if($this.hasClass('closed')){
+            $this.removeClass('closed');
+            icon.css("transform", "rotate(-180deg)");
         }else{
-            jQuery(this).closest('.parent-field-header').addClass('closed');
+            $this.addClass('closed');
+            icon.css("transform", "rotate(0deg)");
         }
     });
     
-    jQuery(document).on('click', '.field-actions .edit-sub-field', function () {
-        jQuery(this).closest('.cwp-field-set').find('.cwp-sub-field-inner').slideToggle(300);
-        if(jQuery(this).closest('.sub-field-header').hasClass('closed')){
-            jQuery(this).closest('.sub-field-header').removeClass('closed');
+    jQuery(document).on('click', '.sub-field-header', function () {
+        var $this = jQuery(this),
+            icon = $this.find(".field-actions .edit-sub-field .dashicons");
+        $this.closest('.cwp-field-set').find('.cwp-sub-field-inner').slideToggle(300);
+        if($this.hasClass('closed')){
+            $this.removeClass('closed');
+            icon.css("transform", "rotate(-180deg)");
         }else{
-            jQuery(this).closest('.sub-field-header').addClass('closed');
+            $this.addClass('closed');
+            icon.css("transform", "rotate(0deg)");
         }
     });
     
@@ -339,7 +293,42 @@ function cwp_update_custom_field_type(){
             }
         }
     });
-    
+    hide_field_optional_onload();
+}
+
+if (jQuery(".hide-field-on-selection").length > 0) {
+    jQuery(document).on('change', '.hide-field-on-selection select', function (e) {
+        var thisObj = jQuery(this);
+        var row = thisObj.closest('.hide-field-on-selection');
+        hide_field_optional(row,thisObj.val());
+    });
+}
+
+function hide_field_optional_onload() {
+    if(jQuery(".hide-field-on-selection").length > 0){
+        jQuery(".hide-field-on-selection").each(function(){
+            var thisObj = jQuery(this);
+            hide_field_optional(thisObj);
+        });
+    }
+}
+
+function hide_field_optional(t,val='') {
+    var hide_option = t.data('hide-option');
+    var hide_field = t.data('hide-field');
+    if( hide_option !== 'undefined' && hide_option !== '' && hide_field !== 'undefined' && hide_field !== '' ){
+        var field = t.closest('tbody').find('.'+hide_field).closest('tr');
+        if(val == ''){
+            var option_val     = t.find('select').val();
+        }else{
+            var option_val     = val;
+        }
+        if( hide_option == option_val){
+            field.hide();
+        }else if( option_val != '' && hide_option != option_val){
+            field.show();
+        }
+    }
 }
 
 function cwp_find_sub_fields() {
@@ -356,15 +345,15 @@ function cwp_find_sub_fields() {
 }
 
 function cwp_fields_sortable(){
-    
     jQuery(".cwp-group-fields-content").sortable({
-        items: ".cwp-add-form-feild",
-        handle: '.field-order'
+        handle: '.parent-field-order',
+        items: '.parent-field'
     }).disableSelection();
     
     jQuery(".cwp-group-fields .sub-fields").sortable({
         items: ".cwp-add-form-feild",
-        handle: '.sub-field-order'
+        handle: '.sub-field-order',
+        containment: 'parent'
     }).disableSelection();
 }
 
@@ -418,4 +407,52 @@ function cwp_conditional_fields(){
             conditional_field.append(conditional_fields_options);
         });
     }
+}
+
+function cwp_custom_field_duplicate(field_id){
+    var id = new Date().getTime().toString(20);
+    var new_field = jQuery('.parent-field.cwp-field-set').last();
+    new_field.addClass('duplicate-field-' +field_id);
+    new_field.find('.parent-field-header').find('.field-slug').html(field_id+id);
+    new_field.find('.parent-fields').find('input.field-name').val(field_id+id);
+    jQuery('.duplicate-field-' +field_id).find('.duplicate-field').remove();
+    new_field.find('.field-counter').find('span').text(jQuery("#poststuff #post-body .cwp-group-fields .cwp-group-fields-content .parent-field.cwp-field-set").length);                
+    
+    new_field.find('input').each(function(){
+        var ethis = jQuery(this),
+            name  = ethis.attr('name');
+        ethis.attr('name',name.replace(field_id,field_id+id));
+    });
+    new_field.find('textarea').each(function(){
+        var ethis = jQuery(this),
+            name  = ethis.attr('name');
+        ethis.attr('name',name.replace(field_id,field_id+id));
+    });
+    new_field.find('select').each(function(){
+        var ethis = jQuery(this),
+            name  = ethis.attr('name');
+        ethis.attr('name',name.replace(field_id,field_id+id));
+    });
+    new_field.find('.sub-fields .cwp-field-set').each(function(){
+        var ethis = jQuery(this);
+        
+        var sub_field_id = ethis.find('.field-title .field-slug').html();
+        ethis.find('.field-title .field-slug').html(sub_field_id+id);
+        ethis.find('input.field-name').val(sub_field_id+id);
+        ethis.find('input').each(function(){
+            var ethis = jQuery(this),
+                name  = ethis.attr('name');
+            ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
+        });
+        ethis.find('textarea').each(function(){
+            var ethis = jQuery(this),
+                name  = ethis.attr('name');
+            ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
+        });
+        ethis.find('select').each(function(){
+            var ethis = jQuery(this),
+                name  = ethis.attr('name');
+            ethis.attr('name',name.replace(sub_field_id,sub_field_id+id));
+        });
+    });
 }

@@ -36,12 +36,11 @@ class CubeWp_Frontend_Checkbox_Field extends CubeWp_Frontend {
      */
     public function render_checkbox_field( $output = '', $args = array() ) {
 
-        $args           =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
-        $options        =  cwp_convert_choices_to_array($args['options']);
-        $required       = self::cwp_frontend_field_required($args['required']);
-        $required       = !empty($required['class']) ? $required['class'] : '';
-        $output         = self::cwp_frontend_post_field_container($args);
-
+        $args       =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
+        $options    =  cwp_convert_choices_to_array($args['options']);
+        $required   = self::cwp_frontend_field_required($args['required']);
+        $required   = !empty($required['class']) ? $required['class'] : '';
+        $output     = self::cwp_frontend_post_field_container($args);
         $output .= '<div class="cwp-checkbox-container">';
                 $output .= self::cwp_frontend_field_label($args);
                 $output .= '<div class="cwp-field-checkbox-container">';
@@ -64,6 +63,7 @@ class CubeWp_Frontend_Checkbox_Field extends CubeWp_Frontend {
                             $output .= '<label for="'. esc_attr($args['id'] . $label) .'">'. esc_html($label) .'</label>';
                         $output .= '</div>';
                     }
+                    $output .= '<input type="hidden" name="' . $input_attrs['name'] . '" value="">';
                 $output .= '</div>';
             $output .= '</div>';
         $output .= '</div>';

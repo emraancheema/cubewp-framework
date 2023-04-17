@@ -145,7 +145,7 @@ class CubeWp_Sanitize {
      * @return   array    $field_type    type of field.
      */
 
-    public function custom_field_type( $field = '' , $fields_of) {
+    public function custom_field_type( $field = '' , $fields_of = '') {
     
         if(!$field){
             return;
@@ -381,30 +381,21 @@ class CubeWp_Sanitize {
      * @return   array    $new_input    The sanitized input.
      */
     public function sanitize_options( $input ) {
-        
-        if(is_array($input) && count($input)==0){
-            return;
+        if ( is_array( $input ) && count( $input ) == 0 ) {
+           return;
         }
-        
         // Initialize the new array that will hold the sanitize values
         $new_input = array();
-        $label = array();
-        $value = array();
-
-        // Loop through the input and sanitize each of the values
-        foreach ( $input['label'] as $key => $val ) {
-                        
-            $label[ $key ] = sanitize_text_field( $val );
+        // Loop through the input and sanitize each of the value
+        foreach ( $input as $name => $options ) {
+           foreach ( $options as $key => $val ) {
+              $label[ $key ] = sanitize_text_field( $val );
+           }
+           $new_input[ $name ] = $label;
         }
-        foreach ( $input['value'] as $key => $val ) {
-                        
-            $value[ $key ] = sanitize_text_field( $val );
-        }
-        $new_input['label'] = $label;
-        $new_input['value'] = $value;
+     
         return $new_input;
-
-    }
+     }
     
     /**
      * A custom sanitization function that will take the incoming input, and sanitize

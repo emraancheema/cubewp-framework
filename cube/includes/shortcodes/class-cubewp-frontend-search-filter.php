@@ -18,6 +18,9 @@ class CubeWp_Frontend_Search_Filter {
     private $wp_default_fields;
     private $taxonomies;
     private static $sorting;
+    private static $form_container_class;
+    private static $form_class;
+    private static $form_id;
         
     
     public function __construct() {
@@ -67,8 +70,8 @@ class CubeWp_Frontend_Search_Filter {
      */
     private static function get_filters_wrap_start($type='',$page_num=''){
     ?>
-        <div class="cwp-search-filters-wrap">
-        <form name="cwp-search-filters" class="cwp-search-filters" method="post">
+        <div class="cwp-search-filters-wrap <?php echo self::$form_container_class; ?>">
+        <form name="cwp-search-filters" class="cwp-search-filters <?php echo self::$form_class; ?>" id="<?php echo self::$form_id; ?>" method="post">
         <div class="cwp-reset-search-filters">
         <p><?php esc_html_e('Filters', 'cubewp-framework'); ?></p>
         <a href="javascript:void(0);" class="clear-filters">
@@ -163,6 +166,8 @@ class CubeWp_Frontend_Search_Filter {
             $fieldOptions['type']    =   isset($search_filter['display_ui']) ? $search_filter['display_ui'] : $fieldOptions['type'];
             $fieldOptions['container_class']    =   isset($search_filter['container_class']) ? $search_filter['container_class'] : $fieldOptions['container_class'];
             $fieldOptions['class']    =   isset($search_filter['class']) ? $search_filter['class'] : $fieldOptions['class'];
+            $placeholder   =   isset($search_filter['placeholder']) && !empty($search_filter['placeholder']) ? $search_filter['placeholder'] : '';
+            $fieldOptions['placeholder']   =   empty($placeholder) && isset($fieldOptions['placeholder']) ? $fieldOptions['placeholder'] : $placeholder;
             
             $field_type  =   isset($search_filter['display_ui']) ? $search_filter['display_ui'] : '';
 
@@ -184,7 +189,6 @@ class CubeWp_Frontend_Search_Filter {
             if(isset($_GET[$fieldOptions['name']]) && !empty($_GET[$fieldOptions['name']])){
                 $fieldOptions['value'] = sanitize_text_field($_GET[$fieldOptions['name']]);                
             }
-
             echo apply_filters("cubewp/search_filters/{$field_type}/field", '', $fieldOptions);
         }
     }
@@ -231,11 +235,11 @@ class CubeWp_Frontend_Search_Filter {
      * @since  1.0.0
      */
     private static function get_filters_style_scripts(){
+        
         CubeWp_Enqueue::enqueue_script( 'cwp-search-filters' );
         CubeWp_Enqueue::enqueue_script( 'select2' );
         CubeWp_Enqueue::enqueue_style( 'select2' );
         CubeWp_Enqueue::enqueue_style( 'archive-cpt-styles' );
-        CubeWp_Enqueue::enqueue_style( 'loop-style' );
         CubeWp_Enqueue::enqueue_script( 'jquery-ui-datepicker' );
         CubeWp_Enqueue::enqueue_style( 'frontend-fields' );
 
@@ -267,11 +271,20 @@ class CubeWp_Frontend_Search_Filter {
         $post_type =   !empty($type) ? $type : _get_post_type();
         $cwp_search_filters = CWP()->get_form('search_filters');
         
+        self::$form_container_class = isset($cwp_search_filters[$post_type]['form']['form_container_class']) ? $cwp_search_filters[$post_type]['form']['form_container_class'] : '';
+        self::$form_class = isset($cwp_search_filters[$post_type]['form']['form_class']) ? $cwp_search_filters[$post_type]['form']['form_class'] : '';
+        self::$form_id = isset($cwp_search_filters[$post_type]['form']['form_id']) ? $cwp_search_filters[$post_type]['form']['form_id'] : '';
+        global $cwpOptions;
+        $archive_filters = isset($cwpOptions['archive_filters']) ? $cwpOptions['archive_filters'] : '';
+        $show_filters = true;
+        if (is_archive() && ! $archive_filters) {
+            $show_filters = false;
+        }
 
-        self::get_filters_wrap_start($type,$page_num);
+        self::get_filters_wrap_start($post_type,$page_num);
         self::get_hidden_field_if_tax();
         
-        if(!empty($cwp_search_filters[$post_type]['fields']) && count($cwp_search_filters[$post_type]['fields'])>0){
+        if(!empty($cwp_search_filters[$post_type]['fields']) && count($cwp_search_filters[$post_type]['fields'])>0 && $show_filters){
             if(isset($cwp_search_filters[$post_type]['fields']) && !empty($cwp_search_filters[$post_type]['fields'])){
                 foreach ($cwp_search_filters[$post_type]['fields'] as $field_name => $search_filter) {
                     if(($search_filter['type'] == 'number' || $search_filter['type'] == 'date_picker') && isset($search_filter['sorting']) && $search_filter['sorting'] == 1){
@@ -297,33 +310,55 @@ class CubeWp_Frontend_Search_Filter {
      * @since  1.0.0
      */
     public static function get_shortcode_filters($type='',$page_num=''){
-
-        /* Calling all css and JS files for filters */
-       self::get_filters_style_scripts();
-
+        global $cwpOptions;
+              /* Calling all css and JS files for filters */
+             self::get_filters_style_scripts();
+        
+        $archive_map = isset($cwpOptions['archive_map']) ? $cwpOptions['archive_map'] : 1;
+        $archive_filters = isset($cwpOptions['archive_filters']) ? $cwpOptions['archive_filters'] : 1;
+        $archive_sort_filter = isset($cwpOptions['archive_sort_filter']) ? $cwpOptions['archive_sort_filter'] : 1;
+        $archive_layout = isset($cwpOptions['archive_layout']) ? $cwpOptions['archive_layout'] : 1;
+        $archive_found_text = isset($cwpOptions['archive_found_text']) ? $cwpOptions['archive_found_text'] : 1;
+        
+        $filter_area_cols = 'cwp-col-md-2';
+        if ( ! $archive_filters) {
+           $filter_area_cols = 'cwp-hide';
+        }
+        $content_area_cols = 'cwp-col-md-7';
+        if ( ! $archive_filters && $archive_map) {
+           $content_area_cols = 'cwp-col-md-9';
+        }else if ( ! $archive_map && $archive_filters) {
+           $content_area_cols = 'cwp-col-md-10';
+        }else if ( ! $archive_map && ! $archive_filters) {
+           $content_area_cols = 'cwp-col-md-12';
+        }
         $type =   !empty($type) ? $type : _get_post_type();
         ob_start();
         ?>
         <div class="cwp-container cwp-archive-container">
             <div class="cwp-row">
-                <div class="cwp-col-md-2 cwp-archive-sidebar-filters-container">
+                <div class="<?php esc_attr_e($filter_area_cols); ?> cwp-archive-sidebar-filters-container">
                     <?php echo do_shortcode('[cwpFilterFields type='.$type.']') ?>
                 </div>
-                <div class="cwp-col-md-7 cwp-archive-content-container">
+                <div class="<?php esc_attr_e($content_area_cols); ?> cwp-archive-content-container">
                     <div class="cwp-archive-content-listing">
                         <div class="cwp-breadcrumb-results">
-                            <div class="cwp-filtered-results">
-                                <?php echo do_shortcode('[cwpFilterResultCount]') ?>
-                                <?php echo do_shortcode('[cwpFilterSorting]') ?>
-                                <?php echo do_shortcode('[cwpFilterListSwitcher]') ?>
-                            </div>
+                        <?php if ($archive_sort_filter || $archive_layout || $archive_found_text) { ?>
+                                <div class="cwp-filtered-results">
+                                    <?php if ($archive_found_text) {echo do_shortcode('[cwpFilterResultCount]'); } ?>
+                                    <?php if ($archive_sort_filter) {echo do_shortcode('[cwpFilterSorting]'); } ?>
+                                    <?php if ($archive_layout) {echo do_shortcode('[cwpFilterListSwitcher]'); } ?>
+                                </div>
+                        <?php } ?>
                         </div>
                         <?php echo do_shortcode('[cwpFilterResults]') ?>
                     </div>
                 </div>
+            <?php if ($archive_map) { ?>
                 <div class="cwp-col-md-3 cwp-archive-content-map">
                     <?php echo do_shortcode('[cwpFilterMap]') ?>
                 </div>
+        <?php } ?>
             </div>
         </div>
         <?php

@@ -135,7 +135,7 @@ class CubeWp_Post_Types_List_Table extends WP_List_Table{
                     unset($get_CustomTypes[sanitize_text_field($_REQUEST['postTypeslug'])]);
                     update_option('cwp_custom_types', $get_CustomTypes);
                 }
-                wp_redirect( CubeWp_Submenu::_page_action('post-types') );
+                wp_redirect( CubeWp_Submenu::_page_action('cubewp-post-types') );
             }
         }
         
@@ -148,7 +148,7 @@ class CubeWp_Post_Types_List_Table extends WP_List_Table{
 		/*
 		 * First, lets decide how many records per page to show
 		 */
-		$per_page = 5;
+		$per_page = 20;
 
 		/*
 		 * REQUIRED. Now we need to define our column headers. This includes a complete

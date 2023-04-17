@@ -36,7 +36,9 @@ class CubeWp_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 			]
 		);
 	}
-
+	public function is_settings_required() {
+		return true;
+	}
 	public function render() {
 		$field = $this->get_settings( 'user_selected_field' );
         

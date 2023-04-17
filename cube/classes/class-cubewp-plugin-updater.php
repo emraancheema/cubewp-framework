@@ -30,7 +30,7 @@ class CubeWp_Plugin_Updater {
 	 * @uses hook()
 	 *
 	 */
-	function __construct( $_api_url, $_plugin_file, $_api_data = null, $_plugin_update_data ) {
+	function __construct( $_api_url, $_plugin_file, $_api_data = null, $_plugin_update_data = array() ) {
 		$this->api_url = trailingslashit( $_api_url );
 		$this->api_data = $_api_data;
 		$this->name = plugin_basename( $_plugin_file );

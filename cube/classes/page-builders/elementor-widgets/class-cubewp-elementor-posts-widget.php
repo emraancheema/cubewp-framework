@@ -62,7 +62,14 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 			'label'   => esc_html__( 'Select Post Type', 'cubewp-framework' ),
 			'options' => $post_types,
 		) );
-
+		if(class_exists('CubeWp_Booster_Load')){
+            $this->add_control( 'show_boosted_posts', array(
+                'type'      => Controls_Manager::SWITCHER,
+                'label'     => esc_html__( 'Show Boosted Posts Only', 'cubewp-framework' ),
+                'default'   => 'no',
+            ) );
+        }
+        
 		$this->add_additional_controls();
 
 		$this->add_control( 'orderby', array(
@@ -192,7 +199,7 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 					}
 				}
 				if ( ! empty( $terms_arr ) ) {
-					$this->add_control( 'terms-' . $taxonomy, array(
+					$this->add_control( 'terms-' . $post_type . '-' . $taxonomy, array(
 						'type'      => Controls_Manager::SELECT2,
 						'label'     => esc_html__( 'Select Term', 'cubewp-framework' ),
 						'options'   => $terms_arr,
@@ -227,27 +234,29 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 
 	private static function get_post_type_posts( $post_types ) {
 		$query  = new CubeWp_Query( array(
-			'post_type'      => $post_types,
-			'fields'         => 'ids',
-			'posts_per_page' => - 1
+		   'post_type'      => $post_types,
+		   'posts_per_page' => - 1
 		) );
 		$posts  = $query->cubewp_post_query();
 		$return = array();
-		if ( $posts->have_posts() ) {
-			while ( $posts->have_posts() ) {
-				$posts->the_post();
-				$return[ get_the_ID() ] = get_the_title() . ' [' . get_the_ID() . ']';
-			}
-		}
-
+		if ( $posts->have_posts() ) :
+				while ( $posts->have_posts() ) : $posts->the_post();
+					$return[ get_the_ID() ] = get_the_title() . ' [' . get_the_ID() . ']';
+				endwhile;
+			endif;
+	 
 		return $return;
 	}
 
 	protected function render() {
 		$settings   = $this->get_settings_for_display();
-		$taxonomies = $settings[ 'taxonomy-' . $settings['posttype'] ];
+		$taxonomies = isset($settings[ 'taxonomy-' . $settings['posttype'] ]) ? $settings[ 'taxonomy-' . $settings['posttype'] ]: array();
+        if(class_exists('CubeWp_Booster_Load')){
+            $show_boosted_posts = $settings['show_boosted_posts'];
+        }
 		$args       = array(
 			'posttype'       => $settings['posttype'],
+            'show_boosted_posts' => $settings['show_boosted_posts'],
 			'taxonomy'       => $taxonomies,
 			'orderby'        => $settings['orderby'],
 			'order'          => $settings['order'],
@@ -258,7 +267,7 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 		);
 		if ( ! empty( $taxonomies ) && is_array( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
-				$terms                        = $settings[ 'terms-' . $taxonomy ];
+				$terms                        = $settings[ 'terms-' . $settings['posttype'] . '-' . $taxonomy ];
 				$args[ $taxonomy . '-terms' ] = $terms;
 			}
 		}

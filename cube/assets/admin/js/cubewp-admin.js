@@ -1,11 +1,47 @@
 jQuery(document).ready(function () {
     
+    if (jQuery(".cubwp-welcome").length > 0) {
+        jQuery('.Section-Faqs').click(function(e) {
+            var currentAttrValue = jQuery(this).attr('href');
+
+            if (jQuery(e.target).is('.active')) {
+                close_accordion_section();
+            } else {
+                close_accordion_section();
+
+                jQuery(this).addClass('active');
+                jQuery('.Faqs ' + currentAttrValue).slideDown(300).addClass('open');
+            }
+
+            e.preventDefault();
+        });
+    }
+
+    if (jQuery(".cwpform-shortcode").length > 0) {
+        jQuery(document).on('click', '.cwpform-shortcode', function (e) {
+                var $this = jQuery(this),
+                    temp_text = document.createElement("input");
+                if ($this.find('.inner').hasClass('copy-to-clipboard')) {
+                    temp_text.value = $this.find('.inner').clone().children().remove().end().text();
+                    document.body.appendChild(temp_text);
+                    temp_text.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(temp_text);
+                }
+        });
+    }
+
     if (jQuery(".cubewp_page_cubewp-post-types").length > 0) {
         disable_rewrite_slug();
         jQuery(document).on('change', 'select#rewrite', function (event) {
             disable_rewrite_slug();
         });
     }
+
+    function close_accordion_section() {
+        jQuery('.Faqs .Section-Faqs').removeClass('active');
+        jQuery('.Faqs .Faqs-section-content').slideUp(300).removeClass('open');
+    };
 
     function disable_rewrite_slug() {
         jQuery('input#rewrite_slug').parents('tr').hide();
@@ -78,6 +114,7 @@ jQuery(document).ready(function () {
         });
 
         jQuery(document).on('click', '.cwp_import_demo', function(e) {
+			jQuery(this).prop( "disabled", 1 );
             e.preventDefault();
             jQuery.ajax({
                 type: 'POST',
@@ -85,10 +122,38 @@ jQuery(document).ready(function () {
                 data:'action=cwp_import_dummy_data&data_type=dummy',
                 dataType: 'json',
                 success: function (response) {
-                    if( response.success === 'false' ){
+                    if( response.success === 'true' ){
+                        if( response.content === 'true' ){
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: cwp_vars_params.ajax_url,
+                                data:'action=cwp_import_dummy_data&data_type=dummy&content=true',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if( response.success === 'false' ){
+                                        alert(response.msg);
+										jQuery(this).prop( "disabled", 0 );
+                                    }else{
+                                        if(response.redirectURL != null && response.redirectURL != ''){
+                                            window.location.href = response.redirectURL;
+                                        }else if(response.success_message != null && response.success_message != ''){
+											jQuery(response.success_message.selecter).text(response.success_message.message);
+											jQuery(response.success_message.selecter).addClass('done');
+                                        }
+                                    }
+                                }
+                            });
+                        }else{
+                            if(response.redirectURL != null && response.redirectURL != ''){
+                                window.location.href = response.redirectURL;
+                            }else if(response.success_message != null && response.success_message != ''){
+								jQuery(response.success_message.selecter).text(response.success_message.message);
+								jQuery(response.success_message.selecter).addClass('done');
+                            }
+                        }
+                    }else if( response.success === 'false' ){
                         alert(response.msg);
-                    }else{
-                        window.location.href = response.redirectURL;
+						jQuery(this).prop( "disabled", 0 );
                     }
                 }
             });

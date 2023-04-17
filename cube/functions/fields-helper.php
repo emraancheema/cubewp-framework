@@ -19,6 +19,8 @@ if ( ! defined('ABSPATH')) {
  */
 if ( ! function_exists("cwp_convert_choices_to_array")) {
 	function cwp_convert_choices_to_array($options = array()) {
+		if($options == null || empty($options)) return array();
+
 		if (is_array($options)) {
 			return $options;
 		}
@@ -635,6 +637,7 @@ if ( ! function_exists("cwp_render_checkbox_input")) {
                 <span class="checkmark"></span>
             </label>';
 			}
+			$html .= '<input type="hidden" name="' . $attrs['name'] . '[]" value="">';
 		}
 
 		return $html;
@@ -673,19 +676,32 @@ if ( ! function_exists("cwp_render_dropdown_input")) {
 		} else if ( ! empty($placeholder)) {
 			$html .= '<option value>' . $placeholder . '</option>';
 		}
-
 		if (isset($attrs['options']) && ! empty($attrs['options'])) {
 			$options_arr = cwp_convert_choices_to_array($attrs['options']);
-
 			foreach ($options_arr as $key => $val) {
-
-				$s = '';
-				if (is_array($attrs['value']) && in_array($key, $attrs['value'])) {
-					$s = 'selected';
-				} else if ($key == $attrs['value']) {
-					$s = 'selected';
+				if ( is_array( $val ) ) {
+					if ( ! empty( $val ) ) {
+						$html .= '<optgroup label="' . $key . '">';
+						foreach ( $val as $value => $label ) {
+							$s = '';
+							if (is_array($attrs['value']) && in_array($value, $attrs['value'])) {
+								$s = 'selected';
+							} else if ($value == $attrs['value']) {
+								$s = 'selected';
+							}
+							$html .= '<option class="option" ' . $s . ' value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
+						}
+						$html .= '</optgroup>';
+					}
+				}else {
+					$s = '';
+					if (is_array($attrs['value']) && in_array($key, $attrs['value'])) {
+						$s = 'selected';
+					} else if ($key == $attrs['value']) {
+						$s = 'selected';
+					}
+					$html .= '<option class="option" ' . $s . ' value="' . esc_attr($key) . '">' . esc_html($val) . '</option>';
 				}
-				$html .= '<option class="option" ' . $s . ' value="' . esc_attr($key) . '">' . esc_html($val) . '</option>';
 			}
 		}
 
@@ -739,11 +755,13 @@ if ( ! function_exists("cwp_render_multi_dropdown_input")) {
 				} else if ($key == $attrs['value']) {
 					$s = 'selected';
 				}
-				$html .= '<option ' . $s . ' value="' . esc_attr($key) . '">' . esc_html($val) . '</option>';
+				if ( ! empty($key)) {
+					$html .= '<option ' . $s . ' value="' . esc_attr($key) . '">' . esc_html($val) . '</option>';
+				}
 			}
 		}
 		$html .= '</select>';
-
+		$html .= '<input type="hidden" name="' . $attrs['name'] . '[]" value="">';
 		return $html;
 	}
 }
@@ -776,6 +794,7 @@ if ( ! function_exists("cwp_render_editor_input")) {
 			'textarea_rows' => $attrs['rows'],
 			'media_buttons' => false,
 			'quicktags'     => false,
+			'editor_class'  => $attrs['class'],
 			'tinymce'       => array(
 				'theme_advanced_buttons1' => '',
 				'theme_advanced_buttons2' => false,
@@ -868,9 +887,31 @@ if ( ! function_exists("cubewp_dynamic_options")) {
 				}
 			} else if ($dropdown_type == 'user') {
 				$query_args = array(
+					'search' => "*{$keyword}*",
 					'role__in'       => array($dropdown_values),
-					'search'         => $keyword,
-					'search_columns' => 'display_name'
+					'search_columns' => array(
+						'user_login',
+						'user_nicename',
+						'display_name'
+					),
+					'meta_query' => array(
+						'relation' => 'OR',
+						array(
+							'key' => 'first_name',
+							'value' => $keyword,
+							'compare' => 'LIKE'
+						),
+						array(
+							'key' => 'last_name',
+							'value' => $keyword,
+							'compare' => 'LIKE'
+						),
+						array(
+							'key' => 'nickname',
+							'value' => $keyword,
+							'compare' => 'LIKE'
+						)
+					)
 				);
 				$users      = get_users($query_args);
 				if ( ! empty($users) && is_array($users)) {

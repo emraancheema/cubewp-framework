@@ -23,7 +23,7 @@ class CubeWp_Frontend_Password_Field extends CubeWp_Frontend {
     }
         
     /**
-     * Method render_password_field
+     * Method render_text_field
      *
      * @param string $output
      * @param array $args
@@ -33,9 +33,31 @@ class CubeWp_Frontend_Password_Field extends CubeWp_Frontend {
      */
     public function render_password_field( $output = '', $args = array() ) {
         
-        $output = apply_filters("cubewp/frontend/text/field", $output, $args);
+        $args           =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
+        $required       = self::cwp_frontend_field_required($args['required']);
+        $required       = !empty($required['class']) ? $required['class'] : '';
+        $output         = self::cwp_frontend_post_field_container($args);
+        $output .= self::cwp_frontend_field_label($args);
+        $input_attrs = array( 
+            'type'         =>    !empty($args['type']) ? $args['type'] : 'password',
+            'id'           =>    $args['id'],
+            'class'        =>    'form-control '. $args['class'].' '.$required,
+            'name'         =>    !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
+            'value'        =>    $args['value'],
+            'placeholder'  =>    $args['placeholder'],
+            'extra_attrs'  =>    $args['extra_attrs']
+        );
+        if (isset($args['char_limit']) && ! empty($args['char_limit']) && is_numeric($args['char_limit'])) {
+            $input_attrs['extra_attrs'] .= ' maxlength="' . $args['char_limit'] . '" ';
+        }
+        $output .= cwp_render_text_input( $input_attrs );
+        $output .= '<span class="dashicons dashicons-visibility show-password"></span>';
+
+        $output .= '</div>';
+
+        $output = apply_filters("cubewp/frontend/{$args['name']}/field", $output, $args);
+
         return $output;
-        
     }
     
 }

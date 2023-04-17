@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class CubeWp_Tag_Image extends \Elementor\Core\DynamicTags\Tag {
+class CubeWp_Tag_Image extends \Elementor\Core\DynamicTags\Data_Tag {
 
 	public function get_name() {
 		return 'cubewp-image-tag';
@@ -21,17 +21,33 @@ class CubeWp_Tag_Image extends \Elementor\Core\DynamicTags\Tag {
 		return [
 			\Elementor\Modules\DynamicTags\Module::TEXT_CATEGORY,
 			\Elementor\Modules\DynamicTags\Module::URL_CATEGORY,
+			\Elementor\Modules\DynamicTags\Module::IMAGE_CATEGORY,
 		];
 	}
 
-	public function render() {
-		$field = $this->get_settings( 'user_selected_field' );
+	public function is_settings_required() {
+		return true;
+	}
+
+	public function get_value( $options = array() ){
+		$returnArr = array();
+        $field = $this->get_settings( 'user_selected_field' );
 
 		if ( ! $field ) {
 			return;
 		}
 		$value = get_field_value( $field );
-		echo cubewp_core_data( $value );
+        if ( !$value || !is_numeric($value) ) {
+			return;
+		}
+		$imageID = $value;
+        if($imageID){
+            $returnArr = [
+                'id' =>$imageID,
+                'url' => wp_get_attachment_image_src($imageID, 'full')[0],
+            ]; 
+        }
+		return $returnArr;
 	}
 
 	protected function register_controls() {

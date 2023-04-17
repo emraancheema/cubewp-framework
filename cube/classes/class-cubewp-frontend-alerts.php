@@ -25,7 +25,7 @@ class CubeWp_Frontend_Alerts{
     
     public static function cubewp_post_views($post_id) {
         // Adding Post Views
-        if (session_status() === PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE && ! headers_sent()) {
             session_start();
         }
         if ( ! isset($_SESSION['cubewp_added_post_view'][$post_id])) {
@@ -59,27 +59,31 @@ class CubeWp_Frontend_Alerts{
 	        if( $payment_status == 'pending' && $paid_submission == 'yes' && $plan_price > 0 ){
 		        $payment_status = apply_filters('cubewp_check_post_payment_status', '', $plan_id, $post_id);
 	        }
-
-            ?>
-            <div class="cubewp-post-author-actions">
-            <?php if (!empty($submit_edit_page)) { ?>
-                <a href="<?php echo esc_url(add_query_arg(array('pid' => $post_id), get_permalink($submit_edit_page))); ?>">
-                    <button class="cube-post-edit-btn">
-                        <?php esc_html_e("Edit", "cubewp-framework"); ?>
-                    </button>
-                </a>
-            <?php } ?>
-                <?php if($payment_status == 'pending') { ?>
-                    <button class="cwp-pay-publish-btn" data-pid="<?php echo absint($post_id); ?>">
-	                    <?php esc_html_e("Pay & Publish", "cubewp-framework"); ?>
-                    </button>
-                <?php }else if($post_admin_approved != 'pending' && $postStatus == 'pending'){ ?>
-                    <button class="cwp-publish-btn" data-pid="<?php echo absint($post_id); ?>">
-                        <?php esc_html_e("Publish", "cubewp-framework"); ?>
-                    </button>
+            if(!empty($submit_edit_page) || $payment_status == 'pending' || ($post_admin_approved != 'pending' && $postStatus == 'pending')){
+                ?>
+                <div class="cubewp-post-author-actions">
+                <?php if (!empty($submit_edit_page)) { ?>
+                    <a href="<?php echo esc_url(add_query_arg(array('pid' => $post_id), get_permalink($submit_edit_page))); ?>">
+                        <button class="cube-post-edit-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"  viewBox="0 0 16 16">
+                              <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                            </svg>
+                            <?php esc_html_e("Edit", "cubewp-framework"); echo " ".$post_type; ?>
+                        </button>
+                    </a>
                 <?php } ?>
-            </div>
-            <?php
+                    <?php if($payment_status == 'pending') { ?>
+                        <button class="cwp-pay-publish-btn" data-pid="<?php echo absint($post_id); ?>">
+                            <?php esc_html_e("Pay & Publish", "cubewp-framework"); ?>
+                        </button>
+                    <?php }else if($post_admin_approved != 'pending' && $postStatus == 'pending'){ ?>
+                        <button class="cwp-publish-btn" data-pid="<?php echo absint($post_id); ?>">
+                            <?php esc_html_e("Publish", "cubewp-framework"); ?>
+                        </button>
+                    <?php } ?>
+                </div>
+                <?php
+            }
         }
     }
 
@@ -91,7 +95,7 @@ class CubeWp_Frontend_Alerts{
             ?>
             <script>
                 jQuery(window).load(function(){
-                    cwp_notification_ui('warning', '<?php echo wp_kses_post($this->cubewp_get_notification_msg()); ?>');
+                    cwp_notification_ui('info', '<?php echo wp_kses_post($this->cubewp_get_notification_msg()); ?>');
                 });
             </script>
             <?php

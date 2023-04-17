@@ -16,9 +16,8 @@ class CubeWp_Admin_Textarea_Field extends CubeWp_Admin {
         add_filter('cubewp/admin/post/textarea/field', array($this, 'render_textarea_field'), 10, 2);
         add_filter('cubewp/admin/dashboard/textarea/field', array($this, 'render_textarea_field'), 10, 2);
         
-        add_filter('cubewp/admin/posttype/textarea/customfield', array($this, 'render_textarea_custom_field'), 10, 2);
+        add_filter('cubewp/admin/textarea/customfield', array($this, 'render_textarea_custom_field'), 10, 2);
         add_filter('cubewp/admin/taxonomies/textarea/customfield', array($this, 'render_textarea_custom_field'), 10, 2);
-        add_filter('cubewp/admin/user/textarea/customfield', array($this, 'render_textarea_custom_field'), 10, 2);
     }
         
     /**
@@ -49,6 +48,9 @@ class CubeWp_Admin_Textarea_Field extends CubeWp_Admin {
                 $extra_attrs .= ' data-validation_msg="'. $validation_msg .'"';
             }
             $input_attrs['extra_attrs'] = $extra_attrs;
+            if (isset($args['char_limit']) && ! empty($args['char_limit']) && is_numeric($args['char_limit'])) {
+                $input_attrs['extra_attrs'] .= ' maxlength="' . $args['char_limit'] . '" ';
+            }
 
             $output .= cwp_render_textarea_input( $input_attrs );
 

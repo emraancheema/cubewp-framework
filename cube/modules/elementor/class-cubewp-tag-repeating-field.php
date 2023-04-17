@@ -23,6 +23,10 @@ class CubeWp_Tag_Repeating_Field extends \Elementor\Core\DynamicTags\Tag {
                ];
 	}
 
+	public function is_settings_required() {
+		return true;
+	}
+
 	protected function register_controls() {
         
 		$options = get_fields_by_type(array('repeating_field'));
@@ -43,8 +47,17 @@ class CubeWp_Tag_Repeating_Field extends \Elementor\Core\DynamicTags\Tag {
 		if ( ! $field ) {
 			return;
 		}
+		$options = get_field_options($field);
+		$label = isset( $options["label"] ) ? $options["label"] : "";
+		$field_type = isset($options['type']) ? $options['type'] : '';
         $value = get_field_value( $field );
-		echo cubewp_core_data($value);
+		$args = array(
+			'type'                  =>    $field_type,
+			'container_class'       =>    "",
+			'value'                 =>    $value,
+			'label'                 =>    $label,
+		);
+		echo CubeWp_Single_Page_Trait::field_repeating_field($args);
 	}
     
 

@@ -38,7 +38,14 @@ jQuery(document).ready(function () {
                 }, success: function (data) {
                     $form.removeClass('processing');
                     $this.removeClass('processing');
-                    $form.closest('div').append(data.html);
+                    if ($this.hasClass('cwp-save-settings')) {
+                        $form.closest('div').append(data.html);
+                    }else{
+                        $form.closest('div').append('<div class="alert-success mr-4 cwp-options-alert" role="alert">Reset Successfully</div>');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
                     setTimeout(function () {
                         $this.find('i').remove();
                         jQuery('.cwp-options-alert').hide('slow');

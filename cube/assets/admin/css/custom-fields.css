@@ -15,12 +15,13 @@
 	width: 100%;
 }
 .cwp-custom-field {
-	margin-bottom: 10px;
-	width: 95%;
+	width: 100%;
 }
-.cwp-custom-field .cwp-field {
-	margin-bottom: 5px;
+.wp-list-table .group_name .post-state {
+	color: #667085;
+	margin-left:10px
 }
+
 .cwp-custom-field .cwp-field textarea {
 	width: 100%;
 }
@@ -56,8 +57,9 @@
 	padding: 0 12px;
 	width: 100%;
 }
-input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], .postbox-container input[type=text], input[type=time], input[type=url], input[type=week] {
-	width: 100%
+input[type=date],input[type=datetime-local],input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], .postbox-container input[type=text], input[type=time], input[type=url],input[type=week],.wp-core-ui select,select {
+	width: 100%;
+	max-width: 100%;
 }
 .cwp-add-form-feild {
 	background: #ffffff;
@@ -145,9 +147,6 @@ input[type=date], input[type=datetime-local], input[type=datetime], input[type=e
 	margin: 0;
 	padding: 15px;
 }
-.cwp-group-fields .field-header.closed {
-	border-bottom: none;
-}
 .cwp-group-fields .field-header .field-title {
 	flex-grow: 1;
 	margin: 0;
@@ -222,9 +221,6 @@ input[type=date], input[type=datetime-local], input[type=datetime], input[type=e
 	justify-content: space-between;
 	margin: 0;
 	padding: 15px;
-}
-.cwp-group-fields .field-header.closed {
-	border-bottom: none;
 }
 .cwp-group-fields .field-header .field-title {
 	flex-grow: 1;
@@ -319,4 +315,89 @@ td.move-option {
 	.field-header .field-type {
 		width: 40% !important;
 	}
+}
+
+
+.cwp-switch {
+	display: inline-flex;
+	justify-content: space-evenly;
+	align-items: center;
+	position: relative;
+	border-radius: 6px;
+	overflow: hidden;
+	width: 75px;
+	height: 30px;
+ }
+ .cwp-switch .cwp-switch-field {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+	z-index: 4;
+ }
+ .cwp-switch .cwp-switch-slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background: #e3e3e3;
+ }
+ .cwp-switch .cwp-switch-text-no,
+ .cwp-switch .cwp-switch-text-yes
+ {
+	position: relative;
+	z-index: 3;
+	padding: 0;
+	transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	color: #000000;
+	user-select: none;
+ }
+ .cwp-switch .cwp-switch-text-no {
+	color: #000000;
+ }
+ .cwp-switch .cwp-switch-slider:before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 3px;
+	width: calc(50% - 3px);
+	height: calc(100% - 6px);
+	z-index: 2;
+	background: #fff;
+	border-radius: 4px;
+	transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-slider {
+	background: #007cba;
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-slider:before {
+	left: calc(50% - 2px);
+	width: calc(50% - 1px);
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-text-no {
+	color: #fff;
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-text-yes {
+	color: #000000;
+ }
+.cwp-field-range[type=range] {
+    width: calc(100% - 65px);
+    display: inline-block;
+}
+.cubewp-current-value {
+    width: 50px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 12px 0 0;
 }

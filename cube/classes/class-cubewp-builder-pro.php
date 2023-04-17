@@ -22,6 +22,7 @@ class CubeWp_Builder_Pro {
         add_action("cubewp_user_profile_form", array($this, "CubeWp_Empty_Form_Builder"));
         add_action("cubewp_single_layout", array($this, "CubeWp_Empty_Form_Builder"));
         add_action("cubewp_user_dashboard", array($this, "CubeWp_Empty_Form_Builder"));
+        add_action("cubewp_loop_builder", array($this, "CubeWp_Empty_Form_Builder"));
     }
 
 	/**
@@ -50,7 +51,10 @@ class CubeWp_Builder_Pro {
         }
         elseif( current_cubewp_page() == 'cubewp_user_dashboard'){
             $page_header="User Dashboard Builder";
-            $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/form-builder-screen.png';
+            $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/user-dashboard-screen.png';
+        }elseif( current_cubewp_page() == 'cubewp_loop_builder'){
+            $page_header="Loop Builder";
+            $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/user-dashboard-screen.png';
         }
         echo'<div id="cubewp-title-bar">
 			<h1>'.$page_header.'</h1>
@@ -71,7 +75,7 @@ class CubeWp_Builder_Pro {
                     <div class="cube-subscription-active-options">
                         <ul class="list-options-subscription-form">
                             <li><span class="dashicons dashicons-yes"></span>Single Layout Builder</li>
-                            <li><span class="dashicons dashicons-yes"></span>Archive Layout Builder</li>
+                            <li><span class="dashicons dashicons-yes"></span>Shortcodes for Archive Layout</li>
                             <li><span class="dashicons dashicons-yes"></span>User Signup Form Builder</li>
                             <li><span class="dashicons dashicons-yes"></span>User Profile Form Builder</li>
                             <li><span class="dashicons dashicons-yes"></span>Advanced Search Fields Builder</li>
@@ -85,7 +89,7 @@ class CubeWp_Builder_Pro {
                             <img src="'.CWP_PLUGIN_URI.'cube/assets/admin/images/cube-logo.png" alt="">
                         </div>
                         <div class="cubewp-subscription-download">
-                            <a href="https://cubewp.com/product-details/"><span class="dashicons dashicons-star-filled"></span> Download Frontend Pro Now</a>
+                            <a href="https://cubewp.com/cubewp-frontend-pro/" target="_blank"><span class="dashicons dashicons-star-filled"></span> Download Frontend Pro Now</a>
                             <span class="cube-award-option"><span class="dashicons dashicons-awards"></span>30-Day Money-Back Guarantee</span>
                         </div>
                     </div>

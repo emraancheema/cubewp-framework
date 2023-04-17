@@ -36,8 +36,8 @@ class CubeWp_Query{
         $the_query = new WP_Query($query);
         
         if($the_query->have_posts()){
-            
             $the_query->posts = apply_filters('cubewp_the_posts',$the_query->posts,$the_query->query_vars);
+            $the_query = apply_filters( 'cubewp_query_vars' , $the_query );
         }
         return $the_query;
     }

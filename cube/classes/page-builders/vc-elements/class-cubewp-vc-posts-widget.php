@@ -219,19 +219,17 @@ class CubeWp_VC_Posts_Widget {
 
 	private static function get_post_type_posts( $post_types ) {
 		$query  = new CubeWp_Query( array(
-			'post_type'      => $post_types,
-			'fields'         => 'ids',
-			'posts_per_page' => - 1
+		   'post_type'      => $post_types,
+		   'posts_per_page' => - 1
 		) );
 		$posts  = $query->cubewp_post_query();
 		$return = array();
-		if ( $posts->have_posts() ) {
-			while ( $posts->have_posts() ) {
-				$posts->the_post();
-				$return[ get_the_title() . ' [' . get_the_ID() . ']' ] = get_the_ID();
-			}
-		}
-
+		if ( $posts->have_posts() ) :
+				while ( $posts->have_posts() ) : $posts->the_post();
+					$return[ get_the_ID() ] = get_the_title() . ' [' . get_the_ID() . ']';
+				endwhile;
+			endif;
+	 
 		return $return;
 	}
 

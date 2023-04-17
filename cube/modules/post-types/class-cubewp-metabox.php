@@ -244,7 +244,7 @@ class CubeWp_Metabox {
             } elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
                 return $post_id;
             }
-
+            
             if(isset($_POST['cwp_meta'])){
                 
                 $fields = CubeWp_Sanitize_Fields_Array($_POST['cwp_meta'], 'post_types');
@@ -255,6 +255,23 @@ class CubeWp_Metabox {
                     $_key = str_replace('cwp-', '', $key);
 
                     $singleFieldOptions = isset($fieldOptions[$_key]) ? $fieldOptions[$_key] : array(); 
+
+                    $val = $value;
+                    if ( ( isset($singleFieldOptions['type']) && isset($singleFieldOptions['relationship']) && $singleFieldOptions['type'] == 'post' && $singleFieldOptions['relationship'] ) && is_array( $singleFieldOptions ) && count( $singleFieldOptions ) > 0 ) {
+                        if ( ! is_array( $val ) ) {
+                            $val = array( $val );
+                        }
+                        if ( ! empty($val) && count($val) > 0) {
+                            (new CubeWp_Relationships)->save_relationship( $post_id, $val, $_key, 'PTP' );
+                        }
+                    }else if ( isset($singleFieldOptions['type']) && isset($singleFieldOptions['relationship']) && ( $singleFieldOptions['type'] == 'user' && $singleFieldOptions['relationship'] ) && is_array( $singleFieldOptions ) && count( $singleFieldOptions ) > 0 ) {
+                        if ( ! is_array( $val ) ) {
+                            $val = array( $val );
+                        }
+                        if ( ! empty($val) && count($val) > 0) {
+                            (new CubeWp_Relationships)->save_relationship( $post_id, $val, $_key, 'PTU' );
+                        }
+                    }
 
                     if(is_array($singleFieldOptions) && count($singleFieldOptions) > 0 && $singleFieldOptions['type'] == 'repeating_field' ){
 
@@ -290,6 +307,5 @@ class CubeWp_Metabox {
                 }
             }
         }
-    
     }
 }

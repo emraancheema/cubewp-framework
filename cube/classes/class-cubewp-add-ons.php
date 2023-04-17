@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CubeWp_Add_Ons {
 
 	// API route
-	public $route   = 'http://127.0.0.1:8888/test';
+	public $route   = 'https://cubewp.com';
 
     // store URL
 	public $purchase_url   = 'https://cubewp.com/store';
@@ -41,7 +41,7 @@ class CubeWp_Add_Ons {
 	 * @since 1.0
 	 * @version 1.0
 	 */
-	public function cubewp_add_ons() {
+	public static function cubewp_add_ons() {
 
 		return array(
 			'cubewp-addon-frontend-pro' => array(
@@ -68,6 +68,54 @@ class CubeWp_Add_Ons {
 				'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-inbox/cube/',
 				'load' => CUBEWP.'_Inbox_Load',
 			),
+            'cubewp-addon-reviews' => array(
+                'item_name' => 'CubeWP Reviews',
+                'slug' => 'cubewp-addon-reviews',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-reviews/cubewp-reviews.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-reviews/cube/',
+                'load' => CUBEWP.'_Reviews_Load',
+            ),
+            'cubewp-addon-booster' => array(
+                'item_name' => 'CubeWP Booster',
+                'slug' => 'cubewp-addon-booster',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-booster/cubewp-booster.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-booster/cube/',
+                'load' => CUBEWP.'_Booster_Load',
+            ),
+            'cubewp-addon-claim' => array(
+                'item_name' => 'CubeWP Claim',
+                'slug' => 'cubewp-addon-claim',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-claim/cubewp-claim.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-claim/cube/',
+                'load' => CUBEWP.'_Claim_Load',
+            ),
+            'cubewp-addon-wallet' => array(
+                'item_name' => 'CubeWP Wallet',
+                'slug' => 'cubewp-addon-wallet',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-wallet/cubewp-wallet.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-wallet/cube/',
+                'load' => CUBEWP.'_Wallet_Load',
+            ),
+            'cubewp-addon-social-logins' => array(
+                'item_name' => 'CubeWP Social Logins',
+                'slug' => 'cubewp-addon-social-logins',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-social-logins/cubewp-social-logins.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-social-logins/cube/',
+                'load' => CUBEWP.'_Social_Logins_Load',
+			),
+			'cubewp-addon-classified' => array(
+                'item_name' => 'CubeWP Classified',
+                'slug' => 'cubewp-addon-classified',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-classified/cubewp-classified.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-classified/cube/',
+                'load' => 'Classified_Load',
+            )
 		);
 
 	}
@@ -85,7 +133,7 @@ class CubeWp_Add_Ons {
 
 		// WordPress check
 		$wp_version = $GLOBALS['wp_version'];
-;
+
 		if ( version_compare( $wp_version, '5.8', '<' ) )
 			$message[] = __( 'This CubeWP Add-on requires WordPress 4.0 or higher. Version detected:', 'cubewp-frontend' ) . ' ' . $wp_version;
 
@@ -119,7 +167,7 @@ class CubeWp_Add_Ons {
 
 	public function add_on_management($plugin) {
 
-		$add_ons = $this->cubewp_add_ons();
+		$add_ons = self::cubewp_add_ons();
 		if(function_exists('CWP')){
 
 			$not_our_plugin 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x69\x73\x20\x6e\x6f\x74\x20\x22\x43\x75\x62\x65\x57\x50\x22\x20\x70\x6c\x75\x67\x69\x6e");
@@ -151,23 +199,25 @@ class CubeWp_Add_Ons {
             
                         // Call the custom API.
                         $response = wp_remote_post( $this->route, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
-            
-                        // make sure the response came back okay
+						// make sure the response came back okay
                         if ( is_wp_error( $response ) ) {
                             die($file_is_not_valid);
                         }
                         // decode the license data
                         $response_data = json_decode( wp_remote_retrieve_body( $response ) );
-                       
-                        if ( 'valid' != $response_data->license ) {
-                            die($lic_is_not_valid);
-                        }else{
-                            CWP()->update_cubewp_options($slug, $response_data);
-							CWP()->update_cubewp_options($slug.'_key', $key);
-                            CWP()->update_cubewp_options($slug.'-status', $response_data->license);
-                        }
+						
+                        if(isset($response_data->license)){
+							if ( 'valid' != $response_data->license ) {
+								die($lic_is_not_valid);
+							}else{
+								CWP()->update_cubewp_options($slug, $response_data);
+								CWP()->update_cubewp_options($slug.'_key', $key);
+								CWP()->update_cubewp_options($slug.'-status', $response_data->license);
+							}
+					    }else{
+							die($lic_is_not_valid);
+						}
 						unlink ( $file );
-
 					}else{
 						//file not good
                         die($need_fresh_file);
@@ -218,17 +268,17 @@ class CubeWp_Add_Ons {
 	}
 
 	public function check_license() {
-
+		$transient = false;
         $add_ons = self::cubewp_add_ons();
         foreach($add_ons as $key => $add_on){
             $item_name = $add_on['item_name'];
             $author = $add_on['author'];
             $slug = $add_on['slug'];
             $base = $add_on['base'];
-            if ( get_transient( $slug . '_checking' ) )
-            return;
-            
-			if(is_plugin_active($base)){
+            if ( get_transient( $slug . '_checking' ) ){
+				$transient = true;
+			}
+			if(is_plugin_active($base) && $transient == false){
 				$Lkey = CWP()->cubewp_options($slug.'_key');
 				if($Lkey){
 					$api_params = array(
@@ -272,7 +322,7 @@ class CubeWp_Add_Ons {
 					
 				}
 			}
-        }        
+        }
     }
 
 

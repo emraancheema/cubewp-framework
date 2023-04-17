@@ -5,9 +5,9 @@
 .cwp-filtered-results {
     align-items: center;
     display: flex;
-    height: 20px;
+    height: 30px;
     justify-content: flex-end;
-    margin: 15px 0px;
+    margin: 0 0 15px 0px;
     padding: 0;
 }
 
@@ -27,6 +27,7 @@ select#cwp-sorting-filter {
     width: auto;
     color: #777777;
     min-width: 155px;
+	height:30px;
 }
 
 .cwp-archive-toggle-Listing-style {
@@ -43,6 +44,7 @@ select#cwp-sorting-filter {
 .cwp-archive-toggle-Listing-style .listing-switcher {
     cursor: pointer;
     padding: 4px 10px;
+	height:30px;
 }
 
 .cwp-active-style {
@@ -158,14 +160,14 @@ select#cwp-sorting-filter {
 }
 
 .cwp-post-content {
-    padding: 15px 20px 20px 20px;
+    padding: 15px;
 }
 
 .cwp-post-content h4 {
     font-size: 20px;
     font-weight: bold;
     line-height: 1.3;
-    margin: 0 0 15px 0;
+    margin: 0 0 5px 0;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -186,11 +188,11 @@ select#cwp-sorting-filter {
     line-height: 1.5;
     list-style: none;
     margin: 0;
-    padding: 15px 20px 10px 20px;
+    padding: 15px 15px 10px;
 }
 
 .cwp-post-terms li {
-    margin: 0 8px 8px 0;
+    margin: 0 5px 5px 0;
 }
 
 .cwp-post-terms li a {
@@ -234,4 +236,15 @@ span.cwp-main.cwp-saved-post svg:first-child {
 .cwp-single-save-btns.cwp-single-widget span.cwp-main,
 .cwp-single-share-btn.cwp-single-widget span.cwp-main {
     cursor: pointer;
+}
+.cwp-post-boosted {
+    padding: 1px 10px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #FFBB00;
+    border-radius: 12px;
+    color: #000000;
+    font-weight: 500;
+    font-size: 13px;
 }

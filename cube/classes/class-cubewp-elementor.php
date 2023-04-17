@@ -69,7 +69,7 @@ final class CubeWp_Elementor {
 	 */
 	public function is_compatible() {
 		// Check if Elementor installed and activated
-		if ( ! did_action('elementor/loaded')) { 
+		if ( ! cubewp_check_if_elementor_active()) { 
 			return false;
 		}
 		// Check for required Elementor version

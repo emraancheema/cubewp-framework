@@ -249,6 +249,12 @@ class CubeWp_Admin_Enqueue{
 				'version' => CUBEWP_VERSION,
 				'has_rtl' => false,
 			),
+			'cubewp-welcome'                  => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/admin/css/cwp-welcome.css' ,
+				'deps'    => array(),
+				'version' => CUBEWP_VERSION,
+				'has_rtl' => false,
+			),
             'cwp-timepicker'                  => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/lib/timepicker/jquery-ui-timepicker-addon.min.css' ,
 				'deps'    => array(),
@@ -428,7 +434,10 @@ class CubeWp_Admin_Enqueue{
                 }elseif (CWP()->is_admin_screen("custom_fields") || CWP()->is_admin_screen("taxonomy_custom_fields") || CWP()->is_admin_screen("user_custom_fields")) {
                    $confirm_text['single'] = esc_html__("Deletion of this custom field group cannot be undone.", "cubewp-framework");
                    $confirm_text['multiple'] = esc_html__("Deletion of these custom field group cannot be undone.", "cubewp-framework");
-                }
+                }else {
+					$confirm_text['single'] = esc_html__("Deletion of this record cannot be undone.", "cubewp-framework");
+					$confirm_text['multiple'] = esc_html__("Deletion of these records cannot be undone.", "cubewp-framework");
+				}
                 $params = array(
                    'ajax_url'     => admin_url('admin-ajax.php'),
                    'admin_url'    => admin_url(),
@@ -444,7 +453,12 @@ class CubeWp_Admin_Enqueue{
                     'existing_taxonomies'    =>   self::get_registered_taxonomies(),
                 );
 				break;
-
+			case 'cubewp-metaboxes':
+				$params = array(
+					'confirm_remove_relation' =>   esc_html__("Are you sure? You want to remove this relation.", "cubewp-framework"),
+					'remove_relation_nonce'   =>   wp_create_nonce("cubewp_remove_nonce")
+							);
+				break;
             case 'cubewp-custom-fields':
                 $params = array(
                     'url'   => admin_url( 'admin-ajax.php' ),

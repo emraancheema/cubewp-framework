@@ -124,6 +124,7 @@ a {
 	justify-content: space-between;
 	margin: 0;
 	padding: 15px;
+	cursor: pointer;
 }
 
 .cwp-group-fields .field-header.closed {
@@ -174,14 +175,19 @@ a {
     padding: 15px 15px;
 	background: #FDFDFD;
 }
-
+.parent-field.cwp-field-set.cwp-add-form-feild.cwp-required-container .parent-field-header.field-header {
+    border-color: red;
+}
 .cwp-group-fields .field-header .field-title {
-	width: calc(100% - 190px);
+	width: calc(100% - 172px);
 	flex-grow: 1;
 	margin: 0;
 	font-size: 14px;
 }
-
+.cwp-group-fields .field-header .field-actions {
+    width: 70px;
+    text-align: right;
+}
 .conditional-rule tbody td.conditional-rule-field select {
 	min-width: 250px;
 }
@@ -208,6 +214,11 @@ a {
 	font-size: 14px;
     font-weight: bold;
 }
+.cwp-group-fields .cwp-field-set .cwp-collapsible-inner table tr td .field-options-table td:first-child {
+    background: unset;
+    border: unset;
+    cursor: move;
+}
 .cwp-group-fields .cwp-field-set .cwp-collapsible-inner tr:first-child td:first-child, .cwp-group-fields .cwp-field-set .cwp-collapsible-inner tr:first-child td {
     padding-top: 30px;
 }
@@ -228,42 +239,6 @@ a {
 .cwp-group-fields .cwp-field-set .cwp-collapsible-inner tr:first-child td.conditional-rule-field:first-child {
     padding-top: 0px;
 }
-input.cwp-switch-check {
-    display: none !important;
-}
-.cwp-switch-check + label {
-	border: 1px solid #D8D8D8;
-    border-radius: 15px;
-    cursor: pointer;
-    height: 20px;
-    opacity: 0.56;
-    position: relative;
-    transition: 300ms;
-    width: 40px;
-    background: #D8D8D8;
-    font-size: 0;
-    display: block;
-}
-.cwp-switch-check + label:before {
-    background: #ffffff;
-    border-radius: 50%;
-    content: "";
-    height: 15px;
-    left: 3px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: 300ms;
-    width: 15px;
-}
-.cwp-switch-check:checked ~ label {
-    background: #077CB2;
-    border-color: #077CB2;
-    opacity: 1;
-}
-.cwp-switch-check:checked ~ label:before {
-    transform: translate(19px, -50%);
-}
 
 /*new css*/
 .postbox {
@@ -274,6 +249,10 @@ input.cwp-switch-check {
 	display: block;
 }
 
+.cwp-logo img {
+    height: 38px;
+}
+
 .cwp-welcome-page {
 	background-color: #f5f9fc;
 	margin-left: -20px;
@@ -282,7 +261,7 @@ input.cwp-switch-check {
 
 .cwp-welcome-page-title {
 	background-color: #0073aa;
-	background-image: url(../images/header-bg.png);
+	background-image: linear-gradient(333deg, #681952, #681952,#00306F, #00306F);
 	background-position: center;
 	background-repeat: no-repeat;
 	margin-left: -22px;
@@ -587,7 +566,7 @@ span.dashicons.dashicons-trash:hover {
 	display: flex;
 	justify-content: center;
 	margin-right: 5px;
-	padding: 5px;
+	padding: 15px;
 }
 
 .cwp-selectMenuIcons span.active,
@@ -631,7 +610,7 @@ span.dashicons.dashicons-trash:hover {
 	top: -65px;
 	transition: 0.3s all ease-in-out;
 	width: 270px;
-	z-index: 1;
+	z-index: 9;
 }
 
 .cwp-icon-helpTip span.dashicons.dashicons-editor-help:hover~.cwp-ctp-toolTips .cwp-ctp-toolTip {
@@ -1127,3 +1106,5 @@ cwp-unlock-feature a{
 	border-left: 0;
 	border-bottom: 0;
  }
+ 
+ 

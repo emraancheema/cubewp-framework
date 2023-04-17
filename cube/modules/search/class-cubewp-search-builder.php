@@ -22,8 +22,6 @@ class CubeWp_Search_Builder extends CubeWp_Form_Builder {
     public function __construct() {
         add_action( "cubewp_admin_search_filters", array( $this, "create_search_filters" ) );
         add_action( "cubewp_admin_search_fields", array( $this, "create_search_fields" ) );
-        add_filter('cubewp/builder/default/right/section',array($this,'default_ui_section_right'),9,4);
-        add_filter('cubewp/builder/right/settings',array($this,'setting_tab'),9,2);
     }
     
     /**
@@ -149,7 +147,7 @@ class CubeWp_Search_Builder extends CubeWp_Form_Builder {
     public function setting_tab($empty,$key) {
         $form_options  =  CWP()->get_form(self::$FORM_TYPE);
         $form_fields = isset($form_options[$key]['form']) ? $form_options[$key]['form'] : array();
-        return $this->cwpform_form_setting_fields( $form_fields, self::$FORM_TYPE );
+        return $this->cwpform_form_setting_fields( $form_fields, self::$FORM_TYPE,$key );
     }
     
         
@@ -160,6 +158,8 @@ class CubeWp_Search_Builder extends CubeWp_Form_Builder {
      * @since  1.0.0
      */
     public function Builder_Ui() {
+        add_filter('cubewp/builder/default/right/section',array($this,'default_ui_section_right'),9,4);
+        add_filter('cubewp/builder/right/settings',array($this,'setting_tab'),9,2);
         add_filter("cubewp/builder/".self::$FORM_TYPE."/default/fields",array($this,'default_wp_fields'),10,2);
         add_filter("cubewp/builder/".self::$FORM_TYPE."/taxonomies/fields",array($this,'taxonomy_fields'),9,2);
         $types = CWP_all_post_types();

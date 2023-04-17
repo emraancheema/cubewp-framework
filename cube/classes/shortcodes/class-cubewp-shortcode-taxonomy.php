@@ -86,14 +86,15 @@ class CubeWp_Shortcode_Taxonomy {
 									<?php
 									if ( ! is_array( $icon_media ) ) {
 										if ( $icon_media != strip_tags( $icon_media ) ) {
-											print( $icon_media );
-										} else if ( ! filter_var( $icon_media, FILTER_VALIDATE_URL ) === false ) {
-											echo '<img src="' . esc_attr($icon_media) . '" alt="' . esc_attr($term_name) . '">
-                                            <div class="cwp-taxonomy-term-box-heading-overlay" style="background-color: ' . esc_attr($color) . ';"></div>';
+										   echo cubewp_core_data( $icon_media );
+										} else if ( is_numeric( $icon_media ) ) {
+										   $icon_media = wp_get_attachment_url( $icon_media );
+										   echo '<img src="' . esc_attr($icon_media) . '" alt="' . esc_attr($term_name) . '">
+																		<div class="cwp-taxonomy-term-box-heading-overlay" style="background-color: ' . esc_attr($color) . ';"></div>';
 										} else {
-											echo '<i class="' . esc_attr($icon_media) . '" aria-hidden="true"></i>';
+										   echo '<i class="' . esc_attr($icon_media) . '" aria-hidden="true"></i>';
 										}
-									}
+									 }
 									?>
                                     <a href="<?php echo get_term_link( $term_id ) ?>"><?php echo esc_html( $term_name ); ?></a>
                                 </div>

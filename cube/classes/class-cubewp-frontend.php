@@ -15,18 +15,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * CubeWp_frontend
  */
-class CubeWp_frontend {
+class CubeWp_Frontend {
     
     const FSAH = 'CubeWp_Search_Ajax_Hooks';
     public static $Load = null;
+    public static $post_type = '';
+    public static $taxonomy = '';
+    public static $parent_field = '';
+    public static $post_count = 0;
     
     public function __construct( ) {
         $this->include_fields();
         add_filter('cubewp/frontend/field/parametrs', array($this, 'frontend_field_parameters'), 10, 1);
+        add_action('cubewp_loaded', array('CubeWp_Frontend_Alerts', 'init'), 10);
+        add_action('cubewp_loaded', array('CubeWp_Frontend_Templates', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Saved', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Pagination', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Frontend_Search_Fields', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Frontend_Search_Filter', 'init'), 10);
+        add_action('cubewp_loaded', array('CubeWp_Frontend_Recaptcha', 'init'), 10);
         add_filter('cubewp_frontend_search_data', array($this, 'cubewp_frontend_search_data'), 10, 2);
         
         new CubeWp_Ajax( '',
@@ -110,11 +117,12 @@ class CubeWp_frontend {
             'name'                  =>    '',
             'custom_name'           =>    '',
             'value'                 =>    '',
-            'minimum_value'           =>   0,
-            'maximum_value'           =>   100,
-            'steps_count'             =>   1,
-            'file_types'              =>   '',
+            'minimum_value'         =>   0,
+            'maximum_value'         =>   100,
+            'steps_count'           =>   1,
+            'file_types'            =>   '',
             'placeholder'           =>    '',
+            'upload_size'           =>   '',
             'label'                 =>    '',
             'description'           =>    '',
             'multiple'              =>    0,
@@ -127,6 +135,7 @@ class CubeWp_frontend {
             'conditional_field'     =>    '',
             'conditional_operator'  =>    '',
             'conditional_value'     =>    '',
+            'char_limit'            =>    '',
             'extra_attrs'           =>    '',
             'field_size'            =>    '',
             'sub_fields'            =>    array(),
@@ -385,13 +394,21 @@ class CubeWp_frontend {
      * @since  1.0.0
      */
     public static function list_switcher() {
+		$cwp_active_grid = $cwp_active_list = '';
+        if(cwp_get_post_card_view() == 'list-view'){
+            $cwp_active_list = 'cwp-active-style';
+        }else if(cwp_get_post_card_view() == 'grid-view'){
+            $cwp_active_grid = 'cwp-active-style';
+        }else{
+            $cwp_active_grid = 'cwp-active-style';
+        }
         $output = '<div class="cwp-archive-toggle-Listing-style">
-            <div class="listing-switcher grid-view cwp-active-style">
+            <div class="listing-switcher grid-view '.$cwp_active_grid.'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
                 </svg>
             </div>
-            <div class="listing-switcher list-view">
+            <div class="listing-switcher list-view '.$cwp_active_list.'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                 </svg>
@@ -410,7 +427,6 @@ class CubeWp_frontend {
     public static function sorting_filter( ) {
         $sorting = apply_filters('cubewp/frontend/sorting/filter','');
         $option = array();
-        $option[''] = esc_html__('Sort By','cubewp-framework');
         $option['DESC'] = esc_html__('Newest','cubewp-framework');
         $option['ASC'] = esc_html__('Oldest','cubewp-framework');
         if(!empty($sorting)){
@@ -423,12 +439,119 @@ class CubeWp_frontend {
             'class'        => 'cwp-orderby',
             'id'           => 'cwp-sorting-filter',
             'name'         => 'cwp_orderby',
-            'value'        => isset($_GET['orderby']) && !empty($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '',
+            'value'        => isset($_GET['orderby']) && !empty($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'DESC',
             'options'      => $option,
             'extra_attrs'  => '',
+            'placeholder'  => esc_html__('Sort By','cubewp-framework')
         );
         echo cwp_render_dropdown_input( $input_attrs );
     }
+
+    /**
+     * Method is_cubewp_single
+     *
+     * @return bool
+     * @since  1.0.7
+     */
+    public static function is_cubewp_single() {
+		$get_CustomTypes = CWP_types();
+        if (is_array($get_CustomTypes) && !empty($get_CustomTypes) && count($get_CustomTypes)!=0) {
+            foreach ($get_CustomTypes as $single_cpt) {
+                self::$post_type = $single_cpt['slug'];
+                // Custom Single Page
+                if (is_singular( $single_cpt['slug'] )):
+                    return true;
+                endif;
+            }
+        }
+        return false;
+	}
+
+    /**
+     * Method is_cubewp_archive
+     *
+     * @return bool
+     * @since  1.0.7
+     */
+    public static function is_cubewp_archive() {
+		$get_CustomTypes = CWP_types();
+        if (is_array($get_CustomTypes) && !empty($get_CustomTypes) && count($get_CustomTypes)!=0) {
+            foreach ($get_CustomTypes as $single_cpt) {
+                self::$post_type = $single_cpt['slug'];
+                // Custom Single Page
+                if (is_post_type_archive( $single_cpt['slug'] )):
+                    return true;
+                endif;
+            }
+        }
+        return false;
+	}
+
+    /**
+     * Method is_cubewp_taxonomy
+     *
+     *
+     * @return bool
+     * @since  1.0.7
+     */
+    public static function is_cubewp_taxonomy() {
+		$get_CustomTax = CWP_custom_taxonomies();
+        if (is_array($get_CustomTax) && !empty($get_CustomTax) && count($get_CustomTax)!=0) {
+            foreach ($get_CustomTax as $single_tax) {
+                self::$taxonomy = $single_tax['slug'];
+                // Custom Taxonomy Page
+                if ($single_tax['public'] == true && is_tax( $single_tax['slug'] )):
+                    return true;
+                endif;
+            }
+        }
+        return false;
+	}
+
+    /**
+     * Method have_fields
+     *
+     * @return void
+     */
+    public static function have_fields($field = '') {
+        if(is_array($field) && !empty($field)){
+            $field_count = count($field);
+            if($field_count >= 1){
+                $field_count -= 1;
+            }
+            if( $field_count >= self::the_subfield(true)){
+                self::$parent_field = $field;
+                return true;
+            }
+		}
+		return false;
+    }
+
+    /**
+     * Method the_subfield
+     *
+     * @return void
+     */
+    public static function the_subfield($incriment = false) {
+        if($incriment != true){
+            return self::$post_count++;
+        }
+        return self::$post_count;
+    }
+
+    /**
+     * Method get_subfield_value
+     *
+     * @return void
+     */
+    public static function get_subfield_value($field = '') {
+		$parent_field = self::$parent_field;
+		$post_count = self::$post_count;
+        $post_count -= 1;
+		if(isset($parent_field[$post_count][$field])){
+			return $parent_field[$post_count][$field]['value'];
+		}
+	}
         
     /**
      * Method init

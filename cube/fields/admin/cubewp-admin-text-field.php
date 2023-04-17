@@ -24,10 +24,8 @@ class CubeWp_Admin_Text_Field extends CubeWp_Admin {
         
         add_filter('cubewp/admin/post/text/field', array($this, 'render_text_field'), 10, 2);
         
-        add_filter('cubewp/admin/posttype/text/customfield', array($this, 'render_text_custom_field'), 10, 2);
+        add_filter('cubewp/admin/text/customfield', array($this, 'render_text_custom_field'), 10, 2);
         add_filter('cubewp/admin/taxonomies/text/customfield', array($this, 'render_text_custom_field'), 10, 2);
-        add_filter('cubewp/admin/user/text/customfield', array($this, 'render_text_custom_field'), 10, 2);
-
     }
         
     /**
@@ -60,7 +58,9 @@ class CubeWp_Admin_Text_Field extends CubeWp_Admin {
                 $extra_attrs .= ' data-validation_msg="'. $validation_msg .'"';
             }
             $input_attrs['extra_attrs'] = $extra_attrs;
-
+            if (isset($args['char_limit']) && ! empty($args['char_limit']) && is_numeric($args['char_limit'])) {
+                $input_attrs['extra_attrs'] .= ' maxlength="' . $args['char_limit'] . '" ';
+            }
             $output .= cwp_render_text_input( $input_attrs );
 
         $output .= $this->cwp_field_wrap_end($args);
@@ -85,7 +85,12 @@ class CubeWp_Admin_Text_Field extends CubeWp_Admin {
         }else{
             $output = self::cwp_tr_start($FieldData);
         }
-        
+        $class = explode(' ', $FieldData['class']);
+        $is_switch = false;
+        if (in_array('cwp-switch-check', $class)) {
+            $is_switch = true;
+            $FieldData['class'] .= ' cwp-switch-field ';
+        }
         $tooltip = isset($FieldData['tooltip']) && !empty($FieldData['tooltip']) ? $FieldData['tooltip'] : '';        
         $required = isset($FieldData['required']) && !empty($FieldData['required']) ? $FieldData['required'] : '';        
         $output .= self::cwp_td_start().self::cwp_label( $FieldData['id'], $FieldData['label'], $required, $tooltip ).self::cwp_td_end();
@@ -133,7 +138,17 @@ class CubeWp_Admin_Text_Field extends CubeWp_Admin {
         }else {
             $input = cwp_render_text_input($input_attrs);
         }
-        $output .= self::cwp_td_start().$extraInput.$input.$extraLabel.self::cwp_td_end();
+        if ($is_switch) {
+            $extraLabel = '<label class="cwp-switch" for="'. $FieldData['id'] .'">
+                  ' . $extraInput . '
+                  ' . $input . '
+                  <span class="cwp-switch-slider"></span>
+                  <span class="cwp-switch-text-no">' . esc_html__("No", "cubewp-framework") . '</span>
+                  <span class="cwp-switch-text-yes">' . esc_html__("Yes", "cubewp-framework") . '</span></label>';
+            $output .= self::cwp_td_start().$extraLabel.self::cwp_td_end();
+         }else {
+            $output .= self::cwp_td_start().$extraInput.$input.$extraLabel.self::cwp_td_end();
+         }
         $output .= self::cwp_tr_end();
         return $output;
     }

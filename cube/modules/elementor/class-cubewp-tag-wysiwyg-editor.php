@@ -23,6 +23,10 @@ class CubeWp_Tag_Wysiwyg_Editor extends \Elementor\Core\DynamicTags\Tag {
                ];
 	}
 
+	public function is_settings_required() {
+		return true;
+	}
+
 	protected function register_controls() {
         
 		$options = get_fields_by_type(array('wysiwyg_editor'));

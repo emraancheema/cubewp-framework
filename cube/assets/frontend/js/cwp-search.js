@@ -5,6 +5,47 @@ jQuery(document).ready(function () {
             jQuery(this).addClass('cubewp-processing-ajax');
         });
     }
+
+    jQuery(document).on("change", '.cwp-search-form input[type="radio"]', function() {
+        jQuery(this).closest('.cwp-field-radio-container').find('input[type="radio"]').prop('checked', false);
+        jQuery(this).prop('checked', true);
+        var hidden_radio = jQuery(this).closest('.cwp-radio-container').find('input[type="hidden"]');
+        var hidden_vals = jQuery(this).val();
+        hidden_radio.val(hidden_vals);
+    });
+    
+    // if(jQuery(".cwp-field-container input[name=s]").length > 0 ){
+    //     jQuery(document).on("keyup", '.cwp-field-container input[name=s]', function() {
+    //         let thisobj = jQuery(this),
+    //         val = thisobj.val(),
+    //         term_array = [],
+    //         maindiv = '<ul class="cwp-search-dropdown-fields">';
+    //         type = thisobj.closest('form').find('input[name=post_type]').val();
+    //         if(val.length < 3){
+    //             return;
+    //         }
+    //         if(!jQuery('.cwp-search-dropdown-fields').length){
+    //             thisobj.closest('.cwp-field-container').append(maindiv);
+    //         }
+    //         fetch('/cube/wp-json/wp/v2/'+type+'/?search='+val).then((response) =>{
+    //             return response.json();
+    //         }).then((posts) =>{
+    //             let output = "";
+    //             posts.map((values) =>{
+    //                 values.taxonomies.map((tax) =>{
+    //                     term_array.push(tax);
+    //                 })                    
+    //             })
+    //             var terms = term_array.filter((v, i, a) => a.indexOf(v) === i);
+    //             terms.map((unq) =>{
+    //                 output += `<li><a href="#">${val}</a> In <a href="#">${unq}</a></li>`;
+    //             })
+    //             thisobj.closest('.cwp-field-container').find('.cwp-search-dropdown-fields').html(output);
+    //         }).catch((error) =>{
+    //             console.log(error);
+    //         })
+    //     });
+    // }
     
     if(jQuery(".cwp-search-field-checkbox").length > 0 ){
         jQuery(document).on("change", '.cwp-search-field-checkbox input[type="checkbox"]', function() {

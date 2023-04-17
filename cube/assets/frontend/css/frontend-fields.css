@@ -58,9 +58,9 @@ input[type="radio"] {
 }
 
 .cwp-frontend-section-container .cwp-field-container p.description {
-    margin: 0;
     font-size: 13px;
-    padding: 5px 0 0 5px;
+    padding: 0 0 0 5px;
+    margin: 0 0 10px 0;
 }
 
 ul.cwp-field-checkbox-container,
@@ -160,8 +160,52 @@ span.select2.select2-container .selection span.select2-selection.select2-selecti
 	width: auto;
 	max-width: 100%;
 }
-
+/*-------------Password Field-----------*/
+.cwp-field-password {
+    position: relative;
+}
+.cwp-field-password input {
+    padding-right: 30px;
+}
+.cwp-field-password .show-password {
+    position: absolute;
+    top: 56%;
+    right: 16px;
+    cursor: pointer;
+    color: #a0a0a0;
+}
 /*-------------Search Fields-----------*/
+/*-------------S field dropdown-----------*/
+.cwp-search-field-text {
+    position: relative;
+}
+.cwp-search-dropdown-fields {
+    background: #fff;
+    border: 1px solid #CECECE;
+    position: absolute;
+    left: 10px;
+    width: 97%;
+    max-height: 200px;
+    overflow: auto;
+    border-radius: 5px;
+}
+.cwp-search-dropdown-fields li {
+    background: aliceblue;
+}
+.cwp-search-dropdown-fields li a {
+    padding: 4px 13px;
+    font-size: 16px;
+    text-transform: capitalize;
+    text-decoration: none;
+}
+.cwp-search-dropdown-fields a:hover {
+    text-decoration: underline;
+}
+.cwp-search-dropdown-fields li {
+    display: flex;
+    flex-wrap: wrap;
+}
+/*-------------S field dropdoen ends-----------*/
 .cwp-search-form {
 	background: #ffffff;
 	border-radius: 5px;
@@ -598,64 +642,108 @@ span.cwp-range-number-field-seprator {
 	display: none;
 }
 
+/*Range Picker*/
+.cwp-field-container.cwp-field-range {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.cwp-field-container.cwp-field-range label {
+    width: 100%;
+}
+.cwp-field-container.cwp-field-range .description {
+    width: 100%;
+}
+.cwp-field-container.cwp-field-range input[type=range] {
+    width: calc(100% - 65px);
+}
+.cwp-field-container.cwp-field-range .cubewp-current-value {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 /*Switch*/
-.cwp-field-container .cwp-field-switch-container {
-	align-items: center;
-	display: block;
-	height: 34px;
-	justify-content: center;
-	position: relative;
-	width: 60px;
-}
 
-.cwp-field-container .cwp-field-switch-container input {
-	height: 0;
-	opacity: 0;
-	width: 0;
-}
-
-.cwp-field-container .cwp-field-switch-container .cwp-field-switch-slider {
-	background-color: #cccccc;
-	bottom: 0;
+.cwp-switch-container .cwp-switch {
+    display: inline-flex !important;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 75px;
+    height: 30px;
 	cursor: pointer;
-	left: 0;
+    line-height: 30px;
+}
+ .cwp-switch .cwp-switch-field {
 	position: absolute;
-	right: 0;
 	top: 0;
-	-webkit-transition: .4s;
-	transition: .4s;
-}
-
-.cwp-field-container .cwp-field-switch-container .cwp-field-switch-slider:before {
-	background-color: white;
-	bottom: 4px;
-	content: "";
-	height: 26px;
-	left: 4px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+	z-index: 4;
+ }
+ .cwp-switch .cwp-switch-slider {
 	position: absolute;
-	-webkit-transition: .4s;
-	transition: .4s;
-	width: 26px;
-}
-
-.cwp-field-container .cwp-field-switch-container input:checked+.cwp-field-switch-slider {
-	background-color: #2196f3;
-}
-
-.cwp-field-container .cwp-field-switch-container input:checked+.cwp-field-switch-slider:before {
-	-ms-transform: translateX(26px);
-	-webkit-transform: translateX(26px);
-	transform: translateX(26px);
-}
-
-.cwp-field-container .cwp-field-switch-container .cwp-field-switch-slider.cwp-field-switch-round {
-	border-radius: 34px;
-}
-
-.cwp-field-container .cwp-field-switch-container .cwp-field-switch-slider.cwp-field-switch-round:before {
-	border-radius: 50%;
-}
-
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background: #e3e3e3;
+ }
+ .cwp-switch .cwp-switch-text-no,
+ .cwp-switch .cwp-switch-text-yes
+ {
+	position: relative;
+	z-index: 3;
+	padding: 0;
+	transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	color: #000000;
+	user-select: none;
+	font-weight: normal;
+	font-size: 13px;
+ }
+ .cwp-switch .cwp-switch-text-no {
+	color: #000000;
+ }
+ .cwp-switch .cwp-switch-slider:before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 3px;
+	width: calc(50% - 3px);
+	height: calc(100% - 6px);
+	z-index: 2;
+	background: #fff;
+	border-radius: 4px;
+	transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-slider {
+	background: #007cba;
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-slider:before {
+	left: calc(50% - 2px);
+	width: calc(50% - 1px);
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-text-no {
+	color: #fff;
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-text-yes {
+	color: #000000;
+ }
+ 
 /*------Date Picker Fields--------------*/
 .cwp-ui-datepicker .ui-datepicker {
 	background: #ffffff;
@@ -766,9 +854,9 @@ a.ui-datepicker-next {
 
 /*Repeating Field*/
 .cwp-frontend-section-content-container .cwp-field-repeating_field p.description {
-	font-size: 14px;
-	font-weight: 400;
-	margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0 0 10px 0;
 }
 
 .cwp-frontend-form-container .cwp-frontend-section-container .cwp-field-container.cwp-field-repeating_field .cwp-add-new-repeating-field {
@@ -981,4 +1069,29 @@ a.ui-datepicker-next {
 	.cwp-archive-toggle-Listing-style {
 		display: none;
 	}
+}
+
+.cwp_email_verification, .cwp_otp_verification {
+    border: 1px solid #6b7f88;
+    border-radius: 5px;
+    padding: 2px 8px;
+    cursor: pointer;
+    margin-left: 10px;
+    display: inline-block;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+.cwp-user-profile-actions {
+    margin: 0 0 25px 0;
+    display: flex;
+    justify-content: space-between;
+}
+.cwp-user-profile-actions a {
+    background: none;
+    border: 0;
+    color: #3345ff;
+    text-decoration: underline;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
 }

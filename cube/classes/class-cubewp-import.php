@@ -52,6 +52,8 @@ class CubeWp_Import {
                 <input type="hidden" name="action" value="cwp_import_data">
                 <input type="hidden" name="cwp_import_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
                 <div class="postbox-container">
+                <!-- <button type="submit" class="button-primary cwp_import_demo" name="cwp_import"><?php esc_html_e('Import Dummy Data', 'cubewp'); ?></button> -->
+                   <button type="submit" class="button-primary cwp_import_demo" name="cwp_import"><?php esc_html_e('Import Dummy Data', 'cubewp'); ?></button> 
                     <div id="poststuff">
                         <div class="postbox">
                             <div class="postbox-header">
@@ -160,10 +162,23 @@ class CubeWp_Import {
                 $moved = true;
             } else {    
                 $moved = false;
+                wp_send_json( array( 'success' => 'false', 'msg' => esc_html__("There is something wrong, Maybe your directory permission is an issue.", 'cubewp-framework')) );
             }
             if($moved == true && $targetdir != ''){
-                self::cwp_import_cubewp_data($targetdir);
-                $message = self::cwp_import_cubewp_custom_fields_groups($targetdir);
+                
+                $setup_file = $this->cwp_import_files(true);
+                if(file_exists($targetdir.$setup_file)){
+                    self::cwp_import_cubewp_data($targetdir, $setup_file);
+                }
+
+                $content_files = $this->cwp_import_files();
+                if(is_array($content_files)){
+                    foreach($content_files as $content_file){
+                        if(file_exists($targetdir.$content_file)){
+                            $message = self::cwp_import_wordpress_content($targetdir, $content_file);
+                        }
+                    }
+                }
                 $message = !empty($message) ? $message : esc_html__('Data imported successfull.', 'cubewp-framework');
                 $this->rmdir_recursive ( $targetdir);
                 wp_send_json( array( 'success' => 'true', 'msg' => $message, 'redirectURL' => admin_url('admin.php?page=cubewp-import&import=success') ) );
@@ -182,16 +197,63 @@ class CubeWp_Import {
     public function cwp_import_dummy_data_callback(){
 
         if(isset($_POST['data_type']) && $_POST['data_type'] == 'dummy'){
-            $targetdir = CWP_PLUGIN_PATH . 'cube/includes/setup/';
+            $plugin_targetdir = CWP_PLUGIN_PATH . 'cube/includes/setup/';
+            $targetdir = apply_filters( 'cubewp/import/content/path', $plugin_targetdir );
+            $content = 'false';
+            if(!isset($_POST['content'])){
+                $setup_file = $this->cwp_import_files(true);
+                if(file_exists($targetdir.$setup_file)){
+                    self::cwp_import_cubewp_data($targetdir, $setup_file);
+                }
 
-            self::cwp_import_cubewp_data($targetdir);
-            $message = self::cwp_import_cubewp_custom_fields_groups($targetdir);
+                $content_files = $this->cwp_import_files();
+                if(is_array($content_files)){
+                    foreach($content_files as $content_file){
+                        if(file_exists($targetdir.$content_file)){
+                            $message = self::cwp_import_wordpress_content($targetdir, $content_file);
+                        }
+                    }
+                }
+                $contents = $this->cwp_import_files(false,true);
+                if(file_exists($targetdir.$contents)){
+                    $content = 'true';
+                }
+            }else{
+                $contents = $this->cwp_import_files(false,true);
+                if(file_exists($targetdir.$contents)){
+                    $message = self::cwp_import_wordpress_content($targetdir, $contents);
+                }
+            }
+            do_action('cwp_actions_after_demo_imported');
             $message = !empty($message) ? $message : esc_html__('Dummy data imported successfully.', 'cubewp-framework');
-
-            wp_send_json( array( 'success' => 'true', 'msg' => $message, 'redirectURL' => admin_url('admin.php?page=cubewp-import&import=success') ) );
+            $redirectURL = apply_filters( 'cubewp/after/import/redirect', admin_url('admin.php?page=cubewp-import&import=success') );
+            $success = apply_filters( 'cubewp/after/import/success_message', '' );
+            $successMessage = '';
+            if(is_array($success) && isset($success['selecter']) && isset($success['message'])){
+                $successMessage = $success;
+            }
+            wp_send_json( array( 'success' => 'true', 'content' => $content, 'success_message' => $successMessage , 'msg' => $message, 'redirectURL' => $redirectURL ) );
             
             wp_die();
         }
+    }
+
+    /**
+     * Method cwp_import_dummy_content
+     *
+     * @return void
+     * @since  1.0.0
+     */
+    public function cwp_import_files($setup = false,$content = false){
+        if($setup == true){
+            return '/cwp-setup.json';
+        }else if($content == true){
+            return '/content.xml';
+        }
+        return array(
+            '/cwp_user_groups.json',
+            '/cwp_post_groups.json',
+        );
     }
    
     /**
@@ -201,10 +263,12 @@ class CubeWp_Import {
      *
      * @return void
      */
-    public function cwp_import_cubewp_data($targetdir = ''){
+    public function cwp_import_cubewp_data($targetdir = '', $file = ''){
 
-        if($targetdir != ''){
-            $file_content   = file_get_contents( $targetdir.'/cwp-setup.json' );
+        if($targetdir != '' && $file != ''){
+
+            $file = $targetdir . $file;
+            $file_content   = file_get_contents( $file );
             $import_content = json_decode($file_content, true);
             
             foreach( $import_content as $content_type => $import_data ){
@@ -248,24 +312,27 @@ class CubeWp_Import {
                     case 'user_dashboard':
                         $this->cwp_import_user_dashboard_forms( $import_data );
                     break;
+                    case 'cwp_settings':
+                        $this->cwp_import_settings( $import_data );
+                    break;
                 }
             }
+            return true;
         }
+        return false;
     }
 
     
     /**
-     * Method cwp_import_cubewp_custom_fields_groups
+     * Method cwp_import_wordpress_content
      *
      * @param $targetdir $targetdir path of files
      *
      * @return void
      */
-    public function cwp_import_cubewp_custom_fields_groups($targetdir = ''){
-        if($targetdir != ''){
-
-            $file   = $targetdir.'/cwp-content.json';
-            $file2   = $targetdir.'/cwp-content2.json';
+    public function cwp_import_wordpress_content($targetdir = '', $file = ''){
+        if($targetdir != '' && $file != ''){
+            $file = $targetdir . $file;
             if (!defined('WP_LOAD_IMPORTERS')) {
                 define('WP_LOAD_IMPORTERS', true);
             }
@@ -293,15 +360,14 @@ class CubeWp_Import {
                 if (!is_file($file)) {
                     return "The XML file containing the content is not available or could not be read .. You might want to try to set the file permission to chmod 755.<br/>If this doesn't work please contact to community or email us for more help.";
                 } else {
-                $wp_import = new WP_Import();
-                $wp_import->fetch_attachments = true;
-                $wp_import->import( $file );
-                $wp_import->import( $file2 );
+                    ob_start();
+                    $wp_import = new WP_Import();
+                    $wp_import->fetch_attachments = true;
+                    $wp_import->import( $file );
+                    ob_end_clean();
                 }
-                ob_end_clean();
             }
         }
-        return '';
     }
     
         
@@ -611,4 +677,28 @@ class CubeWp_Import {
         }
     }
 
+    /**
+     * Method cwp_import_user_dashboard_forms
+     *
+     * @param array $import_data
+     *
+     * @return void
+     * @since  1.0.0
+     */
+    public function cwp_import_settings( $import_data = array() ){
+        if(isset($import_data) && !empty($import_data)){
+            $cwp_settings = CWP()->cubewp_options('cwp_settings');
+            $cwp_settings = $cwp_settings == '' ? array() : $cwp_settings;
+            if(!empty($import_data) && count($import_data) > 0){
+                foreach($import_data as $key => $form_data){
+                    if(!isset($cwp_settings[$key])){
+                        $cwp_settings[$key] = $form_data;
+                    }
+                }
+                update_option('cwpOptions', $cwp_settings);
+            }
+        }
+    }
+
 }
+session_write_close();
