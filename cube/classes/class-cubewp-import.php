@@ -45,45 +45,52 @@ class CubeWp_Import {
             $this->cwp_import_terms( cubewp_core_data($_SESSION['terms']) );
             session_destroy();
         }
-        ?>
-        <div class="wrap cwp-postbox-holder">
-            <h1><?php esc_html_e('CubeWP Import', 'cubewp-framework'); ?></h1>
+       ?>
+        <div id="cubewp-import">
+            <div class="cubewp-page-header">
+                <h2><?php esc_html_e('CubeWP Import', 'cubewp-framework'); ?></h2>
+            </div>
             <form id="import_form" method="post" action="" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="cwp_import_data">
                 <input type="hidden" name="cwp_import_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
-                <div class="postbox-container">
-                <!-- <button type="submit" class="button-primary cwp_import_demo" name="cwp_import"><?php esc_html_e('Import Dummy Data', 'cubewp'); ?></button> -->
-                   <button type="submit" class="button-primary cwp_import_demo" name="cwp_import"><?php esc_html_e('Import Dummy Data', 'cubewp'); ?></button> 
-                    <div id="poststuff">
-                        <div class="postbox">
-                            <div class="postbox-header">
-                                <h2><span><?php esc_html_e('Import Content', 'cubewp-framework'); ?></span></h2>
+                <div class="cubewp-import-box-container">
+                    <div class="cubewp-import-box">
+                        <div class="cubewp-import-card">
+                            <div class="cubewp-import-header">
+                                <span class="dashicons dashicons-media-document"></span>
+                                <h4><?php esc_html_e('Import Data', 'cubewp-framework'); ?></h4>
                             </div>
-                            <div class="inside">
-                                <div class="main">
-                                    <table class="form-table">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <label><?php esc_html_e('Choose File', 'cubewp-framework'); ?></label>
-                                                </td>
-                                                <td>
-                                                    <input type="file" name="file" value="">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="cubewp-import-content">
+                                <p><?php esc_html_e('Upload only zip file containing one or more JSON files exported using CubeWP Export tool.', 'cubewp-framework'); ?></p>
+                                <input type="file" name="file" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="button-primary cwp_import" name="cwp_import">
+                            <?php esc_html_e('Import', 'cubewp-framework'); ?>
+                        </button>
+                    </div>
+                    <div class="cubewp-import-box">
+                        <div class="cubewp-import-card">
+                            <div class="cubewp-import-header">
+                                <span class="dashicons dashicons-download"></span>
+                                <h4><?php esc_html_e('Dummy Data Importer', 'cubewp-framework'); ?></h4>
+                            </div>
+                            <div class="cubewp-import-content">
+                                <div class="cubewp-import-content-dummy-warning">
+                                    <span class="dashicons dashicons-warning"></span>
+                                    <p><?php esc_html_e('This will import dummy content (Post Types, Taxonomies, Terms, Custom Fields, Forms, Posts, etc.) for testing purpose only. No file upload required.', 'cubewp-framework'); ?></p>
                                 </div>
                             </div>
                         </div>
-                        <p>
-                            <button type="submit" class="button-primary cwp_import" name="cwp_import"><?php esc_html_e('Import', 'cubewp-framework'); ?></button>                        </p>
+                        <button type="submit" class="button-primary cwp_import_demo" name="cwp_import">
+                            <?php esc_html_e('Import', 'cubewp'); ?>
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
         <?php
-    }    
+    }   
     /**
      * Method rmdir_recursive
      *
@@ -185,6 +192,8 @@ class CubeWp_Import {
             }
             
             wp_die();
+        }else {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__("The file you are trying to upload is not a .zip file. Please try again.", 'cubewp-framework')) );
         }
     }
 

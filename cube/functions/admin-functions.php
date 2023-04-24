@@ -444,15 +444,15 @@ if ( ! function_exists("get_post_save_button")) {
  */
 if ( ! function_exists("CubeWp_frontend_grid_HTML")) {
 	function CubeWp_frontend_grid_HTML($post_id, $col_class = 'cwp-col-12 cwp-col-md-6') {
-		if ( class_exists( 'CubeWp_Loop_Builder' ) ) {
-			$dynamic_layout = CubeWp_Loop_Builder::get_loop_layout_ui( get_post_type( $post_id ) );
+		if ( function_exists( 'cubewp_get_loop_builder_by_post_type' ) ) {
+			$dynamic_layout = cubewp_get_loop_builder_by_post_type( get_post_type( $post_id ) );
 			if ( ! empty( $dynamic_layout ) ) {
 			   ob_start();
 			   ?>
 			   <div <?php post_class($col_class); ?>>
-				  <?php
-				  echo cubewp_core_data( $dynamic_layout );
-				  ?>
+				 <?php
+				 echo cubewp_core_data( $dynamic_layout );
+				 ?>
 			   </div>
 			   <?php
 		

@@ -259,7 +259,7 @@ class CubeWp_Form_Builder {
         );
         $output     = '';
         $field      = wp_parse_args( $args, $defaults );
-        $class      = isset( $field['class'] ) && ! empty( $field['class'] ) ? $field['class'] : 'N/A';
+        $class      = isset( $field['class'] ) && ! empty( $field['class'] ) ? $field['class'] : '-';
         $type       = isset( $field['type'] ) && ! empty( $field['type'] ) ? $field['type'] : '';
         $field_size = isset( $field['field_size'] ) && ! empty( $field['field_size'] ) ? $field['field_size'] : 'size-1-1';
         $field['filter_taxonomy'] = isset( get_field_options( $field['name'] )['filter_taxonomy'] ) && ! empty( get_field_options( $field['name'] )['filter_taxonomy'] ) ? get_field_options( $field['name'] )['filter_taxonomy'] : '';
@@ -274,9 +274,9 @@ class CubeWp_Form_Builder {
             $type_image = CWP_PLUGIN_URI . "cube/assets/admin/images/fields/cube.png";
         }
         $output .= '<img src="' . $type_image . '" alt="' . esc_html__( "Field Type Icon", 'cubewp-framework' ) . '" class="cubewp-builder-group-widget-type-icon">';
-        $output .= '<p class="cubewp-builder-group-widget-title" title="' . esc_html( $field["label"] ) . '">' . esc_html( $field["label"] ) . '</p>';
-        $output .= '<p class="builder-area-content cubewp-builder-group-widget-type">' . esc_html( $type ) . '</p>';
-        $output .= '<p class="builder-area-content cubewp-builder-group-widget-class">' . esc_html( $class ) . '</p>';
+        $output .= '<p class="cubewp-builder-group-widget-title" title="' . esc_html( $field["label"] ) . '"><span class="subtitle">' . esc_html__( "LABEL", "cubewp-framework" ) . '</span>' . esc_html( $field["label"] ) . '</p>';
+        $output .= '<p class="builder-area-content cubewp-builder-group-widget-type"><span class="subtitle">' . esc_html__( "FIELD TYPE", "cubewp-framework" ) . '</span>' . esc_html( $type ) . '</p>';
+        $output .= '<p class="builder-area-content cubewp-builder-group-widget-class"><span class="subtitle">' . esc_html__( "CSS CLASS", "cubewp-framework" ) . '</span>' . esc_html( $class ) . '</p>';
         $output .= '<div class="builder-area-content cubewp-builder-group-widget-actions">';
         $output .= '<span class="dashicons dashicons-trash color-danger builder-area-content cubewp-builder-group-widget-delete"></span>';
         $output .= '<span class="dashicons dashicons-arrow-down-alt2 builder-area-content cubewp-builder-group-widget-expander cubewp-expand-trigger"></span>';

@@ -164,24 +164,27 @@ class CubeWp_taxonomy {
         }
     }
     
-    public function ctax_form_display() {
+    public function ctax_form_display()
+    {
         if (isset($_GET['action']) && ('new' == $_GET['action'] || 'edit' == $_GET['action'])) {
             return;
         }
-        
+
         $customFieldsTaxonomiesTable = new CubeWp_Taxonomies_List_Table();
-        ?>
-       <div class="wrap cwp-post-type-wrape">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Custom Taxonomies', 'cubewp-framework'); ?></h1>
-            <a href="<?php echo CubeWp_Submenu::_page_action('cubewp-taxonomies','new'); ?>" class="page-title-action"><?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
-           <hr class="wp-header-end">
+?>
+        <div class="wrap cwp-post-type-wrape">
+            <div class="wrap cwp-post-type-title width-40">
+                <h1 class="wp-heading-inline"><?php esc_html_e('Custom Taxonomies', 'cubewp-framework'); ?></h1>
+                <a href="<?php echo CubeWp_Submenu::_page_action('cubewp-taxonomies', 'new'); ?>" class="page-title-action">+ <?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
+            </div>
+            <hr class="wp-header-end">
             <?php $customFieldsTaxonomiesTable->prepare_items(); ?>
             <form method="post">
                 <input type="hidden" name="page" value="cubewp-post-type">
                 <?php $customFieldsTaxonomiesTable->display(); ?>
             </form>
         </div>
-        <?php
+    <?php
     }
     
     public function tax_form_edit() {
@@ -204,20 +207,22 @@ class CubeWp_taxonomy {
         ?>
          <div class="wrap">            
             <form id="post" class="cwptaxonomyform" method="post" action="" enctype="multipart/form-data">
-                <div class="cwpform-title-outer  margin-bottom-0 margin-left-minus-20  margin-right-0">
-                <?php echo self::_title();	?>			
+                <div class="wrap cwp-post-type-title width-40 margin-bottom-0 margin-left-minus-20  margin-right-0">
+                    <?php echo self::_title();    ?>
+                    <?php echo self::save_button(); ?>
                 </div>
-                <input type="hidden" name="cwp_taxonomy_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
+                <hr class="wp-header-end">
+                <input type="hidden" name="cwp_taxonomy_nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>">
                 <div id="poststuff" class="padding-0">
-                <div id="post-body" class="metabox-holder columns-2">
-                    <?php echo self::taxonomy_side_actions($CWPterm); ?>
-                    <div id="postbox-container-2" class="postbox-container postbox-container-top">
-                        
-						<?php echo self::taxonomy_basic_settings($CWPterm); ?>
-                        <?php echo self::taxonomy_options($CWPterm); ?>
-                        
-				    </div>
-                </div>
+                    <div id="post-body" class="metabox-holder columns-2">
+                        <?php echo self::taxonomy_side_actions($CWPterm); ?>
+                        <div id="postbox-container-2" class="postbox-container postbox-container-top">
+
+                            <?php echo self::taxonomy_basic_settings($CWPterm); ?>
+                            <?php echo self::taxonomy_options($CWPterm); ?>
+
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -369,18 +374,6 @@ class CubeWp_taxonomy {
         ?>
         <div id="postbox-container-1" class="postbox-container">
             <div id="side-sortables" class="meta-box-sortables ui-sortable">
-                <div class="postbox">
-                    <div class="postbox-header">
-                        <h2 class="hndle"><?php esc_html_e('Save Your Taxonomy', 'cubewp-framework'); ?></h2>
-                    </div>
-                    <div class="inside">
-                        <div id="major-publishing-actions">
-                            <div id="publishing-action" style="float:none">
-                                <?php echo self::save_button(); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             <div class="postbox">
                 <div class="postbox-header">
                     <h2 class="hndle"><?php esc_html_e('Assign Post Type', 'cubewp-framework'); ?></h2>

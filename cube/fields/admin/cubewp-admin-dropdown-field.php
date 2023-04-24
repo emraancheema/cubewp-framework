@@ -206,7 +206,7 @@ class CubeWp_Admin_Dropdwon_Field extends CubeWp_Admin {
 		$output .= self::cwp_td_end();
 
 		$output .= self::cwp_td_start();
-		$output .='<input class="default-option" name="'.$FieldData['name'].'[default_option]" type="radio" value="'. $value .'" '. $checked .'><label>'. esc_html__('Set as Default Option', 'cubewp-framework') .'<label>';
+		$output .='<input class="default-option" name="'.$FieldData['name'].'[default_option]" type="radio" value="'. $value .'" '. $checked .'><label>'. esc_html__('Set as Default', 'cubewp-framework') .'</label>';
 		$output .= self::cwp_td_end();
 		$output .= '</tr>';
 		return $output;

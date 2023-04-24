@@ -1309,7 +1309,7 @@ msgid "Value"
 msgstr ""
 
 #: cube/fields/admin/cubewp-admin-dropdown-field.php:206
-msgid "Set as Default Option"
+msgid "Set as Default   "
 msgstr ""
 
 #: cube/fields/admin/cubewp-admin-file-field.php:50

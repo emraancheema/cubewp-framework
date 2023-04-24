@@ -53,7 +53,7 @@ class CubeWp_Builder_Pro {
             $page_header="User Dashboard Builder";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/user-dashboard-screen.png';
         }elseif( current_cubewp_page() == 'cubewp_loop_builder'){
-            $page_header="Loop Builder";
+            $page_header="Post Loop Generator (Beta)";
             $background_image_src = CWP_PLUGIN_URI.'cube/assets/admin/images/user-dashboard-screen.png';
         }
         echo'<div id="cubewp-title-bar">

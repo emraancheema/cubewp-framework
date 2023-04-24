@@ -98,13 +98,30 @@ class CubeWp_Admin_Notice {
 			}
 		}
 		if ( CWP()->is_admin_screen( 'cubewp' ) ) {
-			$notice_ui .= '<div class="cwp-welcome-page-title clearfix">';
-			$notice_ui .= '<div class="flot-left cwp-logo">
-				<img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/logo.png" alt="image" />
+			$notice_ui .= '<div class="cwp-welcome-page-title-top-border clearfix"></div>
+			
+			<div class="cwp-welcome-page-title clearfix">';
+			$notice_ui .= '
+			<div class="cwp-welcome-page-section"><div class="flot-left cwp-logo">
+				<a href="https://cubewp.com" target="_blank"><img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/CubeWP-light-logo.png" alt="image" /></a>
+			</div>
+			<div class="cwp-title-menu flot-left">
+				<ul>
+					<li><a href="'.admin_url( 'admin.php?page=cubewp-settings' ).'" target="_blank"><span class="dashicons dashicons-admin-settings"></span>Settings</a></li>
+				</ul> 
 			</div>
 			<div class="float-right cwp-update-plugin-btn">
-				<a target="_blank" href="https://cubewp.com/store">' . esc_attr__( 'Buy Add-Ons', 'cubewp-framework' ) . '</a>
+				<a target="_blank" href="https://cubewp.com/store"><span class="dashicons dashicons-lock"></span>' . esc_attr__( 'Unlock All Premium Features', 'cubewp-framework' ) . '</a>
 			</div>
+			<div class="cwp-title-menu float-right">
+				<ul>
+					<li><a href="https://support.cubewp.com" target="_blank"><span class="dashicons dashicons-media-document"></span>Docs</a></li>
+					<li><a href="https://support.cubewp.com/forums" target="_blank"><span class="dashicons dashicons-buddicons-community"></span>Community</a></li>
+					<li><a href="https://support.cubewp.com/forums/forum/feedback" target="_blank"><span class="dashicons dashicons-feedback"></span>Feedback</a></li>
+					<li><a href="https://help.cubewp.com/" target="_blank"><span class="dashicons dashicons-sos"></span>Helpdesk</a></li>
+				</ul> 
+			</div>	
+			</div>	
 			<div class="clearfix"></div>';
 			$notice_ui .= '</div>';
 			if ( current_cubewp_page() == 'cubewp_post_types' || current_cubewp_page() == 'cubewp_taxonomies'  || current_cubewp_page() == 'custom_fields'  ) {

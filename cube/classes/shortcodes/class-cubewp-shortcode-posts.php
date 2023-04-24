@@ -26,7 +26,10 @@ class CubeWp_Shortcode_Posts {
 //			'orderby'        => $parameters['orderby'],
 			'order'          => $parameters['order'],
 		);
-        $show_boosted_posts = $parameters['show_boosted_posts'];
+        $show_boosted_posts = '';
+        if (class_exists('CubeWp_Booster_Load')) {
+            $show_boosted_posts = $parameters['show_boosted_posts'];
+        }
 		if (isset($parameters['post__in']) && ! empty($parameters['post__in']) && is_array($parameters['post__in'])) {
 			$args['post__in'] = $parameters['post__in'];
         }
@@ -75,9 +78,11 @@ class CubeWp_Shortcode_Posts {
 				if($show_boosted_posts == 'yes'){
                 if(class_exists('CubeWp_Booster_Load')){
                     while ($posts->have_posts()): $posts->the_post();
-                        if(is_boosted(get_the_ID())){
-                            echo CubeWp_frontend_grid_HTML(get_the_ID(), $col_class);
-                        }
+					if (function_exists('is_boosted')) {
+						if (is_boosted(get_the_ID())) {
+							echo CubeWp_frontend_grid_HTML(get_the_ID(), $col_class);
+						}
+					}
                     endwhile;
                 }
             }else{

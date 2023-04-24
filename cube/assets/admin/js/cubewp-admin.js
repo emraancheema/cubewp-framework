@@ -92,105 +92,110 @@ jQuery(document).ready(function () {
     
     if (jQuery(".cwp_import").length > 0) {
         jQuery(document).on('click', '.cwp_import', function(e) {
-
             e.preventDefault();
-            var formData = new FormData(document.getElementById('import_form'));
-            jQuery.ajax({
-                type: 'POST',
-                url: cwp_vars_params.ajax_url,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function (response) {
-                    if( response.success === 'false' ){
-                        alert(response.msg);
-                    }else{
-                        window.location.href = response.redirectURL;
+            if ( confirm( 'Are You Sure?' ) ) {
+                var formData = new FormData(document.getElementById('import_form'));
+                jQuery.ajax({
+                    type: 'POST',
+                    url: cwp_vars_params.ajax_url,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function (response) {
+                        if( response.success === 'false' ){
+                            alert(response.msg);
+                        }else{
+                            window.location.href = response.redirectURL;
+                        }
                     }
-                }
-            });
+                });
+            }
         });
-
         jQuery(document).on('click', '.cwp_import_demo', function(e) {
-			jQuery(this).prop( "disabled", 1 );
             e.preventDefault();
-            jQuery.ajax({
-                type: 'POST',
-                url: cwp_vars_params.ajax_url,
-                data:'action=cwp_import_dummy_data&data_type=dummy',
-                dataType: 'json',
-                success: function (response) {
-                    if( response.success === 'true' ){
-                        if( response.content === 'true' ){
-                            jQuery.ajax({
-                                type: 'POST',
-                                url: cwp_vars_params.ajax_url,
-                                data:'action=cwp_import_dummy_data&data_type=dummy&content=true',
-                                dataType: 'json',
-                                success: function (response) {
-                                    if( response.success === 'false' ){
-                                        alert(response.msg);
-										jQuery(this).prop( "disabled", 0 );
-                                    }else{
-                                        if(response.redirectURL != null && response.redirectURL != ''){
-                                            window.location.href = response.redirectURL;
-                                        }else if(response.success_message != null && response.success_message != ''){
-											jQuery(response.success_message.selecter).text(response.success_message.message);
-											jQuery(response.success_message.selecter).addClass('done');
+            if ( confirm('Are You Sure?') ) {
+                jQuery(this).prop( "disabled", 1 );
+                jQuery.ajax({
+                    type: 'POST',
+                    url: cwp_vars_params.ajax_url,
+                    data:'action=cwp_import_dummy_data&data_type=dummy',
+                    dataType: 'json',
+                    success: function (response) {
+                        if( response.success === 'true' ){
+                            if( response.content === 'true' ){
+                                jQuery.ajax({
+                                    type: 'POST',
+                                    url: cwp_vars_params.ajax_url,
+                                    data:'action=cwp_import_dummy_data&data_type=dummy&content=true',
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        if( response.success === 'false' ){
+                                            alert(response.msg);
+                                            jQuery(this).prop( "disabled", 0 );
+                                        }else{
+                                            if(response.redirectURL != null && response.redirectURL != ''){
+                                                window.location.href = response.redirectURL;
+                                            }else if(response.success_message != null && response.success_message != ''){
+                                                jQuery(response.success_message.selecter).text(response.success_message.message);
+                                                jQuery(response.success_message.selecter).addClass('done');
+                                            }
                                         }
                                     }
+                                });
+                            }else{
+                                if(response.redirectURL != null && response.redirectURL != ''){
+                                    window.location.href = response.redirectURL;
+                                }else if(response.success_message != null && response.success_message != ''){
+                                    jQuery(response.success_message.selecter).text(response.success_message.message);
+                                    jQuery(response.success_message.selecter).addClass('done');
                                 }
-                            });
-                        }else{
-                            if(response.redirectURL != null && response.redirectURL != ''){
-                                window.location.href = response.redirectURL;
-                            }else if(response.success_message != null && response.success_message != ''){
-								jQuery(response.success_message.selecter).text(response.success_message.message);
-								jQuery(response.success_message.selecter).addClass('done');
                             }
+                        }else if( response.success === 'false' ){
+                            alert(response.msg);
+                            jQuery(this).prop( "disabled", 0 );
                         }
-                    }else if( response.success === 'false' ){
-                        alert(response.msg);
-						jQuery(this).prop( "disabled", 0 );
                     }
-                }
-            });
+                });
+            }
         });
     }
     
     if (jQuery(".cwp_export").length > 0) {
         jQuery(document).on('click', '.cwp_export', function (e) {
             e.preventDefault();
-            var thisObj = jQuery(this);
-            jQuery.ajax({
-                type: 'POST',
-                url: cwp_vars_params.ajax_url,
-                data: jQuery('.export-form').serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    if( response.success === 'false' ){
-                        alert(response.msg);
-                    }else{
-                        jQuery.ajax({
-                            type: 'POST',
-                            url: cwp_vars_params.ajax_url,
-                            data: 'action=cwp_user_data&export=success',
-                            dataType: 'json',
-                            success: function (response) {
-                                if( response.success === 'false' ){
-                                    alert(response.msg);
-                                }else{
-                                    alert(response.msg);
-                                    thisObj.closest('.export-form').find('.cwp_download_content').attr('href', response.file_url);
-                                    thisObj.closest('.export-form').find('.cwp_download_content').removeClass('hidden');
+            if ( confirm( 'Are You Sure?' ) ) {
+                var thisObj = jQuery(this);
+                jQuery.ajax({
+                    type: 'POST',
+                    url: cwp_vars_params.ajax_url,
+                    data: jQuery('.export-form').serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if( response.success === 'false' ){
+                            alert(response.msg);
+                        }else{
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: cwp_vars_params.ajax_url,
+                                data: 'action=cwp_user_data&export=success',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if( response.success === 'false' ){
+                                        alert(response.msg);
+                                    }else{
+                                        alert(response.msg);
+                                        thisObj.hide();
+                                        thisObj.closest('.export-form').find('.cwp_download_content').attr('href', response.file_url);
+                                        thisObj.closest('.export-form').find('.cwp_download_content').removeClass('hidden');
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     }
     

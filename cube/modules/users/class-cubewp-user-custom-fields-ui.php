@@ -19,21 +19,26 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_Custom_Fields_Processor{
         return 'user';
     }
 
-    private static function group_display(){
-        if(isset($_GET['action']) && ('new' == $_GET['action'] || 'edit' == $_GET['action'])){
+    private static function group_display()
+    {
+        if (isset($_GET['action']) && ('new' == $_GET['action'] || 'edit' == $_GET['action'])) {
             return;
         }
-        
+
         $customFieldsGroupTable = new CubeWp_User_Custom_Fields_Table();
         ?>
-        <div class="wrap cwp-post-type-wrape">
-            <nav class="nav-tab-wrapper wp-clearfix">
-                <a class="nav-tab " href="?page=custom-fields"><?php esc_html_e('Custom Fields (Post Types)', 'cubewp-framework'); ?></a>
-                <a class="nav-tab " href="?page=taxonomy-custom-fields"><?php esc_html_e('Custom Fields (Taxonomies)', 'cubewp-framework'); ?></a>
-                <a class="nav-tab nav-tab-active" href="?page=user-custom-fields"><?php esc_html_e('Custom Fields (User Roles)', 'cubewp-framework'); ?></a>
-            </nav>
-            <h1 class="wp-heading-inline"><?php esc_html_e('All Groups (User Roles)', 'cubewp-framework'); ?></h1>
-            <a href="<?php echo CubeWp_Submenu::_page_action('user-custom-fields','new'); ?>" class="page-title-action"><?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
+        <div class="wrap cwp-post-type-wrape margin-40">
+            <div class="wrap cwp-post-type-title flex-none margin-none">
+                <div class="cwp-post-type-title-nav">
+                    <h1 class="wp-heading-inline"><?php esc_html_e("Custom Fields", 'cubewp-framework'); ?></h1>
+                    <nav class="nav-tab-wrapper wp-clearfix">
+                        <a class="nav-tab " href="?page=custom-fields"><?php esc_html_e('Post Types', 'cubewp-framework'); ?></a>
+                        <a class="nav-tab " href="?page=taxonomy-custom-fields"><?php esc_html_e('Taxonomies', 'cubewp-framework'); ?></a>
+                        <a class="nav-tab nav-tab-active" href="?page=user-custom-fields"><?php esc_html_e('User Roles', 'cubewp-framework'); ?></a>
+                    </nav>
+                </div>
+                <a href="<?php echo CubeWp_Submenu::_page_action('user-custom-fields', 'new'); ?>" class="page-title-action">+ <?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
+            </div>
             <hr class="wp-header-end">
             <?php $customFieldsGroupTable->prepare_items(); ?>
             <form method="post">
@@ -41,7 +46,8 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_Custom_Fields_Processor{
                 <?php $customFieldsGroupTable->display(); ?>
             </form>
         </div>
-        <?php
+
+    <?php
     }
     
     private static function add_new_group() {
@@ -75,27 +81,17 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_Custom_Fields_Processor{
         ?>
         <div class="wrap">            
             <form id="post" class="cwpgroup" method="post" action="" enctype="multipart/form-data">
-                <div class="cwpform-title-outer  margin-bottom-0 margin-left-minus-20  margin-right-0">
-                <?php echo self::_title();	?>			
+                <div class="wrap cwp-post-type-title  margin-bottom-0 width-40 margin-left-minus-20  margin-right-0">
+                    <?php echo self::_title();    ?>
+                    <?php echo self::save_button(); ?>
                 </div>
+				<hr class="wp-header-end">
                 <input type="hidden" name="cwp_group_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
                 <input type="hidden" class="" name="cwp[group][id]" value="<?php echo esc_attr($group['id']); ?>">
                 <div id="poststuff"  class="padding-0">
                     <div id="post-body" class="metabox-holder columns-2">
                         <div id="postbox-container-1" class="postbox-container">
                             <div id="side-sortables" class="meta-box-sortables ui-sortable">
-                                <div class="postbox">
-                                    <div class="postbox-header">
-                                        <h2 class="hndle"><?php esc_html_e('Save User Groups', 'cubewp-framework'); ?></h2>
-                                    </div>
-                                    <div class="inside">
-                                        <div id="major-publishing-actions">
-                                            <div id="publishing-action" style="float:none">
-                                                <?php echo self::save_button(); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="postbox">
                                     <div class="postbox-header">
                                         <h2 class="hndle"><?php esc_html_e('Group Relation With User Role', 'cubewp-framework'); ?></h2>

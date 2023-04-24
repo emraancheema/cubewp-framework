@@ -271,10 +271,12 @@ class CubeWp_Post_Types {
         $customFieldsPostTypesTable = new CubeWp_Post_Types_List_Table();   
         
         ?>
+        <div class="wrap cwp-post-type-title">
+			<h1 class="wp-heading-inline"><?php esc_html_e('Custom Post Types', 'cubewp-framework'); ?></h1>
+			<a href="<?php echo CubeWp_Submenu::_page_action('cubewp-post-types','new'); ?>" class="page-title-action">+ <?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
+		</div>
+		<hr class="wp-header-end">
         <div class="wrap cwp-post-type-wrape">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Custom Post Types', 'cubewp-framework'); ?></h1>
-            <a href="<?php echo CubeWp_Submenu::_page_action('cubewp-post-types','new'); ?>" class="page-title-action"><?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
-            <hr class="wp-header-end">
             <?php $customFieldsPostTypesTable->prepare_items(); ?>
             <form method="post">
                 <input type="hidden" name="page" value="cubewp-post-type">
@@ -324,17 +326,17 @@ class CubeWp_Post_Types {
         $postType = wp_parse_args($postType, $defaults);
         
         ?>
-        <div class="wrap">
+        <div class="cpt-form">
             <form id="post" class="cwpposttype" method="post" action="" enctype="multipart/form-data">				
-                <div class="cwpform-title-outer  margin-bottom-0 margin-left-minus-20  margin-right-0">
-                    <?php echo self::_title();	?>			
+                <div class="wrap cwp-post-type-title">
+                    <?php echo self::_title();	?>	
+                    <?php echo self::save_button(); ?>		
                 </div>
+				<hr class="wp-header-end">
                 <input type="hidden" name="cwp_post_type_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
                 <div id="poststuff"  class="padding-0">
                     <div id="post-body" class="metabox-holder columns-2">
-
-                        <?php echo self::post_type_side_actions($postType); ?>
-
+                    <?php echo self::post_type_side_actions($postType); ?>
                         <div id="postbox-container-2" class="postbox-container postbox-container-top">
                             <?php echo self::post_type_basic_settings($postType); ?>
                             <?php echo self::post_type_options($postType); ?>
@@ -622,19 +624,6 @@ class CubeWp_Post_Types {
         ?>
         <div id="postbox-container-1" class="postbox-container">
         <div id="side-sortables" class="meta-box-sortables ui-sortable">
-        <div class="postbox">
-            <div class="postbox-header">
-                <h2 class="hndle"><?php esc_html_e('Save Your Post Type', 'cubewp-framework'); ?></h2>
-            </div>
-            <div class="inside">
-                <div id="major-publishing-actions">
-                    <div id="publishing-action" style="float:none">
-                        <?php echo self::save_button(); ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="postbox">
             <div class="postbox-header">
                 <h2 class="hndle"><?php esc_html_e('Options for Edit Post', 'cubewp-framework'); ?></h2>

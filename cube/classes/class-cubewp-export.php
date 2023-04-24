@@ -38,12 +38,14 @@ class CubeWp_Export {
      * @return string html
 	 * @since  1.0.0
      */
-    public function manage_export(){
-        
+    public function manage_export()
+    {
         ?>
-        <div class="wrap cwp-postbox-holder">
-            <h1><?php esc_html_e('CubeWP Export', 'cubewp-framework'); ?></h1>
-            <?php  $this->cwp_export_all(); ?>
+        <div id="cubewp-export">
+            <div class="cubewp-page-header">
+                <h2><?php esc_html_e('CubeWP Export', 'cubewp-framework'); ?></h2>
+            </div>
+            <?php $this->cwp_export_all(); ?>
         </div>
         <?php
     }
@@ -54,99 +56,118 @@ class CubeWp_Export {
      * @return string html
 	 * @since  1.0.0
      */
-    public function cwp_export_all(){
+    public function cwp_export_all()
+    {
         ?>
         <form class="export-form" method="post" action="">
             <input type="hidden" name="action" value="cwp_export_data">
             <input type="hidden" name="cwp_export_type" value="all">
-            <input type="hidden" name="cwp_export_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
-            <div class="postbox-container">
-                <div id="poststuff">
-                    <div class="postbox">
-                        <div class="postbox-header">
-                            <h2><span><?php esc_html_e('Choose Content Type', 'cubewp-framework'); ?></span></h2>
+            <input type="hidden" name="cwp_export_nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>">
+            <div class="cubewp-import-box-container">
+                <div class="cubewp-import-box">
+                    <div class="cubewp-import-card">
+                        <div class="cubewp-import-header">
+                            <span class="dashicons dashicons-media-document"></span>
+                            <h4><?php esc_html_e('Export Data', 'cubewp-framework'); ?></h4>
                         </div>
-                        <div class="inside">
-                            <div class="main">
-                                <table class="form-table">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <?php echo self::cwp_export_options(); ?>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="cubewp-import-content">
+                            <p>Select all the types of content and settings from CubeWP you would like to export
+                                today.</p>
+                            <?php self::cwp_export_options(); ?>
                         </div>
                     </div>
-                    <?php echo self::cwp_export_button(); ?>
+                    <?php self::cwp_export_button(); ?>
                 </div>
             </div>
         </form>
-    <?php
+        <?php
     }
-    private function cwp_export_options(){
+
+    private function cwp_export_options()
+    {
         ?>
-        <fieldset>
-            <input type="checkbox" id="post_types" name="cwp_export_content_type[]"
-                value="post_types" checked="checked">
-            <label for="post_types"><?php esc_html_e('CubeWP Custom Post Types', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="taxonomies" name="cwp_export_content_type[]"
-                value="taxonomies" checked="checked">
-            <label for="taxonomies"><?php esc_html_e('CubeWP Custom Taxonomies', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="custom-fields" name="cwp_export_content_type[]"
-                value="custom-fields" checked="checked">
-            <label
-                for="custom-fields"><?php esc_html_e('CubeWP Post Type Custom Fields', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="tax-custom-fields"
-                name="cwp_export_content_type[]" value="tax-custom-fields"
-                checked="checked">
-            <label for="tax-custom-fields"><?php esc_html_e('CubeWP Taxonomy Custom Fields', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="user-custom-fields" name="cwp_export_content_type[]" value="user-custom-fields" checked="checked">
-            <label for="user-custom-fields"><?php esc_html_e('CubeWP User Custom Fields', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="search-forms" name="cwp_export_content_type[]"
-                value="search-forms" checked="checked">
-            <label for="search-forms"><?php esc_html_e('CubeWP Search Forms', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="filter-forms" name="cwp_export_content_type[]"
-                value="filter-forms" checked="checked">
-            <label for="filter-forms"><?php esc_html_e('CubeWP Filter Forms', 'cubewp-framework'); ?></label>
-            <br>
+        <div class="cubewp-export-options">
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="post_types" name="cwp_export_content_type[]"
+                       value="post_types" checked="checked">
+                <label for="post_types"><?php esc_html_e('CubeWP Custom Post Types', 'cubewp-framework'); ?></label>
+            </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="taxonomies" name="cwp_export_content_type[]"
+                       value="taxonomies" checked="checked">
+                <label for="taxonomies"><?php esc_html_e('CubeWP Custom Taxonomies', 'cubewp-framework'); ?></label>
+            </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="custom-fields" name="cwp_export_content_type[]"
+                       value="custom-fields" checked="checked">
+                <label
+                    for="custom-fields"><?php esc_html_e('CubeWP Post Type Custom Fields', 'cubewp-framework'); ?></label>
+            </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="tax-custom-fields"
+                       name="cwp_export_content_type[]" value="tax-custom-fields"
+                       checked="checked">
+                <label
+                    for="tax-custom-fields"><?php esc_html_e('CubeWP Taxonomy Custom Fields', 'cubewp-framework'); ?></label>
+            </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="user-custom-fields" name="cwp_export_content_type[]"
+                       value="user-custom-fields" checked="checked">
+                <label
+                    for="user-custom-fields"><?php esc_html_e('CubeWP User Custom Fields', 'cubewp-framework'); ?></label>
+            </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="search-forms" name="cwp_export_content_type[]"
+                       value="search-forms" checked="checked">
+                <label for="search-forms"><?php esc_html_e('CubeWP Search Forms', 'cubewp-framework'); ?></label>
+            </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="filter-forms" name="cwp_export_content_type[]"
+                       value="filter-forms" checked="checked">
+                <label for="filter-forms"><?php esc_html_e('CubeWP Filter Forms', 'cubewp-framework'); ?></label>
+            </div>
             <?php
-                if(class_exists('CubeWp_Frontend_Load')){
+            if (class_exists('CubeWp_Frontend_Load')) {
+                ?>
+                <div class="cubewp-export-option">
+                    <input type="checkbox" id="post-type-forms" name="cwp_export_content_type[]"
+                           value="post-type-forms" checked="checked">
+                    <label
+                        for="post-type-forms"><?php esc_html_e('CubeWP Post Types Forms', 'cubewp-framework'); ?></label>
+                </div>
+                <div class="cubewp-export-option">
+                    <input type="checkbox" id="user-reg-forms" name="cwp_export_content_type[]"
+                           value="user-reg-forms" checked="checked">
+                    <label
+                        for="user-reg-forms"><?php esc_html_e('CubeWP User Registration Forms', 'cubewp-framework'); ?></label>
+                </div>
+                <div class="cubewp-export-option">
+                    <input type="checkbox" id="user-profile-forms" name="cwp_export_content_type[]"
+                           value="user-profile-forms" checked="checked">
+                    <label
+                        for="user-profile-forms"><?php esc_html_e('CubeWP User Profile Forms', 'cubewp-framework'); ?></label>
+                </div>
+                <div class="cubewp-export-option">
+                    <input type="checkbox" id="single_layout" name="cwp_export_content_type[]"
+                           value="single_layout" checked="checked">
+                    <label
+                        for="single_layout"><?php esc_html_e('CubeWP Single Post layout', 'cubewp-framework'); ?></label>
+                </div>
+                <div class="cubewp-export-option">
+                    <input type="checkbox" id="user_dashboard" name="cwp_export_content_type[]"
+                           value="user_dashboard" checked="checked">
+                    <label
+                        for="user_dashboard"><?php esc_html_e('CubeWP User Dashboard', 'cubewp-framework'); ?></label>
+                </div>
+                <?php
+            }
             ?>
-            <input type="checkbox" id="post-type-forms" name="cwp_export_content_type[]"
-                value="post-type-forms" checked="checked">
-            <label for="post-type-forms"><?php esc_html_e('CubeWP Post Types Forms', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="user-reg-forms" name="cwp_export_content_type[]"
-                value="user-reg-forms" checked="checked">
-            <label for="user-reg-forms"><?php esc_html_e('CubeWP User Registration Forms', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="user-profile-forms" name="cwp_export_content_type[]"
-                value="user-profile-forms" checked="checked">
-            <label for="user-profile-forms"><?php esc_html_e('CubeWP User Profile Forms', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="single_layout" name="cwp_export_content_type[]"
-                value="single_layout" checked="checked">
-            <label for="single_layout"><?php esc_html_e('CubeWP Single Post layout', 'cubewp-framework'); ?></label>
-            <br>
-            <input type="checkbox" id="user_dashboard" name="cwp_export_content_type[]"
-                value="user_dashboard" checked="checked">
-            <label for="user_dashboard"><?php esc_html_e('CubeWP User Dashboard', 'cubewp-framework'); ?></label>
-            <br>
-            <?php } ?>
-            <input type="checkbox" id="cwp_settings" name="cwp_export_content_type[]"
-                value="cwp_settings" checked="checked">
-            <label for="cwp_settings"><?php esc_html_e('CubeWP Settings', 'cubewp-framework'); ?></label>
-            <br>
-        </fieldset>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="cwp_settings" name="cwp_export_content_type[]"
+                       value="cwp_settings" checked="checked">
+                <label for="cwp_settings"><?php esc_html_e('CubeWP Settings', 'cubewp-framework'); ?></label>
+            </div>
+        </div>
         <?php
     }
 

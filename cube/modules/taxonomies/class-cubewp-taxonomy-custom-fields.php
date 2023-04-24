@@ -20,21 +20,26 @@ class CubeWp_Taxonomy_Custom_Fields {
         
     }
     
-    private static function taxonomy_custom_fields_display() {
-        if(isset($_GET['action']) && ('new' == $_GET['action'] || 'edit' == $_GET['action'])){
+    private static function taxonomy_custom_fields_display()
+    {
+        if (isset($_GET['action']) && ('new' == $_GET['action'] || 'edit' == $_GET['action'])) {
             return;
         }
-        
+
         $taxonomycustomFieldsTable = new CubeWp_Taxonomy_Custom_Fields_Table();
         ?>
-        <div class="wrap cwp-post-type-wrape">
-            <nav class="nav-tab-wrapper wp-clearfix">
-                <a class="nav-tab " href="?page=custom-fields"><?php esc_html_e('Custom Fields (Post Types)', 'cubewp-framework'); ?></a>
-                <a class="nav-tab nav-tab-active" href="?page=taxonomy-custom-fields"><?php esc_html_e('Custom Fields (Taxonomies)', 'cubewp-framework'); ?></a>
-                <a class="nav-tab" href="?page=user-custom-fields"><?php esc_html_e('Custom Fields (User Roles)', 'cubewp-framework'); ?></a>
-            </nav>
-            <h1 class="wp-heading-inline"><?php esc_html_e('All Fields (Taxonomies)', 'cubewp-framework'); ?></h1>
-            <a href="<?php echo CubeWp_Submenu::_page_action('taxonomy-custom-fields','new'); ?>" class="page-title-action"><?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
+        <div class="wrap cwp-post-type-wrape margin-40">
+            <div class="wrap cwp-post-type-title flex-none margin-none">
+                <div class="cwp-post-type-title-nav">
+                    <h1 class="wp-heading-inline"><?php esc_html_e("Custom Fields", 'cubewp-framework'); ?></h1>
+                    <nav class="nav-tab-wrapper wp-clearfix">
+                        <a class="nav-tab " href="?page=custom-fields"><?php esc_html_e('Post Types', 'cubewp-framework'); ?></a>
+                        <a class="nav-tab nav-tab-active" href="?page=taxonomy-custom-fields"><?php esc_html_e('Taxonomies', 'cubewp-framework'); ?></a>
+                        <a class="nav-tab" href="?page=user-custom-fields"><?php esc_html_e('User Roles', 'cubewp-framework'); ?></a>
+                    </nav>
+                </div>
+                <a href="<?php echo CubeWp_Submenu::_page_action('taxonomy-custom-fields', 'new'); ?>" class="page-title-action">+ <?php esc_html_e('Add New', 'cubewp-framework'); ?></a>
+            </div>
             <hr class="wp-header-end">
             <?php $taxonomycustomFieldsTable->prepare_items(); ?>
             <form method="post">
@@ -42,7 +47,7 @@ class CubeWp_Taxonomy_Custom_Fields {
                 <?php $taxonomycustomFieldsTable->display(); ?>
             </form>
         </div>
-        <?php
+    <?php
     }
     
     private static function edit_taxonomy_custom_fields() {
@@ -139,25 +144,15 @@ class CubeWp_Taxonomy_Custom_Fields {
 
         <div class="wrap">            
             <form method="post" action=""  id="post">
-                <div class="cwpform-title-outer  margin-bottom-0 margin-left-minus-20  margin-right-0">
-                <?php echo self::_title();	?>			
+                <div class="wrap cwp-post-type-title width-40  margin-bottom-0 margin-left-minus-20  margin-right-0">
+                    <?php echo self::_title();    ?>
+                    <?php echo self::save_button(); ?>
                 </div>
+				<hr class="wp-header-end">
                 <div id="poststuff"  class="padding-0">
                     <div id="post-body" class="metabox-holder columns-2">
                         <div id="postbox-container-1" class="postbox-container">
                         <div id="side-sortables" class="meta-box-sortables ui-sortable">
-                            <div class="postbox">
-                                <div class="postbox-header">
-                                    <h2 class="hndle"><?php esc_html_e('Save Taxonomy Field', 'cubewp-framework'); ?></h2>
-                                </div>
-                                <div class="inside">
-                                    <div id="major-publishing-actions">
-                                        <div id="publishing-action" style="float:none">
-                                            <?php echo self::save_button(); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="postbox">
                             <div class="postbox-header">
                                 <h2 class="hndle"><?php esc_html_e('Select Taxonomy For This Field', 'cubewp-framework'); ?></h2>

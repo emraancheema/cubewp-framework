@@ -1,6 +1,21 @@
 *{
 	box-sizing:border-box;
 }
+.cwpposttype #postbox-container-2 .postbox-header h2
+,.cwpgroup #postbox-container-2 .postbox-header h2
+,.cwptaxonomyform #postbox-container-2 .postbox-header h2
+,.cwpposttype .inside table
+,.cwpgroup .inside table
+,.cwptaxonomyform .inside table
+{
+	margin-left:15px;
+}
+.cwpposttype .inside table
+,.cwpgroup .inside table
+,.cwptaxonomyform .inside table
+{
+	width:98%
+}
 .cwp-postbox-holder {
 	margin: 10px 20px 0 2px;
 }
@@ -57,9 +72,10 @@
 	padding: 0 12px;
 	width: 100%;
 }
-input[type=date],input[type=datetime-local],input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], .postbox-container input[type=text], input[type=time], input[type=url],input[type=week],.wp-core-ui select,select {
+input[type=date],input[type=datetime-local],input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], .postbox-container input[type=text], input[type=time], input[type=url],input[type=week],.wp-core-ui select,select,textarea {
 	width: 100%;
 	max-width: 100%;
+	border:1px solid #dad6e6
 }
 .cwp-add-form-feild {
 	background: #ffffff;
@@ -162,7 +178,7 @@ input[type=date],input[type=datetime-local],input[type=datetime], input[type=ema
 .field-header .field-order {
 	cursor: move;
 	float: left;
-	margin: 0 20px 0 0;
+	margin: 0 10px 0 0;
 	width: 20px;
 }
 .field-counter {
@@ -171,30 +187,39 @@ input[type=date],input[type=datetime-local],input[type=datetime], input[type=ema
     width: 32px;
 }
 .field-counter span {
-    padding: 4px 12px;
-    border: 1px solid #ccd0d4;
-    font-size: 14px;
-    font-weight: 500;
+    padding: 3px 10px;
+	border: 1px solid #ccd0d4;
+	font-size: 12px;
+	font-weight: 500;
+	background: #f9f8ff;
+	border-radius: 4px;
+	line-height: 29px;
 }
 .field-header .sub-field-order {
 	cursor: move;
 	float: left;
 	width: 3%;
 }
-.field-header .field-label {
-	float: left;
-	width: 40%;
-	font-weight: 600;
-    color: #3194C0;
-}
 .field-header .field-label,
 .field-header .field-type {
 	text-transform: capitalize;
+}
+.field-header .field-label{
+	text-transform: uppercase;
+	color: #837b9b;
+	font-size: 12px;
+	float: left;
+	width: 40%;
+	font-weight: 600;
 }
 .field-header .field-slug {
 	float: left;
 	font-weight: 400;
 	width: 40%;
+}
+.field-order svg {
+    fill: #9891AF;
+	margin-top: 4px;
 }
 .field-header .field-type {
 	float: left;
@@ -227,7 +252,7 @@ input[type=date],input[type=datetime-local],input[type=datetime], input[type=ema
 	margin: 0;
 }
 .field-actions a span {
-    color: #000;
+    color: #776f91 !important
 }
 .field-actions .remove-field span {
     color: #A7AAAE;
