@@ -89,17 +89,21 @@ class CubeWp_Frontend_Taxonomy_Field extends CubeWp_Frontend {
 			if ( ! empty($args['value']) && is_array($args['value'])) {
 				foreach ($args['value'] as $term_id) {
 					$term      = get_term_by('term_id', $term_id, $args['filter_taxonomy']);
-					$options[] = array(
-						"term_id"   => $term_id,
-						"term_name" => esc_html($term->name),
-					);
+					if ( ! empty( $term ) ) {
+						$options[] = array(
+							"term_id"   => $term_id,
+							"term_name" => esc_html($term->name),
+						);
+					}
 				}
 			} else if ( ! empty($args['value']) && ! is_array($args['value'])) {
 				$term      = get_term_by('term_id', $args['value'], $args['filter_taxonomy']);
-				$options[] = array(
-					"term_id"   => $args['value'],
-					"term_name" => esc_html($term->name),
-				);
+				if ( ! empty( $term ) ) {
+					$options[] = array(
+						"term_id"   => $args['value'],
+						"term_name" => esc_html( $term->name ),
+					);
+				}
 			}
 			$args['options'] = $options;
 			$args['class']  = $args['class'] . ' cubewp-remote-options ';
@@ -112,7 +116,7 @@ class CubeWp_Frontend_Taxonomy_Field extends CubeWp_Frontend {
 			}
 		}
 
-		if ($location == 'forms') {
+		if ($location == 'forms' || $location == 'filters') {
 			if (empty($args['container_attrs'])) {
 				$args['class'] = $args['class'] . ' cwp-taxonomy-field';
 			} else {

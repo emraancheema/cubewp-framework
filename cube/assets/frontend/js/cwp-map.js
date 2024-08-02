@@ -39,8 +39,12 @@ function CWP_Single_Map() {
             var thisObj = jQuery(this),
                 latitude = parseFloat(thisObj.attr('data-latitude')),
                 longitude = parseFloat(thisObj.attr('data-longitude')),
+                pin = thisObj.attr('data-pinicon'),
                 uniqueID = cwp_rand_id(6, 'cwp-map-'),
-                tiles = Tiles();
+                tiles = Tiles(),
+                markerOptions = {
+                    icon: createCustomIcon(pin)
+                };
             thisObj.empty();
             thisObj.html('<div id="' + uniqueID + '"></div>');
 
@@ -55,7 +59,7 @@ function CWP_Single_Map() {
                 latlng = new L.latLng(latitude, longitude);
                 jQuery('#' + uniqueID).css('height', '100%');
                 map = new L.map(uniqueID, {center: latlng, zoom: cubewp_map_params.map_zoom, layers: [tiles]});
-                marker = new L.marker(new L.LatLng(latitude, longitude));
+                marker = new L.marker(new L.LatLng(latitude, longitude), markerOptions);
                 map.addLayer(marker);
             }
         });
@@ -67,9 +71,9 @@ CWP_Single_Map();
 function checkIfValidlatitudeAndlongitude(str) {
     // Regular expression to check if string is a latitude and longitude
     const regexExp = /^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/gi;
-  
+
     return regexExp.test(str);
-  }
+}
 function CWP_Cluster_Map(args ='') {
     var cwpArchiveMap = jQuery('.cwp-archive-content-map');
     if(cwpArchiveMap.length > 0){
@@ -94,7 +98,14 @@ function CWP_Cluster_Map(args ='') {
                         url = a[3],
                         thumbnail = a[4],
                         popover = '',
-                        marker = L.marker(new L.LatLng(a[0], a[1]), {title: title});
+                        pinIconUrl = a[5],
+                        markerOptions = {
+                            title: title
+                        };
+                        if (pinIconUrl) {
+                            markerOptions.icon = createCustomIcon(pinIconUrl);
+                        }
+                        marker = L.marker(new L.LatLng(a[0], a[1]), markerOptions);
                     popover = '<div class="cwp-map-popover">' +
                         '<a href="' + url + '" target="_blank"><img src="' + thumbnail + '" alt="' + title + '" />' +
                         '<h3>' + title + '</h3></a>' +
@@ -112,4 +123,12 @@ function CWP_Cluster_Map(args ='') {
             }
         }
     }
+}
+function createCustomIcon(iconUrl) {
+    return L.icon({
+        iconUrl: iconUrl,
+        iconSize: [32, 32], // size of the icon
+        iconAnchor: [16, 32], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -32] // point from which the popup should open relative to the iconAnchor
+    });
 }

@@ -24,7 +24,11 @@ class CubeWp_Ajax {
     public function __construct($AjaxHandle='', $className='', $callback='') {
         $this->AjaxHandle = $this->__ajax_handle($AjaxHandle,$callback);
         $this->className = $className;
-        add_action( $this->AjaxHandle, array ( $this->className, $callback ) );
+        if(empty($this->className)){
+            add_action( $this->AjaxHandle,  $callback  );
+        }else{
+            add_action( $this->AjaxHandle, array ( $this->className, $callback ) );
+        }
     }    
     /**
      * Method __ajax_handle to call ajax

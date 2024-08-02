@@ -197,9 +197,16 @@ if ( ! function_exists("cubewp_post_type_default_fields")) {
 				'name'            => 'featured_image',
 				'type'            => 'file',
 				'container_class' => 'cubewp-have-image-field',
-				'extra_attrs'     => 'accept="image/png,image/jpg,image/jpeg,image/gif" data-error-msg="' . esc_html__("is not acceptable in this field.", "cubewp-framework") . '"',
+				'extra_attrs'     => 'accept="image/png,image/jpg,image/jpeg,image/gif,image/webp" data-error-msg="' . esc_html__("is not acceptable in this field.", "cubewp-framework") . '"',
 			);
 		}
+		if (post_type_supports($postType, 'excerpt')) {
+            $field['the_excerpt'] = array(
+                'label' => __("Excerpt", "cubewp-framework"),
+                'name'  => 'the_excerpt',
+                'type'  => 'textarea',
+            );
+        }
 
 		return $field;
 	}
@@ -513,20 +520,25 @@ if ( ! function_exists("cwp_render_switch_input")) {
 
 		$defaults = array(
 			'type'        => 'checkbox',
-			'id'          => '',
+			'id'          => 'id-'.rand(),
 			'name'        => '',
 			'placeholder' => '',
 			'class'       => '',
-			'value'       => 'yes',
+			'value'       => '1',
 			'extra_attrs' => '',
 		);
 		$attrs    = wp_parse_args($attrs, $defaults);
+		$checked = '';
+		if (isset($attrs['value']) && !empty($attrs['value']) && $attrs['value'] == '1') {
+			$checked = ' checked="checked"';
+		}
 
-		$html = '<label class="switch" for="' . $attrs['id'] . '">
-        <input type="' . $attrs['type'] . '" id="' . $attrs['id'] . '" class="switch-field ' . $attrs['class'] . '" name="' . $attrs['name'] . '" value="yes">
-        <span class="slider round"></span>
-    </label>';
-
+		$html = '<label class="cwp-switch" for="' . $attrs['id'] . '">
+		<input type="checkbox" id="' . $attrs['id'] . '" name="' . $attrs['name'] . '" class="switch-field checkbox cwp-switch-check cwp-switch-field ' . $attrs['class'] . '" value="1" '.$attrs['extra_attrs'] .$checked. '>
+		<span class="cwp-switch-slider"></span>
+		<span class="cwp-switch-text-no">No</span>
+		<span class="cwp-switch-text-yes">Yes</span>
+		</label>';
 		return $html;
 	}
 }
@@ -729,6 +741,7 @@ if ( ! function_exists("cwp_render_multi_dropdown_input")) {
 			'value'       => '',
 			'options'     => '',
 			'extra_attrs' => '',
+			'hidden_input' => true,
 		);
 		$attrs       = wp_parse_args($attrs, $defaults);
 		$field_attrs = $attrs['extra_attrs'] ?? '';
@@ -761,7 +774,10 @@ if ( ! function_exists("cwp_render_multi_dropdown_input")) {
 			}
 		}
 		$html .= '</select>';
-		$html .= '<input type="hidden" name="' . $attrs['name'] . '[]" value="">';
+
+		if ( isset( $attrs['hidden_input'] ) && ! empty( $attrs['hidden_input'] ) ) {
+			$html .= '<input type="hidden" name="' . $attrs['name'] . '[]" value="">';
+		}
 		return $html;
 	}
 }
@@ -785,6 +801,7 @@ if ( ! function_exists("cwp_render_editor_input")) {
 			'value'       => '',
 			'extra_attrs' => '',
 			'rows'        => '8',
+			'editor_media' => 0,
 		);
 		$attrs    = wp_parse_args($attrs, $defaults);
 
@@ -792,7 +809,7 @@ if ( ! function_exists("cwp_render_editor_input")) {
 			'wpautop'       => true,
 			'textarea_name' => $attrs['name'],
 			'textarea_rows' => $attrs['rows'],
-			'media_buttons' => false,
+			'media_buttons' => $attrs['editor_media'],
 			'quicktags'     => false,
 			'editor_class'  => $attrs['class'],
 			'tinymce'       => array(
@@ -868,7 +885,7 @@ if ( ! function_exists("cubewp_dynamic_options")) {
 		$keyword         = sanitize_text_field($_POST['keyword']);
 		$options         = array();
 		if ( ! empty($dropdown_type) && ! empty($dropdown_values) && ! empty($keyword)) {
-			if ($dropdown_type == 'post') {
+			if ($dropdown_type == 'post' || $dropdown_type == 'user-posts') {
 				$query_args = array(
 					'post_type'      => $dropdown_values,
 					'post_status'    => 'publish',
@@ -876,13 +893,22 @@ if ( ! function_exists("cubewp_dynamic_options")) {
 					'posts_per_page' => - 1,
 					'fields'         => 'ids'
 				);
-				$posts      = get_posts($query_args);
-				if ( ! empty($posts) && is_array($posts)) {
-					foreach ($posts as $post_id) {
-						$options[] = array(
-							"label" => esc_html(get_the_title($post_id)),
-							"value" => $post_id
-						);
+				if ( $dropdown_type == 'user-posts' ) {
+					if ( is_user_logged_in() ) {
+						$query_args['author'] = get_current_user_id();
+					}else {
+						$query_args = array();
+					}
+				}
+				if ( ! empty( $query_args ) ) {
+					$posts      = get_posts($query_args);
+					if ( ! empty($posts) && is_array($posts)) {
+						foreach ($posts as $post_id) {
+							$options[] = array(
+								"label" => esc_html(get_the_title($post_id)),
+								"value" => $post_id
+							);
+						}
 					}
 				}
 			} else if ($dropdown_type == 'user') {

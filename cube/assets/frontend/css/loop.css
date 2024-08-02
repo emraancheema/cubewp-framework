@@ -20,7 +20,7 @@
     margin: 0;
 }
 
-select#cwp-sorting-filter {
+select#cwp-sorting-filter, select#cwp-order-filter {
     cursor: pointer;
     font-size: 14px;
     padding: 5px;
@@ -28,6 +28,16 @@ select#cwp-sorting-filter {
     color: #777777;
     min-width: 155px;
 	height:30px;
+}
+select#cwp-order-filter {
+    margin-right:20px
+}
+
+select#cwp-order-filter:disabled {
+    background-color: #f0f0f0; /* Light grey background */
+    color: #999999; /* Grey text color */
+    border: 1px solid #cccccc; /* Light grey border */
+    cursor: not-allowed; /* Not-allowed cursor */
 }
 
 .cwp-archive-toggle-Listing-style {

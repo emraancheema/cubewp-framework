@@ -377,3 +377,154 @@ tr.cwp-repeating-field{
 	pointer-events: none;
 	text-decoration: none;
 }
+.cubewp-email-template-shortcodes .cubewp-email-template-shortcode {
+	align-items: flex-start;
+	display: flex;
+	justify-content: center;
+	margin: 0 0 15px 0;
+	padding: 0 0 15px 0;
+	flex-direction: column;
+	border-bottom: 1px solid #c3c4c7;
+}
+.cubewp-email-template-shortcodes .cubewp-email-template-shortcode:last-of-type {
+	margin-bottom: 0;
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+.cubewp-email-template-shortcodes .cubewp-email-template-shortcode .cubewp-email-template-shortcode-label {
+	font-size: 13px;
+	padding: 0 0 0 0;
+	margin: 0 0 5px 0;
+	line-height: 1.4;
+	color: #1d2327;
+	font-weight: 600;
+}
+.cubewp-email-template-shortcodes .cubewp-email-template-shortcode .cubewp-email-template-shortcode-value {
+	margin: 0 0 0 0;
+	width: 100%;
+	background: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	user-select: all;
+}
+
+/*------ Block Toolbar css ------*/
+.cubewp-cf-popover-inner-wrap {
+	min-width: 280px;
+	padding: 20px;
+}
+.select2-dropdown {
+	z-index: 9999999 !important
+}
+.cubewp-toolbar-control{
+	min-width: 48px !important;
+	padding-left: 12px !important;
+	padding-right: 12px !important;
+	height:48px !important;
+}
+.cubewp-toolbar-control img{
+	width:24px
+}
+
+/*----------------- Business Hour Field (Admin) --------------*/
+.yb-business-hour-fields {
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.yb-business-hour-field-admin {
+    width: calc(33.3% - 23px) !important;
+    padding: 0 15px 0 0;
+}
+
+.yb-business-hour-field-admin input:disabled {
+    color: #a7aaad;
+    border-color: #dcdcde;
+    background-color: #f6f7f7;
+    box-shadow: none;
+    text-shadow: 0 1px 0 #fff;
+    cursor: default;
+    transform: none;
+}
+
+.yb-business-hour-field-admin select {
+    min-width: unset !important;
+}
+
+.yb_business_hour_fulldayopen {
+    display: flex;
+    align-items: center;
+}
+
+.yb_business_hour_fulldayopen>label {
+    font-size: 12px;
+    display: inline-block;
+    margin: 0 0 5px 0;
+    letter-spacing: 0.1px;
+    word-spacing: 0px;
+    line-height: 1.6;
+}
+
+button.cwp-add-new-business_hour {
+    float: right;
+    background: #2271b1;
+    border: none;
+    padding: 6px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.cwp-add-new-business_hour svg {
+    color: #ffffff;
+    display: block;
+    stroke: #fff;
+}
+
+.business-hours {
+    float: left;
+    width: 100%;
+    line-height: 27px;
+}
+
+.business-hours>span {
+    float: left;
+    width: 7px;
+}
+
+.business-hours>span.weekday {
+    font-weight: 700;
+    width: 200px;
+    float: left;
+    text-transform: capitalize;
+}
+
+.business-hours>span.start-end.fullday {
+    width: auto;
+}
+
+.business-hours>span.open {
+    width: 65px;
+    float: left;
+}
+
+.business-hours>span.close {
+    float: left;
+    margin-left: 15px;
+    width: 70px;
+}
+
+a.remove-business-hours {
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+a.remove-business-hours span {
+    color: red;
+    line-height: 1.3;
+}

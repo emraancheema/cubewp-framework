@@ -81,7 +81,7 @@ jQuery(document).ready(function ($){
         if(jQuery(this).is(":checked")){
             jQuery(this).closest('label').find('input[type="hidden"]').val('Yes').trigger("input");
         }else{
-            jQuery(this).closest('label').find('input[type="hidden"]').val('No').trigger("input");
+            jQuery(this).closest('label').find('input[type="hidden"]').val('').trigger("input");
         }
     });
     
@@ -118,7 +118,10 @@ jQuery(document).ready(function ($){
                 rand_id = makeid(5);
             jQuery.each( attachments, function( key, attachment_data ) {
                 var input_name = 'cwp_meta['+ gallery_id +'][]';
-    
+                
+                if (thisObj.closest(".cwp-field").find(".cwp-gallery-have-custom-name").length > 0) {
+                    input_name = thisObj.closest(".cwp-field").find(".cwp-gallery-have-custom-name").val() + '[]';
+                }
                 if (thisObj.closest('.cwp-repeating-fields').length > 0) {
                     var repeating_id = thisObj.closest('.cwp-repeating-fields').closest(".cwp-field").find('.cwp-add-row-btn').data('id'),
                         gallery_list = thisObj.closest(".cwp-field").find(".cwp-gallery-list").find(".cwp-gallery-item");
@@ -189,6 +192,15 @@ jQuery(document).ready(function ($){
         });
     }
     
+    jQuery(document).on('input', 'input[maxlength]', function () {
+        var maxDigits = jQuery(this).attr('maxlength');
+        var inputValue = jQuery(this).val().trim();
+    
+        if (inputValue.length > maxDigits) {
+            jQuery(this).val(inputValue.slice(0, maxDigits)).trigger('input');
+        }
+    });
+    
     jQuery(document).on('click', '.cubewp-address-manually', function () {
         var $this = jQuery(this),
             parent = $this.closest(".cwp-google-address"),
@@ -209,7 +221,18 @@ jQuery(document).ready(function ($){
             long.attr("type", "text");
         }
     });
-
+    setTimeout(function () {
+        var address_field = jQuery('.address.pac-target-input');
+        if (address_field.length > 0) {
+            address_field.each(function() {
+                if (jQuery(this).val() !== '') {
+                    if (jQuery(this).hasClass('gm-err-autocomplete')) {
+                        jQuery(this).removeClass("gm-err-autocomplete").removeAttr("style disabled").prop("placeholder", jQuery(this).attr("data-placeholder"));
+                    }
+                }
+            });
+        }
+    }, 5000);
 });
 
 function makeid(length) {
@@ -341,14 +364,27 @@ function cwp_condition_logic(selectedVal, fieldVal, Compare, Target) {
             return true;
         }
     } else if (Compare === '==') {
-        if (selectedVal === fieldVal) {
-            jQuery(Target+fieldVal).show();
-            return true;
-        } else {
-            jQuery(Target+fieldVal).hide();
-            return true;
+        if (fieldVal.includes('--OR--')) {
+            var exploded = fieldVal.split('--OR--');
+            if (exploded.includes(selectedVal)) {
+                jQuery(Target+fieldVal).show();
+                return true;
+            }else {
+                jQuery(Target+fieldVal).hide();
+                jQuery(Target+fieldVal).find('input,select').val('').trigger('input');
+                return true;
+            }
+        }else {
+            if (selectedVal === fieldVal) {
+                jQuery(Target+fieldVal).show();
+                return true;
+            } else {
+                jQuery(Target+fieldVal).hide();
+                jQuery(Target+fieldVal).find('input,select').val('').trigger('input');
+                return true;
+            }
         }
-    } else if (Compare === '!=') {
+    }else if (Compare === '!=') {
         if (selectedVal !== fieldVal && selectedVal !== '') {
             jQuery(Target+fieldVal).show();
             return true;
@@ -476,6 +512,7 @@ function cwp_repreating_fields_county(thisObj) {
             jQuery(this).find('.cwp-repeating-count .count').text(Number(i) + 1);
         });
         cubewp_init_resources();
+        initialize_google_address();
     }
 }
 

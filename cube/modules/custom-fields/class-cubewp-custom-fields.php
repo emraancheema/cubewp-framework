@@ -25,6 +25,8 @@ class CubeWp_Custom_Fields {
     
     const CFUM = 'CubeWp_User_Meta';
 
+    const CSF = 'CubeWp_Settings_Custom_Fields_Display';
+
     public function __construct() {
 
         //For display custom fields of post types
@@ -44,6 +46,9 @@ class CubeWp_Custom_Fields {
         
         //USer custom meta
         self::User_Meta();
+
+        //For display custom fields of Settings
+        add_action( 'settings_custom_fields', array( self::CSF, 'cwp_custom_fields_run' ) );
 
         new CubeWp_Ajax( '',
             self::PROCESSOR,
@@ -79,9 +84,7 @@ class CubeWp_Custom_Fields {
      * @since  1.0.0
      */
     private function PostType_Fields(){
-        
         add_action( 'custom_fields', array( self::CFP, 'cwp_custom_fields_run' ) );
-
         new CubeWp_Ajax( '',
             self::CFP,
             'cwp_get_taxonomies_by_post_types'
@@ -100,8 +103,6 @@ class CubeWp_Custom_Fields {
         add_action( 'save_post', array(self::CFPM, 'save_metaboxes'));
 
     }
-        
-   
         
     /**
      * Method Taxonomy_Metabox

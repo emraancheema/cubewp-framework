@@ -106,7 +106,7 @@ class CubeWp_Single_Cpt {
 	 */
 	public static function get_post_featured_image() {
 		if ( has_post_thumbnail( self::$post_id ) ) {
-			return '<div class="cwp-single-fet-img" style="background-image: url(' . get_the_post_thumbnail_url( self::$post_id ) . ')"></div>';
+			return '<div class="cwp-single-fet-img"><img src="' . esc_url( get_the_post_thumbnail_url( self::$post_id, array( 1250, 500 ) ) ) . '" alt="' . get_the_title( self::$post_id ) . '"></div>';
 		} else {
 			return null;
 		}
@@ -262,10 +262,11 @@ class CubeWp_Single_Cpt {
             }
             $value = self::get_single_meta_value($meta_key,$field_type);
             $options['value'] = $value;
+            $options = apply_filters( 'cubewp/custom/cube/field/options', $options );
 			if(function_exists('cube_' . $field_type)){
                 $output .= call_user_func('cube_' . $field_type, $options);
             }else if (method_exists(__CLASS__, 'field_' . $field_type)) {
-                $output .= call_user_func('self::field_' . $field_type, $options);
+                $output .= call_user_func( array( __CLASS__, 'field_' . $field_type ), $options);
 			}else {
 				$output .= '<p style="color: #ff0000">' . sprintf(esc_html__("Invalid Field Type: %s", "cubewp-framework"), $field_type) . '</p>';
 			}
@@ -284,7 +285,7 @@ class CubeWp_Single_Cpt {
      */
     public static function get_single_meta_value($meta_key='',$field_type=''){
         
-        if($meta_key == 'the_title' || $meta_key == 'the_content' || $meta_key == 'featured_image'){
+        if($meta_key == 'the_title' || $meta_key == 'the_content' || $meta_key == 'the_excerpt' || $meta_key == 'featured_image'){
             return '';
         }elseif($field_type == 'taxonomy'){
             $value = get_the_terms( self::$post_id, $meta_key );
@@ -311,7 +312,7 @@ class CubeWp_Single_Cpt {
         if(empty($value)){
             return '';
         }
-        return $value;
+        return apply_filters( 'cubewp/single/page/field/value', $value, self::$post_id, $meta_key, $field_type );
     }
     	
 	/**

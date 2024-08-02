@@ -54,7 +54,7 @@ class CubeWp_Frontend_Google_Address_Field extends CubeWp_Frontend {
             'placeholder'  =>    $args['placeholder']
         );
         $input_attrs['extra_attrs'] = isset($args['extra_attrs']) ? $args['extra_attrs'] : '';
-        $input_attrs['extra_attrs'] .= ' autocomplete="off" data-placeholder="' . esc_html__("Enter a location", "cubewp-framework") . '"';
+        $input_attrs['extra_attrs'] .= ' autocomplete="off" data-placeholder="' . esc_html__("Enter a Location", "cubewp-framework") . '"';
         
         $output .= '<div class="cwp-field-google-address-input-container">';
             $output .= cwp_render_text_input( $input_attrs );
@@ -69,7 +69,7 @@ class CubeWp_Frontend_Google_Address_Field extends CubeWp_Frontend {
             'class'        => 'latitude',
             'name'         => !empty($args['custom_name_lat']) ? $args['custom_name_lat'] : $args['name'],
             'value'        => isset($args['lat']) ? $args['lat'] : '',
-            'placeholder' => esc_html__("Enter latitude here", "cubewp-framework")
+            'placeholder' => esc_html__("Enter Latitude", "cubewp-framework")
         );
         $output .= cwp_render_hidden_input( $input_attrs );
 
@@ -78,7 +78,7 @@ class CubeWp_Frontend_Google_Address_Field extends CubeWp_Frontend {
             'class'        => 'longitude',
             'name'         => !empty($args['custom_name_lng']) ? $args['custom_name_lng'] : $args['name'],
             'value'        => isset($args['lng']) ? $args['lng'] : '',
-            'placeholder' => esc_html__("Enter longitude here", "cubewp-framework")
+            'placeholder' => esc_html__("Enter Longitude", "cubewp-framework")
         );
         $output .= cwp_render_hidden_input( $input_attrs );
         

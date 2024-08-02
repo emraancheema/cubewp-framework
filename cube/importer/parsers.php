@@ -118,14 +118,24 @@ class WXR_Parser_SimpleXML {
 
 		foreach ( $xml->xpath('/rss/channel/wp:term') as $term_arr ) {
 			$t = $term_arr->children( $namespaces['wp'] );
-			$terms[] = array(
+			$term = [
 				'term_id' => (int) $t->term_id,
 				'term_taxonomy' => (string) $t->term_taxonomy,
 				'slug' => (string) $t->term_slug,
 				'term_parent' => (string) $t->term_parent,
 				'term_name' => (string) $t->term_name,
-				'term_description' => (string) $t->term_description
-			);
+				'term_description' => (string) $t->term_description,
+			];
+			if ( isset( $t->termmeta ) && ! empty( $t->termmeta ) ) {
+				foreach ( $t->termmeta as $meta ) {
+					$term['termmeta'][] = [
+						'key' => (string) $meta->meta_key,
+						'value' => (string) $meta->meta_value,
+					];
+				}
+			}
+
+			$terms[] = $term;
 		}
 
 		// grab posts

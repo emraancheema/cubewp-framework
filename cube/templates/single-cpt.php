@@ -4,18 +4,22 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
- * @package Blocksy
+ * @package CubeWP
  */
 
 get_header();
+global $cubewp_frontend,$cwpOptions;
 
-do_action('cubewp_single_page_notification', get_the_ID());
+$cubewp_frontend->cubewp_post_notification();
 
 $post_type = get_post_type(get_the_ID());
-if (is_cubewp_single_page_builder_active($post_type)) {
-   echo cubewp_single_page_builder_output($post_type);
-}else {
-    global $cubewp_frontend,$cwpOptions;
+// if (is_cubewp_single_page_builder_active($post_type)) {
+//    echo cubewp_single_page_builder_output($post_type);
+// }
+
+if (CubeWp_Theme_Builder::is_cubewp_theme_builder_active('single')) {
+    CubeWp_Theme_Builder::do_cubewp_theme_builder('single');
+ }else {
     $single = $cubewp_frontend->single();
     wp_enqueue_style('single-cpt-styles');
     ?>
@@ -61,5 +65,6 @@ if (is_cubewp_single_page_builder_active($post_type)) {
         </div>
     <?php    
 }
-do_action('cubewp_post_confirmation', get_the_ID());
+$cubewp_frontend->cubewp_post_confirmation();
+
 get_footer();

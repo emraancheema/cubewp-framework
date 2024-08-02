@@ -234,7 +234,6 @@ jQuery(document).ready(function ($) {
 function cubewp_validate_input_value(value) {
     if (/^[a-zA-Z0-9- ]*$-/.test(value) === false) {
         var _value = value.replace(/ /g, "_");
-        _value = _value.replace(/-/g, "_");
         _value = _value.toLowerCase();
         _value = replaceSpecialCharacters(_value);
         if (value !== _value) {

@@ -37,7 +37,7 @@ class CubeWp_Settings_Ajax_Hooks {
         $settings_helpers = new CubeWp_Settings_Helpers();
         $post_data = wp_unslash( $_POST['cwpOptions'] );
         $values    = $settings_helpers::parse_str( $post_data );
-        
+
         if(isset($_POST['reset'])){
             $options = require CWP_PLUGIN_PATH . 'cube/functions/settings/cubewp-default-options.php';
             foreach($options as $option){

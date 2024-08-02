@@ -55,6 +55,9 @@ function cwp_notification_ui(notification_type, notification_content) {
     if ($cwp_alert.is(":visible") && $cwp_alert_content.html() === notification_content) {
         return false;
     }
+    if ($cwp_alert.is(":visible")) {
+        $cwp_alert.find('.cwp-alert-close').trigger("click");
+    }
     if ( notification_type === 'success' ) {
         $alert_class = 'cwp-alert-success';
     } else if ( notification_type === 'warning' ) {

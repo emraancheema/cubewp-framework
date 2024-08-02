@@ -58,9 +58,12 @@ input[type="radio"] {
 }
 
 .cwp-frontend-section-container .cwp-field-container p.description {
-    font-size: 13px;
-    padding: 0 0 0 5px;
-    margin: 0 0 10px 0;
+	font-size: 11px;
+	padding: 3px 10px;
+	margin: 0 0 10px 0;
+	background: #f5f5f5;
+	display: inline-block;
+	border-radius: 5px;
 }
 
 ul.cwp-field-checkbox-container,
@@ -123,7 +126,7 @@ span.select2-selection.select2-selection--single span.select2-selection__arrow {
 	margin: 0px;
 }
 
-span.select2-container.select2-container--default.select2-container--open span.select2-dropdown.select2-dropdown--below {
+.logged-in span.select2-container.select2-container--default.select2-container--open span.select2-dropdown.select2-dropdown--below {
 	margin-top: 30px;
 	border: 0.1rem solid #dcd7ca;
 }
@@ -344,7 +347,7 @@ span.cwp-range-number-field-seprator {
 .cwp-frontend-section-content-container {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: flex-start;
 }
 
 .cwp-frontend-form-container .cwp-frontend-section-container .cwp-frontend-section-content-container {
@@ -673,7 +676,7 @@ span.cwp-range-number-field-seprator {
 /*Switch*/
 
 .cwp-switch-container .cwp-switch {
-    display: inline-flex !important;
+    display: flex !important;
     justify-content: space-evenly;
     align-items: center;
     position: relative;
@@ -753,6 +756,7 @@ span.cwp-range-number-field-seprator {
 	padding: 20px;
     width: 20%;
     font-size: 12px;
+	z-index: 99 !important;
 }
 
 .cwp-ui-datepicker .ui-datepicker .ui-datepicker-header {
@@ -987,7 +991,7 @@ a.ui-datepicker-next {
 }
 
 .cwp-hide {
-	display: none;
+	display: none !important;
 }
 
 .cwp-address-range {
@@ -1094,4 +1098,150 @@ a.ui-datepicker-next {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
+}
+
+
+/**************************************************************************/
+/******************** Business hours fields css ***************************/
+/**************************************************************************/
+
+.yb-business-hours-display {
+    margin-bottom: 20px;
+    width: 100%;
+    float: left;
+}
+
+.yb-business-hours-display .business-hours {
+    padding: 10px 20px;
+    border-bottom: 1px solid #E0E0E0;
+    border-right: 1px solid #E0E0E0;
+    border-left: 1px solid #E0E0E0;
+    float: left;
+    width: 100%;
+    line-height: 27px;
+}
+
+.yb-business-hours-display .business-hours:last-child {
+    border: 1px solid #E0E0E0;
+    border-top: none;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.yb-business-hours-display .business-hours:first-child {
+    border: 1px solid #E0E0E0;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.yb-business-hours-display .business-hours span {
+    font-weight: 400;
+    color: #7f7f7f;
+    font-size: 14px;
+    float: left;
+}
+
+.yb-business-hours-display .business-hours span.weekday {
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #000000;
+    font-size: 15px;
+    width: 30%;
+}
+
+.yb-business-hours-display .business-hours span.open {
+    width: 65px;
+}
+
+.yb-business-hours-display .business-hours span.dash {
+    float: left;
+    width: 7px;
+}
+
+.yb-business-hours-display .business-hours span.close {
+    float: left;
+    margin-left: 15px;
+    width: 60px;
+}
+
+.yb-business-hours-display .business-hours a.remove-business-hours {
+    color: #000000;
+    float: right;
+}
+
+.yb-business-hours-fields {
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.yb-business-hours-fields .cwp-field-container {
+    padding: 0;
+    width: calc(33.3% - 40px) !important;
+    margin-bottom: 0px !important;
+}
+
+.yb-business-hours-fields .cwp-field-container:nth-child(2) {
+    margin: 0 15px;
+}
+
+.yb_business_hour_fulldayopen {
+    display: flex;
+    margin-left: 14px;
+    align-items: center;
+}
+
+.cwp-frontend-form-container .cwp-frontend-section-container .cwp-field-container .yb_business_hour_fulldayopen label {
+    font-size: 12px;
+    display: inline-block;
+    margin: 0;
+    letter-spacing: 0.1px;
+    word-spacing: 0px;
+}
+
+button.cwp-add-new-business-hour {
+    float: right;
+    background: #007bff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.cwp-add-new-business-hour svg {
+    color: #ffffff;
+    display: block;
+    stroke: #fff;
+}
+
+@media screen and (max-width: 480px) {
+
+    .yb-business-hour-fields .cwp-field-container {
+        padding: 0;
+        width: 100% !important;
+        margin: 0 0 20px 0 !important;
+    }
+    .yb_business_hour_fulldayopen {
+        margin-left: 0;
+    }
+}
+
+/*------------ Timing Field Output --------------*/
+.yb-business-hours {
+    width: 100%;
+}
+.yb-business-hours .cwp-cpt-single-field-container {
+    margin: 0 0 8px 0;
+}
+.yb-business-hours p {
+    color: #898886;
+    font-size: 14px;
+    margin: 0;
+}
+.yb-business-hours h6 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    text-transform: capitalize;
 }

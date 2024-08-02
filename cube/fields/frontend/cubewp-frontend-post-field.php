@@ -33,7 +33,7 @@ class CubeWp_Frontend_Post_Field extends CubeWp_Frontend {
 	 */
 	public function render_post_field($output = '', $args = array()) {
 		$args = apply_filters('cubewp/frontend/field/parametrs', $args);
-		if (is_singular($args['filter_post_types'])) {
+		if ( isset($args['filter_post_types']) && is_singular($args['filter_post_types'])) {
 			$args['value'] = get_the_ID();
 		}
 
@@ -58,7 +58,11 @@ class CubeWp_Frontend_Post_Field extends CubeWp_Frontend {
 			}
 			$args['options']     = $options;
 			$args['class']       = $args['class'] . ' cubewp-remote-options ';
-			$args['extra_attrs'] = $args['extra_attrs'] . ' data-dropdown-type="post" data-dropdown-values="' . $args['filter_post_types'] . '" ';
+			if ( isset( $args['current_user_posts'] ) && $args['current_user_posts'] ) {
+				$args['extra_attrs'] = $args['extra_attrs'] . ' data-dropdown-type="user-posts" data-dropdown-values="' . $args['filter_post_types'] . '" ';
+			}else {
+				$args['extra_attrs'] = $args['extra_attrs'] . ' data-dropdown-type="post" data-dropdown-values="' . $args['filter_post_types'] . '" ';
+			}
 		} else {
 			$query_args = array(
 				'post_type'      => $args['filter_post_types'],
@@ -66,14 +70,23 @@ class CubeWp_Frontend_Post_Field extends CubeWp_Frontend {
 				'posts_per_page' => -1,
 				'fields'         => 'ids'
 			);
-			$posts      = get_posts($query_args);
-			$options    = array();
-			if (isset($posts) && ! empty($posts)) {
-				foreach ($posts as $post_id) {
-					$options[$post_id] = esc_html(get_the_title($post_id));
+			if ( isset( $args['current_user_posts'] ) && $args['current_user_posts'] ) {
+				if ( is_user_logged_in() ) {
+					$query_args['author'] = get_current_user_id();
+				}else {
+					$query_args = array();
 				}
 			}
-			$args['options'] = $options;
+			if ( ! empty( $query_args ) ) {
+				$posts      = get_posts($query_args);
+				$options    = array();
+				if (isset($posts) && ! empty($posts)) {
+					foreach ($posts as $post_id) {
+						$options[$post_id] = esc_html(get_the_title($post_id));
+					}
+				}
+				$args['options'] = $options;
+			}
 		}
 
 		return apply_filters("cubewp/frontend/{$args['type']}/field", $output, $args);

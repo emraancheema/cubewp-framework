@@ -15,10 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class CubeWp_Query{
     
-    private static $meta_key = null;
-    private static $terms = null;
-    private static $q_args = null;
-    private static $meta_query = array();
+    public static $meta_key = null;
+    public static $terms = null;
+    public static $q_args = null;
+    public static $meta_query = array();
+    public static $custom_sorting_prefix = "cwpsorting-";
     
     public function __construct(array $args) {
         self::$q_args = $args;
@@ -61,6 +62,8 @@ class CubeWp_Query{
             self::$meta_key = $meta_key;
             $field_type     = self::q_field_type();
             
+            do_action( 'cubewp_meta_query' , $meta_key, $field_type );
+
             if($field_type == 'taxonomy'){
                 $query['tax_query']['relation'] = 'AND';
                 $query['tax_query'][] = self::q_type_taxonomy();
@@ -79,6 +82,8 @@ class CubeWp_Query{
             }
         }
 
+        $args = self::$q_args;
+
         if(isset($args['s']) && !empty($args['s'])){
             $query['s'] = $args['s'];
         }
@@ -95,24 +100,28 @@ class CubeWp_Query{
             $query['author'] = $args['author'];
         }
         
+        // Sorting
+        if(isset($args['order']) && ($args['order'] == 'DESC' || $args['order'] == 'ASC')){
+            $query['order'] = $args['order'];
+        }
         if(isset($args['orderby']) && !empty($args['orderby'])){
-            if($args['orderby'] == 'ASC' || $args['orderby'] == 'DESC'){
-                $query['order'] = $args['orderby'];
-                $query['orderby'] = 'date';
-            }elseif($args['orderby'] == 'post__in'){
-                $query['orderby'] = $args['orderby'];
-            }else{
-                $meta = explode("-", $args['orderby']);
-                $query['order'] = $meta[1];
+            if (strpos($args['orderby'], self::$custom_sorting_prefix) === 0) {
+                $custom_sort_field = substr($args['orderby'], strlen(self::$custom_sorting_prefix));
+                $query['order'] = $query['order'];
                 $query['orderby'] = 'meta_value_num';
-                $query['meta_key'] = $meta[0];
+                $query['meta_key'] = $custom_sort_field;
+            }else{
+                $query['orderby'] = $args['orderby'];
             }
         }
-        
+
+        // Extra Meta Query
         $extra_meta_query = isset($args['meta_query']) && !empty($args['meta_query']) ? $args['meta_query'] : array();
        
         if(!empty(self::$meta_query) && count(self::$meta_query) > 0){
             $query['meta_query'] = array_merge(self::$meta_query,$extra_meta_query);
+        }elseif(!empty($extra_meta_query) && count($extra_meta_query) > 0){
+            $query['meta_query'] = $extra_meta_query;
         }
         return $query;
     }
@@ -224,24 +233,16 @@ class CubeWp_Query{
         $args = self::$q_args;
         $meta_key = self::$meta_key;
         $_mKey = $args[$meta_key];
-        if(isset($_mKey) && !empty($_mKey)){
-            $values = explode(',', $_mKey);
-            if((is_array($values) && count($values) == 1)){
-                $meta_query = array(
-                    'key'       => $meta_key,
-                    'value'     => $_mKey,
-                    'compare'   => '=',
+        if ( isset( $_mKey ) && ! empty( $_mKey ) ) {
+            $values = explode( ',', $_mKey );
+            $meta_query = array();
+            $meta_query['relation'] = 'OR';
+            foreach ( $values as $_val ) {
+                $meta_query[] = array(
+                'key'     => $meta_key,
+                'value'   => $_val,
+                'compare' => 'LIKE',
                 );
-            }else{
-                $meta_query = array();
-                $meta_query['relation'] = 'OR';
-                foreach($values as $_val){
-                    $meta_query[] = array(
-                        'key'       => $meta_key,
-                        'value'	    => $_val,
-                        'compare'   => 'LIKE',
-                    );
-                }
             }
             
             self::$meta_query[] = $meta_query;

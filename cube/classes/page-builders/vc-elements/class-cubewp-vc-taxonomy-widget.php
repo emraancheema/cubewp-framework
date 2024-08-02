@@ -65,7 +65,7 @@ class CubeWp_VC_Taxonomy_Widget {
 			"type"        => "textfield",
 			"param_name"  => "icon_media_name",
 			"heading"     => esc_html__( "Icon Or Image", "cubewp-framework" ),
-			'description' => esc_html__( 'Enter taxonomy custom field name for term icon or image. ', 'cubewp-framework' ),
+			'description' => esc_html__( 'Enter taxonomy custom field slug for term icon or image.', 'cubewp-framework' ),
 			'save_always' => true,
 			'dependency'  => array(
 				'element' => 'output_style',

@@ -28,6 +28,7 @@ class CubeWp_Metabox {
             'meta_key'    => '_cwp_group_order',
             'orderby'     => 'meta_value_num',
             'order'       => 'ASC',
+            'post_status' => array('publish','private'),
             'meta_query'  => array(
                 'key'       => '_cwp_group_types',
                 'value'     => '',
@@ -278,7 +279,41 @@ class CubeWp_Metabox {
                         $arr = array();
                         foreach($value as $_key => $_val){
                             foreach($_val as $field_key => $field_val){
-                                $arr[$field_key][$_key] = $field_val;
+                                $subFieldOptions = isset($fieldOptions[$_key]) ? $fieldOptions[$_key] : array();
+                                if ( isset( $subFieldOptions['type'] ) && $subFieldOptions['type'] == 'gallery' ) {
+                                    if ( ! empty( $field_val ) ) {
+                                        $save_format = isset( $subFieldOptions['files_save'] ) && ! empty( $subFieldOptions['files_save'] ) ? $subFieldOptions['files_save'] : 'ids';
+                                        $format_separator = isset( $subFieldOptions['files_save_separator'] ) && ! empty( $subFieldOptions['files_save_separator'] ) ? $subFieldOptions['files_save_separator'] : 'array';
+                                        if ( $save_format == 'urls' ) {
+                                            $_attachment_ids = array();
+                                            foreach ( $field_val as $_field_val ) {
+                                                $_attachment_ids[] = wp_get_attachment_url( cwp_get_attachment_id( $_field_val ) );
+                                            }
+                                            $field_val = $_attachment_ids;
+                                        }
+                                        if ( $format_separator != 'array' ) {
+                                            $field_val = implode( $format_separator, $field_val );
+                                        }
+                                    }
+                                    $arr[$field_key][$_key] = $field_val;
+                                } else if ( isset( $subFieldOptions['type'] ) && ( $subFieldOptions['type'] == 'file' || $subFieldOptions['type'] == 'image' ) ) {
+                                    if ( ! empty( $field_val ) ) {
+                                        $save_format = isset( $subFieldOptions['files_save'] ) && ! empty( $subFieldOptions['files_save'] ) ? $subFieldOptions['files_save'] : 'ids';
+                                        if ( $save_format == 'urls' ) {
+                                            $attachment_url = wp_get_attachment_url( cwp_get_attachment_id( $field_val ) );
+                                            $field_val = $attachment_url;
+                                        }
+                                    }
+                                    $arr[$field_key][$_key] = $field_val;
+                                } else if ( ( isset( $subFieldOptions['type'] ) && $subFieldOptions['type'] == 'dropdown' && isset($subFieldOptions['multiple']) && $subFieldOptions['multiple'] ) || ( isset( $subFieldOptions['type'] ) && $subFieldOptions['type'] == 'checkbox' ) || ( isset( $subFieldOptions['appearance'] ) && $subFieldOptions['appearance'] == 'multi_select' ) ) {
+                                    $format_separator = isset( $subFieldOptions['files_save_separator'] ) && ! empty( $subFieldOptions['files_save_separator'] ) ? $subFieldOptions['files_save_separator'] : 'array';
+                                    if ( $format_separator != 'array' ) {
+                                        $field_val = implode( $format_separator, $field_val );
+                                    }
+                                    $arr[$field_key][$_key] = $field_val;
+                                } else {
+                                    $arr[$field_key][$_key] = $field_val;
+                                }
                             }
                         }
                         if(isset($arr) && !empty($arr)){
@@ -293,6 +328,32 @@ class CubeWp_Metabox {
                         $new = $fields[$key];
                         if(is_array($singleFieldOptions) && count($singleFieldOptions) > 0 && $singleFieldOptions['type'] == 'gallery' ){
                             $new = array_filter($new);
+                            $save_format = isset( $singleFieldOptions['files_save'] ) && ! empty( $singleFieldOptions['files_save'] ) ? $singleFieldOptions['files_save'] : 'ids';
+                            $format_separator = isset( $singleFieldOptions['files_save_separator'] ) && ! empty( $singleFieldOptions['files_save_separator'] ) ? $singleFieldOptions['files_save_separator'] : 'array';
+                            if ( ! empty( $new ) ) {
+                                if ( $save_format == 'urls' ) {
+                                    $_attachment_ids = array();
+                                    foreach ( $new as $_field_val ) {
+                                        $_attachment_ids[] = wp_get_attachment_url( cwp_get_attachment_id( $_field_val ) );
+                                    }
+                                    $new = $_attachment_ids;
+                                }
+                                if ( $format_separator != 'array' ) {
+                                    $new = implode( $format_separator, $new );
+                                }
+                            }
+                        }else if(is_array($singleFieldOptions) && count($singleFieldOptions) > 0 && ( $singleFieldOptions['type'] == 'file' || $singleFieldOptions['type'] == 'image' ) ){
+                            $save_format = isset( $singleFieldOptions['files_save'] ) && ! empty( $singleFieldOptions['files_save'] ) ? $singleFieldOptions['files_save'] : 'ids';
+                            if ( $save_format == 'urls' ) {
+                                $attachment_url = wp_get_attachment_url( cwp_get_attachment_id( $new ) );
+                                $new = $attachment_url;
+                            }
+                        }
+                        else if ( ( isset( $singleFieldOptions['type'] ) && $singleFieldOptions['type'] == 'dropdown' && ( isset( $singleFieldOptions['multiple'] ) && $singleFieldOptions['multiple'] ) ) || ( isset( $singleFieldOptions['type'] ) && $singleFieldOptions['type'] == 'checkbox' ) || ( isset( $singleFieldOptions['appearance'] ) && $singleFieldOptions['appearance'] == 'multi_select' ) ) {
+                            $format_separator = isset( $singleFieldOptions['files_save_separator'] ) && ! empty( $singleFieldOptions['files_save_separator'] ) ? $singleFieldOptions['files_save_separator'] : 'array';
+                            if ( $format_separator != 'array' ) {
+                                $new = implode( $format_separator, $new );
+                            }
                         }else if(is_array($singleFieldOptions) && count($singleFieldOptions) > 0 && ($singleFieldOptions['type'] == 'date_picker' || $singleFieldOptions['type'] == 'date_time_picker' || $singleFieldOptions['type'] == 'time_picker' )){
                             $new = strtotime($new);
                         }

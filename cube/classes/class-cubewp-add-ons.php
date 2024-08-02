@@ -39,7 +39,7 @@ class CubeWp_Add_Ons {
 	/**
 	 * all Add ons
 	 * @since 1.0
-	 * @version 1.0
+	 * @version 1.1.8
 	 */
 	public static function cubewp_add_ons() {
 
@@ -91,15 +91,7 @@ class CubeWp_Add_Ons {
                 'base' => 'cubewp-addon-claim/cubewp-claim.php',
                 'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-claim/cube/',
                 'load' => CUBEWP.'_Claim_Load',
-            ),
-            'cubewp-addon-wallet' => array(
-                'item_name' => 'CubeWP Wallet',
-                'slug' => 'cubewp-addon-wallet',
-                'author' => 'Emraan Cheema',
-                'base' => 'cubewp-addon-wallet/cubewp-wallet.php',
-                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-wallet/cube/',
-                'load' => CUBEWP.'_Wallet_Load',
-            ),
+			),
             'cubewp-addon-social-logins' => array(
                 'item_name' => 'CubeWP Social Logins',
                 'slug' => 'cubewp-addon-social-logins',
@@ -114,7 +106,15 @@ class CubeWp_Add_Ons {
                 'author' => 'Emraan Cheema',
                 'base' => 'cubewp-addon-classified/cubewp-classified.php',
                 'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-classified/cube/',
-                'load' => 'Classified_Load',
+                'load' => CUBEWP.'_Classified_Load',
+            ),
+			'cubewp-addon-booking' => array(
+                'item_name' => 'CubeWP Booking',
+                'slug' => 'cubewp-addon-booking',
+                'author' => 'Emraan Cheema',
+                'base' => 'cubewp-addon-booking/cubewp-booking.php',
+                'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-booking/cube/',
+                'load' => CUBEWP.'_Booking_Load',
             )
 		);
 
@@ -170,7 +170,7 @@ class CubeWp_Add_Ons {
 		$add_ons = self::cubewp_add_ons();
 		if(function_exists('CWP')){
 
-			$not_our_plugin 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x69\x73\x20\x6e\x6f\x74\x20\x22\x43\x75\x62\x65\x57\x50\x22\x20\x70\x6c\x75\x67\x69\x6e");
+			$not_our_plugin = mb_convert_encoding("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x69\x73\x20\x6e\x6f\x74\x20\x22\x43\x75\x62\x65\x57\x50\x22\x20\x70\x6c\x75\x67\x69\x6e", 'UTF-8', 'ASCII');
 
 			if(isset($add_ons[$plugin])){
 
@@ -181,10 +181,11 @@ class CubeWp_Add_Ons {
 
 				if(empty(CWP()->cubewp_options($slug))){
 					
-					$lic_is_not_valid 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x59\x6f\x75\x72\x20\x6c\x69\x63\x65\x6e\x73\x65\x20\x69\x73\x20\x6e\x6f\x74\x20\x76\x61\x6c\x69\x64\x2c\x20\x45\x72\x72\x6f\x72\x20\x63\x6f\x64\x65\x20\x69\x73\x3a");
-					$file_is_not_valid 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x70\x6c\x75\x67\x69\x6e\x20\x66\x69\x6c\x65\x20\x69\x73\x20\x6e\x6f\x74\x20\x76\x61\x6c\x69\x64");
-					$need_fresh_file 	= utf8_encode("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x70\x6c\x75\x67\x69\x6e\x20\x66\x69\x6c\x65\x20\x68\x61\x73\x20\x61\x6c\x72\x65\x61\x64\x79\x20\x75\x73\x65\x64\x2c\x20\x50\x6c\x65\x61\x73\x65\x20\x64\x6f\x77\x6e\x6c\x6f\x61\x64\x20\x66\x72\x65\x73\x68\x20\x66\x69\x6c\x65\x20\x66\x6f\x72\x20\x66\x72\x65\x73\x68\x20\x69\x6e\x73\x74\x61\x6c\x6c\x61\x74\x69\x6f\x6e\x2e");
-					
+					$lic_is_not_valid = mb_convert_encoding("\x53\x6f\x72\x72\x79\x21\x20\x59\x6f\x75\x72\x20\x6c\x69\x63\x65\x6e\x73\x65\x20\x69\x73\x20\x6e\x6f\x74\x20\x76\x61\x6c\x69\x64\x2c\x20\x45\x72\x72\x6f\x72\x20\x63\x6f\x64\x65\x20\x69\x73\x3a", 'UTF-8', 'ASCII');
+					$file_is_not_valid = mb_convert_encoding("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x70\x6c\x75\x67\x69\x6e\x20\x66\x69\x6c\x65\x20\x69\x73\x20\x6e\x6f\x74\x20\x76\x61\x6c\x69\x64", 'UTF-8', 'ASCII');
+					$need_fresh_file = mb_convert_encoding("\x53\x6f\x72\x72\x79\x21\x20\x54\x68\x69\x73\x20\x70\x6c\x75\x67\x69\x6e\x20\x66\x69\x6c\x65\x20\x68\x61\x73\x20\x61\x6c\x72\x65\x61\x64\x79\x20\x75\x73\x65\x64\x2c\x20\x50\x6c\x65\x61\x73\x65\x20\x64\x6f\x77\x6e\x6c\x6f\x61\x64\x20\x66\x72\x65\x73\x68\x20\x66\x69\x6c\x65\x20\x66\x6f\x72\x20\x66\x72\x65\x73\x68\x20\x69\x6e\x73\x74\x61\x6c\x6c\x61\x74\x69\x6f\x6e\x2e", 'UTF-8', 'ASCII');
+
+
 					if ( file_exists ( $file ) ) {
 
 						$key = file_get_contents ( $file );
@@ -247,7 +248,7 @@ class CubeWp_Add_Ons {
             $base = $add_on['base'];
             $Lkey = CWP()->cubewp_options($slug.'_key');
             $Lstatus = CWP()->cubewp_options($slug.'-status');
-            if($Lkey){
+            if($Lkey && is_plugin_active($base) ){
                 $plugin = get_plugin_data( plugin_dir_path( dirname(dirname(__DIR__)) ).$base, false, false );
                 // setup the updater
                 new CubeWp_Plugin_Updater( $this->route, $base, array(
@@ -310,6 +311,7 @@ class CubeWp_Add_Ons {
 							$this->update_plugin_data($slug, $license_data->license);
 						}else{
 							CWP()->update_cubewp_options($slug.'-status', $license_data->license);
+							CWP()->update_cubewp_options($slug, $license_data);
 						}
 					}
 			

@@ -166,6 +166,7 @@ button .dashicons {
     display: flex;
     justify-content: flex-start;
     padding: 8px 20px;
+    cursor: pointer;
 }
 #cwpform-builder .cubewp-builder-container .cubewp-builder-area .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-header .cubewp-builder-section-mover {
     cursor: move;
@@ -516,7 +517,7 @@ button .dashicons {
     padding: 11px;
 }
 #cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-builder-section-fields .cubewp-builder-group-widget,
-.cubewp-builder-group-widget-placeholder {
+.cubewp-builder-sidebar-groups-widgets .cubewp-builder-group-widget-placeholder {
     align-items: center;
     background-color: #f3f4f5;
     border-radius: 3px;
@@ -931,6 +932,47 @@ button .dashicons {
     transition: 0.3s;
     background: #1f8013 0% 0% no-repeat padding-box;
 }
+.cube-subscription-header.forms-templates .subscription-header-super {
+    width: 550px;
+    margin-top: 0px;
+}
+.cubewp-subscription-contant.forms-templates .cubewp-subscription-download {
+    flex-direction: row;
+	padding: 5px 38px;
+	margin-bottom: 50px;
+}
+.cubewp-subscription-frame.forms-templates .cubewp-subscription-form .cubewp-subscription-contant .cube-popup-title {
+    padding-top: 5px;
+}
+.cubewp-subscription-frame.forms-templates .cubewp-subscription-main {
+    top: 50%;
+}
+.cubewp-subscription-frame.forms-templates .cubewp-subscription-logo {
+    font-weight: bold;
+    font-size: 14px;
+    background: #FFF6B2;
+    border-radius: 10px;
+    padding: 10px 13px;
+    margin-top: 20px;
+    color: #AC0000;
+    margin-bottom: 10px;
+}
+.cubewp-subscription-contant.forms-templates h3 {
+    font-size: 14px !important;
+    color: #000 !important;
+    margin-bottom: 0px !important;
+}
+.cubewp-subscription-frame.forms-templates .cubewp-subscription-contant.forms-templates {
+    border-top: unset !important;
+    margin: 0px;
+    border: 1px solid #6852eb;
+}
+.cubewp-subscription-contant.forms-templates .cubewp-subscription-download a:last-child {
+    background: none;
+    border: 1px solid #6752EB;
+    border-radius: 4px;
+    color: #6752EB;
+}
 .list-options-subscription-form li {
     width: calc((100% / 2) - 0px);
     text-align: left;
@@ -945,7 +987,7 @@ button .dashicons {
     margin: 0px 8px 0 0;
 }
 .cubewp-subscription-bottom-contant .cubewp-logo {
-    margin-bottom: 14px;
+    margin-bottom: 25px;
     text-align: center;
 }
 .cubewp-subscription-download a {
@@ -963,7 +1005,7 @@ button .dashicons {
 }
 .cubewp-subscription-download {
     text-align: center;
-    margin-bottom: 22px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
 }
@@ -989,12 +1031,19 @@ button .dashicons {
     margin: 2px -1px -3px 0;
 }
 .cubewp-builder-sections-importer {
-    margin: 0 10px 0 auto;
+    margin: 15px auto 0;
     padding: 0 10px 0 0;
-    border-right: 1px solid #8c8f94;
 }
-
-
+.cubewp-builder-sections-importer label {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin: 0 0 15px 0;
+}
+.cubewp-subscription-logo img {
+    width: 165px;
+    margin-top: 25px;
+}
 .cubewp-subscription-main {
     position: absolute;
     text-align: center;
@@ -1004,7 +1053,7 @@ button .dashicons {
     top: 44%;
 }
 .cubewp-subscription-bottom-contant .cubewp-logo img {
-    width: 170px;
+    width: 110px;
     height: auto;
 }
 
@@ -1071,17 +1120,121 @@ button .dashicons {
     cursor: pointer;
 }
 #cwpform-builder .cubewp-builder-container .cubewp-post-loop-generator .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget {
-    height: 450px;
     width: 100%;
     position: relative;
 }
-#cwpform-builder .cubewp-builder-container .cubewp-post-loop-generator .cubewp-builder-sections .cubewp-builder-section .cubewp-builder-section-fields .cubewp-builder-group-widget .cubewp-loop-builder-editor {
+#cwpform-builder .cubewp-builder-container .cubewp-loop-builder-editor-container .cubewp-loop-builder-editor,
+#cwpform-builder .cubewp-builder-container .cubewp-loop-builder-editor-container .cubewp-loop-builder-editor-css {
+    height:500px;
+    margin-bottom:50px;
+    padding: 20px 0px;
+}
+
+.cubewp-loop-builder-editor-container{
+    width:100%
+}
+
+#cwpform-builder .cubewp-builder-container .cubewp-post-loop-generator .cubewp-builder-sections .cubewp-builder-section .cubewp-loop-preview{
+    width: 500px;
+    margin:50px auto;
+}
+
+.cubewp-builder-sidebar.processing-ajax {
+    position: relative;
+}
+.cubewp-builder-sidebar.processing-ajax:after {
+    content: '';
     position: absolute;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: #ffffff90;
 }
+.cubewp-builder-sidebar.processing-ajax:before {
+    content: "\f463";
+    animation: rotation 2s infinite linear;
+    position: absolute;
+    font-size: 30px;
+    line-height: 30px;
+    font-family: 'dashicons';
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: calc(50% - 15px);
+}
+
+/* Switch field render css */
+.cwp-switch {
+	display: inline-flex;
+	justify-content: space-evenly;
+	align-items: center;
+	position: relative;
+	border-radius: 6px;
+	overflow: hidden !important;
+	width: 75px !important;
+	height: 30px;
+ }
+ .cwp-switch .cwp-switch-field {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100%;
+	visibility: hidden;
+	z-index: 4;
+ }
+ .cwp-switch .cwp-switch-slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background: #e3e3e3;
+ }
+ .cwp-switch .cwp-switch-text-no,
+ .cwp-switch .cwp-switch-text-yes
+ {
+	position: relative;
+	z-index: 3;
+	padding: 0;
+	transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	color: #000000;
+	user-select: none;
+ }
+ .cwp-switch .cwp-switch-text-no {
+	color: #000000;
+ }
+ .cwp-switch .cwp-switch-slider:before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 3px;
+	width: calc(50% - 3px);
+	height: calc(100% - 6px);
+	z-index: 2;
+	background: #fff;
+	border-radius: 4px;
+	transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-slider {
+	background: #007cba;
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-slider:before {
+	left: calc(50% - 2px);
+	width: calc(50% - 1px);
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-text-no {
+	color: #fff;
+ }
+ .cwp-switch .cwp-switch-field:checked ~ .cwp-switch-text-yes {
+	color: #000000;
+ }
+
 @media only screen and (max-width: 1026px) {
     #cwpform-builder .cubewp-builder-sidebar .cubewp-builder-sidebar-groups-widgets .cubewp-loop-builder-fields .cubewp-loop-builder-field {
         width: 100%;

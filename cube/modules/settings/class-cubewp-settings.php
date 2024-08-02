@@ -85,6 +85,19 @@ class CubeWp_Settings {
                 </div>
 				<?php
 			}
+			$groups = cwp_get_groups_of_settings();
+			if(isset($groups) && !empty($groups)){
+				foreach($groups as $group){
+					$id = 'section_'.$group;
+					$class = 'custom-section';
+					?>
+					<div class="cubewp-setting-tab <?php esc_attr_e($class); ?>" data-target-id="<?php esc_attr_e($id); ?>">
+						<span class="dashicons <?php esc_attr_e($icon); ?>"></span>
+						<?php echo get_the_title($group) ?>
+					</div>
+					<?php
+				}
+			}
 			?>
         </div>
 		<?php
@@ -121,6 +134,40 @@ class CubeWp_Settings {
                     </table>
                 </div>
 				<?php
+			}
+			$groups = cwp_get_groups_of_settings();
+			if(isset($groups) && !empty($groups)){
+				foreach($groups as $group){
+					$fields = get_post_meta($group, '_cwp_group_fields', true);
+					$id = 'section_'.$group;
+					$class = 'custom-section';
+					?>
+					<div id="<?php esc_attr_e($id) ?>" class="cubewp-settings-tabs-content <?php esc_attr_e($class) ?>">
+						<h2><?php echo get_the_title($group) ?></h2>
+						<table class="form-table">
+							<tbody>
+							<?php
+							$fields = explode(",", $fields);
+							foreach ($fields as $field) {
+								$field = get_setting_field_options($field);
+								$field['id'] = $field['name'];
+								$field['custom_name'] = $field['name'];
+								if ($field['type'] == 'google_address') {
+								   $field['custom_name_lat'] = $field['name'] . '_lat';
+								   $field['custom_name_lng'] = $field['name'] . '_lng';
+								}
+								$field['desc'] = $field['description'];
+								$field['title'] = $field['label'];
+								$field = self::set_field_value($field);
+								echo apply_filters("cubewp/admin/post/{$field['type']}/field", '', $field);
+								$this->check_dependencies($field);
+							}
+							?>
+							</tbody>
+						</table>
+					</div>
+				<?php
+				}
 			}
 			self::cubewp_setting_actions("footer");
 			?>
@@ -183,8 +230,15 @@ class CubeWp_Settings {
 			$val = $field['default'];
 		}
 		$this->options_values[$field['id']] = $val;
-		$field['value']                     = $val;
-
+		$field['value'] = $val;
+		if ($field['type'] == 'google_address') {
+			if ( isset( $cwpOptions[ $field['id'] . '_lat' ] ) ) {
+			   $field['lat'] = $cwpOptions[ $field['id'] . '_lat' ];
+			}
+			if ( isset( $cwpOptions[ $field['id'] . '_lng' ] ) ) {
+			   $field['lng'] = $cwpOptions[ $field['id'] . '_lng' ];
+			}
+		}
 		return $field;
 	}
 

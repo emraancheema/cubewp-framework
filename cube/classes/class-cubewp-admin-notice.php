@@ -105,22 +105,36 @@ class CubeWp_Admin_Notice {
 			<div class="cwp-welcome-page-section"><div class="flot-left cwp-logo">
 				<a href="https://cubewp.com" target="_blank"><img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/CubeWP-light-logo.png" alt="image" /></a>
 			</div>
-			<div class="cwp-title-menu flot-left">
+			<div class="flot-left cwp-library">
+                <a href="' . admin_url( 'admin.php?page=cubewp-libraries' ) . '"><span class="dashicons dashicons-art"></span>Themes Library <span class="new">New!</span></a>
+            </div>';
+			if( class_exists( 'CubeWp_Forms_Custom' ) ){
+				$notice_ui .= '<div class="flot-left form-templates">
+					<a href="' . admin_url( 'admin.php?page=cubewp-custom-form-templates' ) . '">Form Templates <span class="new">New!</span></a>
+				</div>';
+			}else{
+				$notice_ui .= '<div class="flot-left form-templates">
+					<a href="' . admin_url( 'admin.php?page=cubewp-forms-unsubscribed-templates' ) . '">Form Templates <span class="new">New!</span></a>
+				</div>';
+			}
+			$notice_ui .= '<div class="cwp-title-menu flot-left">
 				<ul>
-					<li><a href="'.admin_url( 'admin.php?page=cubewp-settings' ).'" target="_blank"><span class="dashicons dashicons-admin-settings"></span>Settings</a></li>
+					<li><a href="' . admin_url( 'admin.php?page=cubewp-settings' ) . '"><span class="dashicons dashicons-admin-settings"></span>Settings</a></li>
 				</ul> 
-			</div>
-			<div class="float-right cwp-update-plugin-btn">
-				<a target="_blank" href="https://cubewp.com/store"><span class="dashicons dashicons-lock"></span>' . esc_attr__( 'Unlock All Premium Features', 'cubewp-framework' ) . '</a>
-			</div>
+			</div>';
+			$notice_ui .= '
 			<div class="cwp-title-menu float-right">
 				<ul>
 					<li><a href="https://support.cubewp.com" target="_blank"><span class="dashicons dashicons-media-document"></span>Docs</a></li>
 					<li><a href="https://support.cubewp.com/forums" target="_blank"><span class="dashicons dashicons-buddicons-community"></span>Community</a></li>
 					<li><a href="https://support.cubewp.com/forums/forum/feedback" target="_blank"><span class="dashicons dashicons-feedback"></span>Feedback</a></li>
-					<li><a href="https://help.cubewp.com/" target="_blank"><span class="dashicons dashicons-sos"></span>Helpdesk</a></li>
-				</ul> 
-			</div>	
+					<li><a href="https://help.cubewp.com/" target="_blank"><span class="dashicons dashicons-sos"></span>Helpdesk</a></li>';
+					if(class_exists('CubeWp_Frontend_Load') ){
+						$notice_ui .= '<li><a href="https://cubewp.com/store" target="_blank"><span class="dashicons dashicons-buddicons-groups"></span>Add-ons</a></li>';
+					}
+			$notice_ui .= ' </ul> 
+			<p class="grdnt-bg-counters linear"><a href="https://cubewp.com/pricing/" target="_Blank">All Access Starts at $19</a></p>
+			</div>
 			</div>	
 			<div class="clearfix"></div>';
 			$notice_ui .= '</div>';
@@ -149,31 +163,6 @@ class CubeWp_Admin_Notice {
 		}
 		if ( empty( get_option( 'cubewp_framework_installed_on' ) ) ) {
 			update_option( 'cubewp_framework_installed_on', strtotime( "NOW" ) );
-		}
-		$framework_installed_on = get_option( 'cubewp_framework_installed_on' );
-		$max_age = 15 * 24 * 60 * 60;
-		if (time() - $framework_installed_on > $max_age) {
-			$permanently_removed_notices = get_option( 'permanently_removed_notices' );
-			$permanently_removed_notices = ! empty( $permanently_removed_notices ) && is_array( $permanently_removed_notices ) ? $permanently_removed_notices : array();
-			if ( ! isset( $_COOKIE['cubewp-notice-rating'] ) && ! in_array( 'cubewp-notice-rating', $permanently_removed_notices ) ) {
-				$current_url = cubewp_get_current_url();
-				$current_url = add_query_arg( array(
-					'cubewp-remove-notice-permanently' => 'cubewp-notice-rating'
-				), $current_url );
-				$notice_ui .= '<div class="notice notice-info is-dismissible cubewp-notice" data-notice="cubewp-notice-rating">';
-				$notice_ui .= '<p>';
-				$notice_ui .= esc_html__( 'Hey, I noticed you\' have been using CubeWP Framework for a few weeks! Could you do me a favor and give the plugin 5-Star rating on WordPress?', 'cubewp-framework' );
-				$notice_ui .= '<br />';
-				$notice_ui .= '<a href="https://wordpress.org/support/plugin/cubewp-framework/reviews/#new-post" target="_blank">' . esc_html__( 'Yes, Take me there', 'cubewp-framework' ) . '</a>';
-				$notice_ui .= '<br />';
-				$notice_ui .= '<a href="' . esc_url( $current_url ) . '" class="cubewp-remove-notice-permanently">' . esc_html__( 'Already did it', 'cubewp-framework' ) . '</a>';
-				$notice_ui .= '</p>';
-				$notice_ui .= '<p>';
-				$notice_ui .= '<a href="https://profiles.wordpress.org/cubewp1211/" target="_blank"><strong>' . esc_html__( '~ Emraan Cheema, CubeWP Framework co-founder', 'cubewp-framework' ) . '</strong></a>';
-				$notice_ui .= '</p>';
-				$notice_ui .= '<a class="notice-dismiss" style="display: flex;justify-content: center;align-items: center;">' . esc_html__( 'Maybe Later.', 'cubewp-framework' ) . '</a>';
-				$notice_ui .= '</div>';
-			}
 		}
         self::cubewp_remove_notices_permanently();
 

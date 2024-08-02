@@ -42,6 +42,7 @@ jQuery(document).ready(function ($){
             cwp_find_group_field();
             cwp_find_sub_fields();
             cwp_fields_sortable();
+            cwp_conditional_fields();
         });
     });
 
@@ -231,21 +232,18 @@ jQuery(document).ready(function ($){
         }
     });
 
-    var conditional_rule_operator = jQuery(".conditional-rule-operator select");
-    if (conditional_rule_operator.length > 0) {
-        conditional_rule_operator.on("change", function (){
-            var $this = jQuery(this),
-                parent = $this.closest("tr"),
-                value_field = parent.find(".conditional-rule-value"),
-                value = $this.val();
-            if (value !== "!empty" && value !== "empty") {
-                value_field.show();
-            }else {
-                value_field.hide();
-            }
-        });
-        conditional_rule_operator.trigger("change");
-    }
+    jQuery(document).on("change", ".conditional-rule-operator select", function() {
+        var $this = jQuery(this),
+            parent = $this.closest("tr"),
+            value_field = parent.find(".conditional-rule-value"),
+            value = $this.val();
+        if (value !== "" && value !== "!empty" && value !== "empty") {
+            value_field.show();
+        } else {
+            value_field.hide();
+        }
+    });
+    jQuery(".conditional-rule-operator select").trigger("change");
     
 });
 

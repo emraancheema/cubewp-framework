@@ -317,15 +317,19 @@ class CubeWp_Custom_Fields_Processor {
                         $field['sub_fields'] = implode(',', $sub_fields);
                     }
                     if($field['type'] == 'google_address' && isset($field['map_use']) && $field['map_use'] == '1'){
-                        $mapMeta = $field['name'];
+                        $cwp_map_meta = array();
+                        $options = self::get_field_options();
+                        $options = $options == '' ? array() : $options;
+                        if(!empty($options) && count($options) > 0){
+                            $cwp_map_meta = $options['cwp_map_meta'];
+                        }
+
                         $groupTypes = get_post_meta($post_id, '_cwp_group_types', true);
                         if(!empty($groupTypes)){
                             $groupTypes = explode(',',$groupTypes);
-                            $mapMeta = array();
                             foreach($groupTypes as $type){
-                                $mapMeta[$type] = $field['name'];
-                                
-                                self::set_option('cwp_map_meta', $mapMeta);
+                                $cwp_map_meta[$type] = $field['name'];
+                                self::set_option('cwp_map_meta', $cwp_map_meta);
                             }
                         }
                     }

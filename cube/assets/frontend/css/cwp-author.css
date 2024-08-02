@@ -237,10 +237,10 @@
 .cwp-author-custom-fields.cwp-auther-about-info .cwp-cpt-single-field-container h4 {
     font-size: 14px;
 }
-.cwp-author-custom-fields.cwp-auther-about-info .cwp-cpt-single-field-container img.cwp-cpt-single-gallery-item {
+.cwp-author-custom-fields.cwp-auther-about-info .cwp-cpt-single-field-container .cwp-cpt-single-gallery-item {
     width: calc(50% - 20px);
 }
-.cwp-author-custom-fields.cwp-auther-about-info .cwp-cpt-single-field-container img.cwp-cpt-single-image-item {
+.cwp-author-custom-fields.cwp-auther-about-info .cwp-cpt-single-field-container .cwp-cpt-single-image-item {
     height: 150px;
     border-radius: 5px;
 }

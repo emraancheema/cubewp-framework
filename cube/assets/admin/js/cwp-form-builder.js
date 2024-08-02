@@ -226,6 +226,54 @@
 
     }
 
+    $(document).ready(function (e) {
+        var divs = $('.cubewp-builder-widgets');
+        var index = 0;
+        function CubeWP_load_widgets() {
+            if (index < divs.length) {
+                $('.cubewp-builder-sidebar').addClass('processing-ajax');
+                var currentDiv = divs.eq(index),
+                    _form_type = currentDiv.data('form-type'),
+                    _switch= currentDiv.data('child-switcher'),
+                    _slug = currentDiv.data('slug');
+                $.ajax({
+                    type: 'POST',
+                    url: cwp_vars_params.ajax_url,
+                    data: {
+                        'action': 'cubewp_get_builder_widgets',
+                        'form_type': _form_type,
+                        'slug': _slug,
+                        'nested_switcher': _switch,
+                        'security_nonce': cwp_vars_params.nonce
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if ( response.success ) {
+                            currentDiv.html(response.data.sidebar);
+                            cwpform_sortable_sections();
+                            cwpform_sortable_fields();
+                            cubewp_show_hide_no_section();
+                            cwpform_disable_fields();
+                            $('.cubewp-builder-sidebar').removeClass('processing-ajax');
+                            var onload_tab_switcher = $('.cubewp-tab-switcher-trigger-on-load');
+                            if (onload_tab_switcher.length > 0) {
+                                onload_tab_switcher.trigger("change");
+                            }
+                        }
+                        index++;
+                        CubeWP_load_widgets(index);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle AJAX error if needed
+                        index++;
+                        CubeWP_load_widgets(index);
+                    }
+                });
+            }
+        }
+        CubeWP_load_widgets();
+    });
+
     $.cubewp_form_builder.switch_tab = function (t) {
         var $this = $(t),
             target = $this.find(":selected").attr("data-switcher-target"),
@@ -416,7 +464,8 @@
         var parent = jQuery('.cubewp-type-container.active-tab');
         var form_relation = parent.find('.form-relation').val();
         var form_type = parent.find('.form-type').val();
-            
+        var section_fields = '';
+        var form_sections = '';
         parent.find('.cubewp-builder-area .cubewp-builder-section').each(function () {
             $(this).find('.cubewp-builder-section-fields').find('.cubewp-builder-group-widget').each(function () {
                 var field_meta_key = $(this).find('.field-name').val();                    
@@ -427,7 +476,17 @@
                         $(this).attr('name', "cwpform[" + form_relation + "][fields][" + field_meta_key + "][" + field_name + "]");
                     } 
                 });
+                if (form_type == 'search_filters') {
+                    section_fields += '[cwpFilterField field="' + field_meta_key + '"]';
+                } else if (form_type == 'search_fields') {
+                    section_fields += '[cwpSearchField name="' + field_meta_key + '" ]';
+                }
             });
+            if (form_type == 'search_filters') {
+                form_sections += section_fields;
+            } else if (form_type == 'search_fields') {
+                form_sections += section_fields;
+            }
         });
         if (parent.find('.cwpform-settings .form-field').length > 0) {
             parent.find('.cwpform-settings .form-field').each(function () {
@@ -435,6 +494,9 @@
                 
                 if (type == 'checkbox') {
                     var field_name = $(this).closest('.cwpform-setting-field').data('name');
+                    if($(this).hasClass('switch-field')){
+                        field_name = $(this).data('name');
+                    }
                     $(this).attr('name', "cwpform[" + form_relation + "][form][" + field_name + "]");
                 } else {
                     var field_name = $(this).data('name');
@@ -445,7 +507,7 @@
         }
         var shortcode = '';
         if (form_type == 'search_filters') {
-            shortcode = '[cwpFilters]';
+            shortcode = '[cwpFilter type="' + form_relation + '"]' + form_sections + '[/cwpFilter]';
         } else if (form_type == 'search_fields') {
             shortcode = '[cwpSearch type="' + form_relation + '"]';
         }
@@ -455,7 +517,7 @@
             data: parent.find('.cubewp-builder-area').find(':input').serialize() + '&form_relation=' + form_relation + '&form_type=' + form_type + '&action=cwpform_save_shortcode',
             success: function (data) {
                 var $class = '';
-                if (form_type === 'single_layout' || form_type === 'search_filters') {
+                if (form_type === 'search_filters') {
                     shortcode = data.message;
                 } else {
                     $class = 'copy-to-clipboard';

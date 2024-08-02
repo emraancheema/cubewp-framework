@@ -20,20 +20,19 @@
 }
 #cwp-options-form #cubewp-settings-tabs {
     min-height: calc(100vh - 70px);
-    background-color: #00306F;
+    background-color: #DAD6E6;
     width: 250px;
     padding: 0;
 }
 #cwp-options-form #cubewp-settings-tabs .cubewp-settings-tabs-header {
-    background-color: #3622ED;
+    background-color: #000;
     padding: 10px 15px;
-    border-bottom: 1px solid #0376E3;
     margin: 0 0 10px 0;
 }
 #cwp-options-form #cubewp-settings-tabs .cubewp-setting-tab {
     padding: 10px 15px;
     font-size: 15px;
-    color: #FFFFFF;
+    color:#000;
     line-height: 22px;
     display: flex;
     justify-content: flex-start;
@@ -43,7 +42,8 @@
     user-select: none;
 }
 #cwp-options-form #cubewp-settings-tabs .cubewp-setting-tab.active {
-    background-color: #3622ED;
+    background-color: #837b9b;
+    color:#fff;
 }
 #cwp-options-form #cubewp-settings-tabs .cubewp-setting-tab span {
     margin: 0 15px 0 0;
@@ -127,7 +127,7 @@
 #cwp-options-form #cubewp-settings-tabs-content textarea,
 #cwp-options-form #cubewp-settings-tabs-content select
 {
-    min-width: 100%;
+    width: 100%;
     border: 1px solid #E1E5E9;
     border-radius: 4px;
     height: 36px;
@@ -255,6 +255,7 @@
     -webkit-appearance: none;
     white-space: nowrap;
     border-color: #e0e0e0;
+	cursor: pointer;
 }
 #cwp-options-form #cubewp-settings-tabs-content .cwp-switch-options label:first-of-type {
     border-top-left-radius: 4px;

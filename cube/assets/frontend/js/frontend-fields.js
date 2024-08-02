@@ -66,7 +66,15 @@ jQuery(document).ready(function () {
         if (jQuery(this).is(":checked")) {
             jQuery(this).closest('label').find('input[type="hidden"]').val('Yes').trigger('input');
         } else {
-            jQuery(this).closest('label').find('input[type="hidden"]').val('No').trigger('input');
+            jQuery(this).closest('label').find('input[type="hidden"]').val('').trigger('input');
+        }
+    });
+    jQuery(document).on('input', '.cwp-field-number input[maxlength]', function () {
+        var maxDigits = jQuery(this).attr('maxlength');
+        var inputValue = jQuery(this).val().trim();
+    
+        if (inputValue.length > maxDigits) {
+            jQuery(this).val(inputValue.slice(0, maxDigits)).trigger('input');
         }
     });
 
@@ -102,15 +110,15 @@ jQuery(document).ready(function () {
         });
     });
     jQuery(document).on('click', '.cwp-file-field-preview span', function () {
-        var $this = jQuery(this), parent = $this.closest('.cwp-file-field-container'),
-            preview = parent.find('.cwp-file-field-preview'), preview_img = preview.find('img');
+        var $this = jQuery(this),
+            parent = $this.closest('.cwp-file-field-preview'),
+            preview_img = parent.find('img');
         preview_img.attr('src', '');
-        parent.find('.cwp-file-field input[type="file"]').val('');
-        parent.find('.cwp-file-field input[type="hidden"]').val('');
-        preview.find('p').text('');
-        preview.hide();
-        preview.find('input').remove();
+        parent.find('.cwp-image-preview').val('');
+        parent.find('p').text('');
+        parent.hide();
     });
+    
 
     // Gallery Field
     jQuery(document).on('click', '.cwp-gallery-field-trigger', function (e) {
@@ -412,19 +420,26 @@ function cubewp_process_input_type_file($this, handle_as, $callbackFunction = ()
 }, $typeErrorFunction = () => {
 }) {
     var files = $this.prop('files'), sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'], type_compare = Array(),
-        allowed_image_types = Array('image/png', 'image/jpg', 'image/gif', 'image/jpeg'),
-        allowed_file_types = Array('application/gzip', 'text/calendar', 'application/pdf', 'text/plain', 'application/zip', 'application/x-7z-compressed', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
+        allowed_image_types = Array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/webp'),
+        allowed_file_types = Array('application/gzip', 'text/calendar', 'application/pdf', 'text/plain', 'application/zip', 'application/x-7z-compressed', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed'),
+        max_allowed_images = $this.closest('.cwp-gallery-field').attr('data-max-files'),
+        files_count = files.length;
     if (handle_as === 'image') {
         type_compare = allowed_image_types;
     } else if (handle_as === 'file') {
         type_compare = allowed_file_types;
+    }
+    files_count += $this.closest('.cwp-gallery-field-container').find('.cwp-gallery-field-preview.cloned').length;
+    if ( files_count > max_allowed_images ) {
+        alert(cwp_frontend_fields_params.max_upload_files);
+        return false;
     }
     for (var files_counter = 0; files_counter < files.length; files_counter++) {
         (function (file_index) {
             var file = files[file_index], fileType = file["type"], fileName = file["name"], fileSize = file["size"],
                 i = parseInt(Math.floor(Math.log(fileSize) / Math.log(1024))), previewTempUrl = null,
                 file_size = (fileSize / 1024 / 1024).toFixed(2),
-                allowed_file_size = $this.attr('data-max-upload');
+                allowed_file_size = $this.closest('.cwp-gallery-field').attr('data-max-upload');
             fileSize = Math.round(fileSize / Math.pow(1024, i), 2) + ' ' + sizes[i];
             if ( file_size > allowed_file_size ) {
                 alert(cwp_frontend_fields_params.max_upload_size);
@@ -508,36 +523,71 @@ function cwp_conditional_fields(form_name_method) {
         cwp_conditional_logic.each(function () {
             
             var $this = jQuery(this),
-                field = $this.attr('data-field'),
-                value = $this.attr('data-value'),
-                operator = $this.attr('data-operator');
-            
-                var parent = jQuery('*' +form_name_method+ '[' + field + ']"]');
-                var parentCheckbox = jQuery(form_name_method+ '[' + field + '][]"]');
-                var selectedVal = parent.val();
-                var tagName = parent.prop('tagName');
-                if ( tagName === 'INPUT' ) {
-                    var inputType = parent.prop('type');
-                    if ( inputType === 'radio' ) {
-                        selectedVal = jQuery('*' +form_name_method+ '[' + field + ']"]:selected').val();
-                    }
+            field = $this.attr('data-field'),
+            value = $this.attr('data-value'),
+            operator = $this.attr('data-operator');
+        
+            var parent = $this.closest('form').find('*' +form_name_method+ '[' + field + ']"]');
+            var parentCheckbox = $this.closest('form').find(form_name_method+ '[' + field + '][]"]');
+            var selectedVal = parent.val();
+            var tagName = parent.prop('tagName');
+            if ( tagName === 'INPUT' ) {
+                var inputType = parent.prop('type');
+                if ( inputType === 'radio' ) {
+                        selectedVal = $this.closest('form').find('*' +form_name_method+ '[' + field + ']"]').val();
                 }
-                if (parent.is(':checked') || selectedVal != '' || selectedVal == ''){
-                    cwp_condition_logic(selectedVal, value, operator, field);
-                }else if(parentCheckbox.is(':checked')){
-                    var selectedVal = parentCheckbox.val();
-                    cwp_condition_logic(selectedVal, value, operator, field);
-                }
-            jQuery(document).on('change input', '*' +form_name_method+ '[' + field + ']"]', function (event) {
+            }
+            if (parent.is(':checked') || selectedVal != '' || selectedVal == ''){
+                cwp_condition_logic(selectedVal, value, operator, field, $this.closest('form'));
+            }else if(parentCheckbox.is(':checked')){
+                var selectedVal = parentCheckbox.val();
+                cwp_condition_logic(selectedVal, value, operator, field, $this.closest('form'));
+            }
+            $this.closest('form').on('change input', '*' +form_name_method+ '[' + field + ']"]', function (event) {
                 event.preventDefault();
-                
                 var selectedVal = jQuery(this).val();
-                cwp_condition_logic(selectedVal, value, operator, field);
+                cwp_condition_logic(selectedVal, value, operator, field, $this.closest('form'));
+                
+                jQuery('div[class*="'+field+'"]').each(function() {
+                    if (jQuery(this).hasClass('conditional-logic')) {
+                        if (!jQuery(this).hasClass( field+selectedVal )) {
+                            jQuery('div[class*="'+jQuery(this).data('name')+'"]').each(function() {
+                                jQuery(this).hide();
+                            });
+                        }else{
+                            selected = jQuery(this).closest('form').find('*' +form_name_method+ '[' + jQuery(this).data('name') + ']"]:visible:checked').val();
+                            jQuery('div[class*="'+jQuery(this).data('name')+selected+'"]').each(function() {
+                                var $thisx = jQuery(this),
+                                fieldx = $thisx.attr('data-field'),
+                                valuex = $thisx.attr('data-value'),
+                                operatorx = $thisx.attr('data-operator');
+                            
+                                var parent = $thisx.closest('form').find('*' +form_name_method+ '[' + fieldx + ']"]:visible');
+                                var parentCheckbox = $thisx.closest('form').find(form_name_method+ '[' + fieldx + '][]"]');
+                                var selectedVal = parent.val();
+                                var tagName = parent.prop('tagName');
+                                if ( tagName === 'INPUT' ) {
+                                    var inputType = parent.prop('type');
+                                    if ( inputType === 'radio' ) {
+                                            selectedVal = $thisx.closest('form').find('*' +form_name_method+ '[' + fieldx + ']"]:visible:checked').val();
+                                    }
+                                }
+                                if (parent.is(':checked') || selectedVal != '' || selectedVal == ''){
+                                    cwp_condition_logic(selectedVal, valuex, operatorx, fieldx, $thisx.closest('form'));
+                                }else if(parentCheckbox.is(':checked')){
+                                    var selectedVal = parentCheckbox.val();
+                                    cwp_condition_logic(selectedVal, valuex, operatorx, fieldx, $thisx.closest('form'));
+                                }
+                            });
+                        }
+                    }
+                });
+                
             });
 
             var value_condition = '[value="' + value + '"]';
             if (operator === '!empty' || operator === 'empty' || operator === '!=') value_condition = '';
-            jQuery(document).on('input', '*' +form_name_method+ '[' + field + '][]"]' + value_condition, function (event) {
+            $this.closest('form').on('input', '*' +form_name_method+ '[' + field + '][]"]' + value_condition, function (event) {
                 event.preventDefault();
                 var $this = jQuery(this),
                     selectedVal = '';
@@ -554,7 +604,7 @@ function cwp_conditional_fields(form_name_method) {
                         selectedVal = target_field.val();
                     }
                 }
-                cwp_condition_logic(selectedVal, value, operator, field);
+                cwp_condition_logic(selectedVal, value, operator, field, $this.closest('form'));
             });
         });
     }

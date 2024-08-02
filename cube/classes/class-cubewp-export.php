@@ -20,6 +20,7 @@ class CubeWp_Export {
         add_action('cubewp_export', array($this, 'manage_export'));
         add_action('wp_ajax_cwp_export_data', array($this, 'cwp_export_data_callback'));
         add_action( 'wp_ajax_cwp_user_data', array($this, 'cwp_user_fields_data_callback') );
+        add_action('wp_ajax_cwp_custom_forms', array($this, 'cwp_custom_forms_data_callback') );
     }
         
     /**
@@ -71,8 +72,7 @@ class CubeWp_Export {
                             <h4><?php esc_html_e('Export Data', 'cubewp-framework'); ?></h4>
                         </div>
                         <div class="cubewp-import-content">
-                            <p>Select all the types of content and settings from CubeWP you would like to export
-                                today.</p>
+                            <p>Please Choose the Content Type and Settings that you would like to Export.</p>
                             <?php self::cwp_export_options(); ?>
                         </div>
                     </div>
@@ -116,6 +116,18 @@ class CubeWp_Export {
                 <label
                     for="user-custom-fields"><?php esc_html_e('CubeWP User Custom Fields', 'cubewp-framework'); ?></label>
             </div>
+            <?php
+            if (class_exists('CubeWp_Forms_Custom')) {
+                ?>            
+                <div class="cubewp-export-option">
+                    <input type="checkbox" id="custom-forms-fields" name="cwp_export_content_type[]"
+                        value="custom-forms-fields" checked="checked">
+                    <label
+                        for="custom-forms-fields"><?php esc_html_e('CubeWP Forms', 'cubewp-framework'); ?></label>
+                </div>
+                <?php
+            }
+            ?>
             <div class="cubewp-export-option">
                 <input type="checkbox" id="search-forms" name="cwp_export_content_type[]"
                        value="search-forms" checked="checked">
@@ -186,10 +198,33 @@ class CubeWp_Export {
             $buffer = self::cwp_custom_fields_posts('cwp_user_fields');
             $files = self::cwp_file_names();
             if (self::cwp_file_force_contents($files['cwp_user_groups'], $buffer)) {
+                $download_now = isset( $_POST['download_now'] ) ? sanitize_text_field( $_POST['download_now'] ) : 'true';
+                if ( $download_now != 'false' ) {
+                    self::cwp_create_zip_file();
+                }
+                wp_send_json(array(
+                    'success'  => 'true',
+                    'msg'      => esc_html__('The file you requested is ready for download. Please click the download file button to download it.', 'cubewp-framework'),
+					'file_url' => $files['zip_file'],
+                ));
+            }else {
+                wp_send_json(array(
+                    'success' => 'false',
+                    'msg'     => esc_html__('Something went wrong. Please try again.', 'cubewp-framework')
+                ));
+            }
+        }
+    }
+
+    public function cwp_custom_forms_data_callback(){
+        if(isset($_POST['export']) && $_POST['export'] == 'success'){
+            $buffer = self::cwp_custom_fields_posts('cwp_forms');
+            $files = self::cwp_file_names();
+            if (self::cwp_file_force_contents($files['cwp_custom_forms'], $buffer)) {
                 self::cwp_create_zip_file();
                 wp_send_json(array(
                     'success'  => 'true',
-                    'msg'      => esc_html__('Data Export successfully.', 'cubewp-framework'),
+                    'msg'      => esc_html__('The file you requested is ready for download. Please click the download file button to download it.', 'cubewp-framework'),
 					'file_url' => $files['zip_file'],
                 ));
             }else {
@@ -212,7 +247,7 @@ class CubeWp_Export {
 			if (empty($_POST['cwp_export_content_type'])) {
 				wp_send_json(array(
 					'success' => 'false',
-					'msg'     => esc_html__('Please choose content type for export.', 'cubewp-framework')
+					'msg'     => esc_html__('Select at least one content type to proceed with data export.', 'cubewp-framework')
 				));
 			} else {
 				$export_content = array();
@@ -233,9 +268,12 @@ class CubeWp_Export {
                         case 'user-custom-fields':
 							$export_content['user_custom_fields'] = CWP()->get_custom_fields( 'user' );
 							break;   
-                            
+                        case 'custom-forms-fields':
+                            $export_content['custom_forms_fields'] = CWP()->get_custom_fields( 'custom_forms' );
+                            break;
                         case 'post-type-forms':
 							$export_content['post_type_forms'] = CWP()->get_form('post_type');
+                            $export_content['loop_builder_forms'] = CWP()->get_form( 'loop_builder' );
 							break;
 						case 'search-forms':
 							$export_content['search_forms'] = CWP()->get_form('search_fields');
@@ -300,10 +338,15 @@ class CubeWp_Export {
             '_'
         ), 'demo_data_' . current_time('M-d-Y H:s A'));
         $upload_dir = wp_upload_dir();
+        $upload_url = $upload_dir['url'];
+		if (strpos($upload_url, 'http://') === 0 && is_ssl()) {
+			$upload_url = 'https://' . substr($upload_url, 7);
+		}
         $names['setup_file']  = $upload_dir['path'] . '/cubewp/export/cwp-setup.json';
         $names['cwp_post_groups']  = $upload_dir['path'] . '/cubewp/export/cwp_post_groups.json';
         $names['cwp_user_groups']  = $upload_dir['path'] . '/cubewp/export/cwp_user_groups.json';
-        $names['zip_file']   = $upload_dir['url'] . '/cubewp/export/' . $file_name . '.zip';
+        $names['zip_file']   = $upload_url . '/cubewp/export/' . $file_name . '.zip';
+        $names['cwp_custom_forms'] = $upload_dir['path'] . '/cubewp/export/cwp_custom_forms.json';
         $names['file_name'] = $file_name;
         return $names;
     }
@@ -326,13 +369,14 @@ class CubeWp_Export {
             $zip->addFile($files['setup_file'],'cwp-setup.json');
             $zip->addFile($files['cwp_post_groups'],'cwp_post_groups.json');
             $zip->addFile($files['cwp_user_groups'],'cwp_user_groups.json');
-
+            $zip->addFile($files['cwp_custom_forms'],'cwp_custom_forms.json');
         // close and save archive
 
         $zip->close();
         unlink ($files['setup_file']);
         unlink ($files['cwp_post_groups']);
         unlink ($files['cwp_user_groups']);
+        unlink ($files['cwp_custom_forms']);
 
     }
     /**

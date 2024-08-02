@@ -16,8 +16,21 @@ jQuery(document).ready(function () {
 
     jQuery(document).on('click', '.cwp-save-settings, .cwp-reset-section, .cwp-reset-settings', function (O) {
         O.preventDefault();
-        var $this = jQuery(this), $form = $this.closest('form#cwp-options-form'), options = $form.serialize(),
-            activeTab = $form.find('.cubewp-setting-tab.active').attr('data-target-id');
+        var $this = jQuery(this),
+        $form = $this.closest('form#cwp-options-form'),
+        activeTab = $form.find('.cubewp-setting-tab.active').attr('data-target-id'),
+        options;
+
+        if( typeof tinymce != "undefined" ) {
+            $form.find(".wp-editor-area").each(function() {
+                var editor = jQuery(this),
+                    editor_id = editor.attr('id'),
+                    postContent = tinymce.get(editor_id).getContent();
+                editor.val( postContent );
+            });
+        }
+
+        options = $form.serialize();
         if (!$form.hasClass('processing')) {
             $this.addClass('processing');
             $form.addClass('processing');

@@ -198,7 +198,7 @@ input[type=date],input[type=datetime-local],input[type=datetime], input[type=ema
 .field-header .sub-field-order {
 	cursor: move;
 	float: left;
-	width: 3%;
+	width: 15%;
 }
 .field-header .field-label,
 .field-header .field-type {
@@ -425,4 +425,7 @@ td.move-option {
     font-size: 14px;
     font-weight: 500;
     margin: 0 12px 0 0;
+}
+.col-wrap p.submit {
+    margin-top: 2px;
 }

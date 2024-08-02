@@ -126,7 +126,7 @@ class CubeWp_Admin_Repeater_Field extends CubeWp_Admin {
 					$sub_field_options['custom_name_lat'] = 'cwp_meta[' . $field_options['name'] . '][' . $sub_field_options['name'] . '_lat' . '][]';
 					$sub_field_options['custom_name_lng'] = 'cwp_meta[' . $field_options['name'] . '][' . $sub_field_options['name'] . '_lng' . '][]';
 				}
-				if ($sub_field_options['type'] == 'radio' || $sub_field_options['type'] == 'checkbox' || ($sub_field_options['type'] == 'dropdown' && $sub_field_options['multiple'] == true)) {
+				if ($sub_field_options['type'] == 'radio' || $sub_field_options['type'] == 'checkbox' || ($sub_field_options['type'] == 'dropdown' && isset($sub_field_options['multiple']) &&  $sub_field_options['multiple'] == true)) {
 					$sub_field_options['custom_name'] = 'cwp_meta[' . $field_options['name'] . '][' . $sub_field_options['name'] . '][' . uniqid() . ']';
 				}
 				if ($sub_field_options['type'] == 'post' && ($sub_field_options['appearance'] == 'multi_select' || $sub_field_options['appearance'] == 'checkbox')) {

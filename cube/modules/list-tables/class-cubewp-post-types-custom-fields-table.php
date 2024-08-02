@@ -52,14 +52,14 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
     }
     
     public function usort_reorder( $a, $b ) {
-      // If no sort, default to title
-      $orderby = ( ! empty( $_GET['orderby'] ) ) ? sanitize_text_field($_GET['orderby']) : 'group_name';
-      // If no order, default to asc
-      $order = ( ! empty($_GET['order'] ) ) ? sanitize_text_field($_GET['order']) : 'asc';
-      // Determine sort order
-      $result = strcmp( $a[$orderby], $b[$orderby] );
-      // Send final sort direction to usort
-      return ( $order === 'asc' ) ? $result : -$result;
+        // If no sort, default to title
+        $orderby = ( ! empty( $_GET['orderby'] ) ) ? sanitize_text_field($_GET['orderby']) : 'group_name';
+        // If no order, default to asc
+        $order = ( ! empty($_GET['order'] ) ) ? sanitize_text_field($_GET['order']) : 'asc';
+        // Determine sort order
+        $result = strcmp( $a[$orderby], $b[$orderby] );
+        // Send final sort direction to usort
+        return ( $order === 'asc' ) ? $result : -$result;
     }
     
     /**
@@ -79,9 +79,9 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
             $actions['delete'] = sprintf( '<a href="%s">'. esc_html__('Delete', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','delete', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_delete_group' )));
         }
         if(!empty($group_status)){
-            $actions['activate'] = sprintf( '<a href="%s">'. esc_html__('activate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','activate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_status_group' )));
+            $actions['Activate'] = sprintf( '<a href="%s">'. esc_html__('Activate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','activate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_status_group' )));
         }else{
-            $actions['deactivate'] = sprintf( '<a href="%s">'. esc_html__('deactivate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','deactivate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_status_group' )));
+            $actions['Deactivate'] = sprintf( '<a href="%s">'. esc_html__('Deactivate', 'cubewp-framework') .'</a>', CubeWp_Submenu::_page_action('custom-fields','deactivate', '&groupid='.absint( $item['ID']), '&_wpnonce='.wp_create_nonce( 'cwp_status_group' )));
         }
         return $title . $this->row_actions( $actions );
     }
@@ -312,7 +312,7 @@ class CubeWp_Post_Types_Custom_Fields_Table extends WP_List_Table{
 
     public function get_group_by_ID($GroupID) {
         $groupType        = get_post_meta($GroupID, '_cwp_group_types');
-        $group['types']   = implode(",",$groupType);
+        $group['types']   = implode(",", array_unique($groupType));
         $groupTerms       = get_post_meta($GroupID, '_cwp_group_terms');
         
         $group_terms = $comma = '';

@@ -42,7 +42,8 @@ class CubeWp_Admin_Wysiwyg_Editor_Field extends CubeWp_Admin {
                 'class'        => $args['class'],
                 'name'         => !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
                 'value'        => $args['value'],
-                'placeholder'  => $args['placeholder']
+                'placeholder'  => $args['placeholder'],
+                'editor_media' => $args['editor_media'],
             );
             $output .= cwp_render_editor_input( $input_attrs );
         $output .= $this->cwp_field_wrap_end($args);

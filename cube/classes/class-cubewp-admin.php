@@ -14,7 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class CubeWp_Admin {
-    
+
+    use CubeWp_Builder_Ui;
+
     const CubeWp = 'CubeWp_';
     public function __construct() {
         
@@ -28,7 +30,17 @@ class CubeWp_Admin {
         
         // Admin functions
         include_once CWP_PLUGIN_PATH . 'cube/functions/admin-functions.php';
+
+        // Block Render
+        include_once CWP_PLUGIN_PATH . 'cube/functions/blocks-render.php';
+
         add_action( 'widgets_init', array( $this, 'CubeWp_register_widgets' ) );
+        
+        //CubeWP theme builder init
+        add_action( 'cubewp_loaded', array( 'CubeWp_Theme_Builder', 'init' ) );
+        add_action( 'cubewp_loaded', array( 'CubeWp_Theme_Builder_Rules', 'init' ) );
+
+        //Only admin related
         if (CWP()->is_request('admin')) {
             self::include_fields();
             
@@ -53,6 +65,10 @@ class CubeWp_Admin {
             if( !class_exists( 'CubeWp_Frontend_Load' ) ) {
                 add_action('cubewp_loaded', array('CubeWp_Builder_Pro', 'init'));
             }
+			
+			if( !class_exists( 'CubeWp_Forms_Custom' ) ) {
+                add_action('cubewp_loaded', array('CubeWp_Forms_Pro', 'init'));
+            }
 
             add_filter( 'post_updated_messages', array( $this, 'cubewp_updated_post_type_messages' ) );
 
@@ -63,11 +79,38 @@ class CubeWp_Admin {
             if (cubewp_check_if_elementor_active() && ! cubewp_check_if_elementor_active(true) && class_exists("CubeWp_Frontend_Load")) {
                 add_action('admin_init', array($this, 'cubewp_import_custom_single_page_to_frontend'), 10);
             }
-            
-        }
 
+            new CubeWp_Ajax( '',
+                self::class,
+                'cubewp_get_builder_widgets'
+            );
+        }
     }
 
+    /**
+     * Method cubewp_get_builder_widgets to Ajax callback function 
+     *
+     * @return json
+     * @since  1.1.10
+     */
+    public static function cubewp_get_builder_widgets() {
+
+        if ( ! wp_verify_nonce($_POST['security_nonce'], "cubewp-admin-nonce")) {
+			wp_send_json_error(array(
+				'msg' => esc_html__('Sorry! Security Verification Failed.', 'cubewp-framework'),
+			), 404);
+		}
+        
+        $widgets_ui = self::cubewp_builder_widgets_display($_POST['nested_switcher'],$_POST['form_type'],$_POST['slug']);
+		wp_send_json_success(array( 'sidebar' => $widgets_ui));
+	}
+
+    /**
+     * Method cubewp_import_custom_single_page_to_frontend to setup single page 
+     *
+     * @return void
+     * @since  1.0.0
+     */
     public function cubewp_import_custom_single_page_to_frontend() {
         global $cwpOptions;
         $import_to_frontend = false;
@@ -102,17 +145,10 @@ class CubeWp_Admin {
      */
     public function cubewp_admin_css() {
         echo '<style>
-            #toplevel_page_cube_wp_dashboard .wp-submenu li:nth-child(6) {
-                display: none;
-            }
-            #toplevel_page_cube_wp_dashboard .wp-submenu li:nth-child(7) {
-                display: none;
-            }
-            #toplevel_page_cube_wp_dashboard .wp-submenu li:nth-child(6).current,
-            #toplevel_page_cube_wp_dashboard .wp-submenu li:nth-child(7).current {
-                display: block;
-            }
-        </style>';
+        .wp-submenu li a[href="admin.php?page=cubewp-libraries"]{
+            display: none!important;
+        }
+		</style>';
         if( ! class_exists( 'CubeWp_Frontend_Load' ) ) {
             echo '<style>
                 .wp-submenu li a[href="admin.php?page=cubewp-user-registration-form"]::after,
@@ -158,6 +194,7 @@ class CubeWp_Admin {
         }
         $modules = array(
             'custom-fields' => 'modules/',
+            'theme-builder'  => 'modules/',
             'post-types' => 'modules/',
             'users'      => 'modules/',
             'search'     => 'modules/',
@@ -208,6 +245,7 @@ class CubeWp_Admin {
             'checkbox', 
             'radio', 
             'switch', 
+            'business-hours', 
             'google-address', 
             'date-picker', 
             'date-time-picker', 
@@ -235,7 +273,7 @@ class CubeWp_Admin {
      * @since  1.0.0
      */
     public static function register_elementor_tags($module) {
-        $tags = CubeWp_Custom_Fields_Markup::cwp_form_field_types();
+        $tags = CubeWp_Custom_Fields_Markup::cwp_form_field_types( 'elementor_dynamic_tags' );
         $module->register_group( 'cubewp-fields', [
         'title' => esc_html__( 'CubeWP Custom Fields', 'cubewp-framework' ),
         ] );
@@ -403,11 +441,15 @@ class CubeWp_Admin {
             'conditional_field'     =>    '',
             'conditional_operator'  =>    '',
             'conditional_value'     =>    '',
+            'current_user_posts'    =>    0,
             'char_limit'            =>    '',
             'multiple'              =>    0,
             'select2_ui'            =>    0,
+            'editor_media'          =>    0,
             'sub_fields'            =>    array(),
             'wrap'                  =>    true,
+            'files_save'            =>    'ids',
+            'files_save_separator'  =>    'array',
         );
         return wp_parse_args($args, $default);
 

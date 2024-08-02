@@ -41,7 +41,8 @@ class CubeWp_Frontend_Wysiwyg_Editor_Field extends CubeWp_Frontend {
                 'class'        =>    'form-control '. $args['class'].' '.$required,
                 'name'         =>    !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
                 'value'        =>    $args['value'],
-                'placeholder'  =>    $args['placeholder']
+                'placeholder'  =>    $args['placeholder'],
+                'editor_media' =>    $args['editor_media']
             );
             
             $output .= cwp_render_editor_input( $input_attrs );

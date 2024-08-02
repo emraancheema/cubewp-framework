@@ -39,6 +39,10 @@ class CubeWp_Admin_Dropdwon_Field extends CubeWp_Admin {
 	public function render_dropdwon_field($output = '', $args = array()) {
 		$args  = apply_filters('cubewp/admin/field/parametrs', $args);
 		$class = 'cwp-select';
+		if( (isset($args['multi']) && $args['multi'] == true) || (isset($args['multiple']) && $args['multiple'] == 1)) {
+			$args['not_formatted_value'] = $args['value'];
+			$args['value']               = cwp_handle_data_format( $args );
+		}
 		if (isset($args['select2_ui']) && $args['select2_ui'] == 1) {
 			wp_enqueue_style('select2');
 			wp_enqueue_script('select2');
@@ -212,7 +216,7 @@ class CubeWp_Admin_Dropdwon_Field extends CubeWp_Admin {
 		return $output;
 	}
 
-	private static function _extra_options($FieldData = array(),$key){
+	private static function _extra_options($FieldData = array(),$key = ''){
 		if(isset($FieldData['options']) && !empty($FieldData['options'])){
 			$options = json_decode($FieldData['options'], true);
 			unset($options['label']);
@@ -235,6 +239,5 @@ class CubeWp_Admin_Dropdwon_Field extends CubeWp_Admin {
 			return $output;
 		}
 	}
-
 }
 new CubeWp_Admin_Dropdwon_Field();

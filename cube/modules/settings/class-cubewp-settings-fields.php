@@ -24,7 +24,6 @@ class CubeWp_Settings_Fields {
         add_filter('cubewp/settings/posts/options', array($this, 'posts_options'), 10, 2);
         add_filter('cubewp/settings/terms/options', array($this, 'terms_options'), 10, 2);
         
-        add_filter('cubewp/settings/google_fonts', array($this, 'google_fonts'), 10, 1);
         add_filter('cubewp/settings/google_fonts/options', array($this, 'google_fonts_options'), 10, 1);
         add_filter('cubewp/settings/font_styles/options', array($this, 'font_styles_options'), 10, 2);
         add_filter('cubewp/settings/font_subsets/options', array($this, 'font_subsets_options'), 10, 2);
@@ -653,14 +652,16 @@ class CubeWp_Settings_Fields {
     }
     
     public function google_fonts(){
-        
-        $googlefonts = require CWP_PLUGIN_PATH . 'cube/functions/settings/googlefonts.php';
-        return $googlefonts;
-        
+		$file = CWP_PLUGIN_PATH . 'cube/functions/settings/googlefonts.php';
+		if ( file_exists( $file ) ) {
+			return (array) require $file;
+		}
+		
+		return array();
     }
     
     public function google_fonts_options(){
-        $google_fonts = apply_filters("cubewp/settings/google_fonts", '');
+        $google_fonts = apply_filters("cubewp/settings/google_fonts", self::google_fonts());
         
         $options = array();
         if(isset($google_fonts) && !empty($google_fonts)){
@@ -673,7 +674,7 @@ class CubeWp_Settings_Fields {
     }
     
     public function font_styles_options( $output = '', $font_family = '' ){
-        $google_fonts = apply_filters("cubewp/settings/google_fonts", '');
+        $google_fonts = apply_filters("cubewp/settings/google_fonts", array());
         
         $options = array();
         if(isset($google_fonts[$font_family]['variants']) && !empty($google_fonts[$font_family]['variants'])){
@@ -685,7 +686,7 @@ class CubeWp_Settings_Fields {
     }
     
     public function font_subsets_options( $output = '', $font_family = '' ){
-        $google_fonts = apply_filters("cubewp/settings/google_fonts", '');
+        $google_fonts = apply_filters("cubewp/settings/google_fonts", array());
         
         $options = array();
         if(isset($google_fonts[$font_family]['subsets']) && !empty($google_fonts[$font_family]['subsets'])){

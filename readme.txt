@@ -1,12 +1,11 @@
 === CubeWP - All-in-One Dynamic Content Framework ===
-Contributors: Emraan Cheema
+Contributors: cubewp1211, teamcubewp
 Donate link: NA
-Tags: custom fields, custom post types, custom taxonomies, acf, meta box, custom field, post type, taxonomy, meta, custom, field, file, image, post types, post, simple fields, text, textarea, type, advanced custom fields, custom post type, custom taxonomy, clone fields, forms, maps, relationship, repeatable fields, conditional fields, acf, fields, meta, postmeta, repeater, content types, pods, crocoblock, metabox, toolset, jetengine
+Tags: custom fields, custom post types, custom taxonomies, acf, metabox
 Requires at least: 5.0
-Requires PHP: 7.2
-Tested up to: 6.2
-Stable tag: 1.1.0
-Beta tag: 1.1.1-beta
+Requires PHP: 7.4
+Tested up to: 6.4.3
+Stable tag: 1.1.16
 License: GPLv2 or later
 
 CubeWP is an end-to-end dynamic content framework for WordPress to help you shrink time and cut cost of development up to 90%.
@@ -18,7 +17,6 @@ CubeWP is an end-to-end dynamic content framework for WordPress to help you shri
 The CubeWP Framework is the ultimate dynamic content solution for WordPress. Say goodbye to complex coding and bring your ideas to life in record time. Streamline your end-to-end WordPress project development and save time and money with the all-in-one CubeWP Framework. 
 
 **Discover both free and premium add-ons for the CubeWP Framework to enhance your site with more advanced features and functionality.**
-
 
 ## 10 Reasons to Choose CubeWP
 
@@ -235,30 +233,106 @@ CubeWP Custom Fields now supports the WordPress REST API, allowing you to view a
  
 ## ⭐ FREE EXTENSION ⭐
 
-[CubeWP Forms](https://wordpress.org/plugins/cubewp-forms/)
+[CubeWP Forms](https://wordpress.org/plugins/cubewp-forms)
  
 CubeWP Forms is a free extension for the CubeWP Framework that lets you easily build professional-looking contact forms, lead forms, feedback forms, and other types of forms for your website using a drag-and-drop form builder.
 
-In addition to serving as a simple contact or lead form, CubeWP Forms can also be used for more advanced purposes. 
+In addition to serving as a simple contact or lead form, CubeWP Forms can also be used for newsletter subscriptions as it's already integrated with MailChimp. 
 
+🎁 Bonus! Includes 10+ form templates with a dozen different styles to kickstart.
+
+
+[CubeWP Wallet](https://wordpress.org/plugins/cubewp-wallet)
+
+CubeWP Wallet is a feature-rich plugin designed primarily to integrate a wallet system into a WordPress themes or websites. Easily enable transactions to be added to a user’s wallet, provide withdrawal functionality, and even implement commission charges. 
+
+
+[CubeWP Social Login](https://cubewp.com/downloads/cubewp-addon-social-login)
+
+CubeWP Social Login is a powerful add-on for the CubeWP Framework that allows users to sign in and sign up using their Facebook and Google accounts. It also provides the option to connect existing accounts with these two popular social media platforms.
+
+
+[CubeWP Bulk Import](https://cubewp.com/downloads/cubewp-addon-bulk-import)
+
+CubeWP Bulk Import Plugin is a user-friendly tool that simplifies content import in WordPress. It seamlessly handles large-scale imports of posts, pages, custom post types, taxonomies, and media files.
+
+
+[CubeWP Post Claim](https://cubewp.com/downloads/cubewp-addon-post-claim)
+
+CubeWP Claim is a versatile plugin designed to add a post claim feature to your dynamic WordPress website. You can offer users the ability to claim ownership of posts, ensuring content integrity.
 
  
 ## ⭐ PREMIUM EXTENSIONS ⭐
 
+**Do you want admin access to try our premium extensions?**
 
-[CubeWP Frontend Pro](https://cubewp.com/cubewp-frontend-pro/)
+[Click-here to create an instant sandbox](https://demowp.io/get-demo.php?demo=CubeWP) - Powered by DemoWP.io
+
+
+[CubeWP Frontend Pro](https://cubewp.com/cubewp-frontend-pro)
  
-The ultimate frontend form and layout builder, you need to create more advanced web apps in a lot less time with WordPress.
+With CubeWP Frontend Pro, streamline your workflow by replacing multiple plugins and manual coding. This robust extension empowers you to create custom frontend forms, layouts, and dynamic content effortlessly.
+
+- Advanced Search Builder: Enhance your search capabilities by adding various custom fields.
+- Advanced Filter Builder: Expand filtering options with all available custom fields.
+- User Signup Form Builder: Craft tailored registration forms for different user roles.
+- User Profile Form Builder: Create personalized profile forms for diverse user roles.
+- Post Types Form Builder: Develop front-end submission forms for any post type.
+- Single-post Template Editor: Customize post details with a drag-and-drop layout builder.
+- User Dashboard Builder: Easily construct custom user dashboards based on roles.
+- Post Loop Generator: Gain full control over post grids for unique content presentation (HTML/CSS skills required).
  
 
-[CubeWP Payments](https://cubewp.com/cubewp-payments/)
+[CubeWP Payments](https://cubewp.com/cubewp-payments)
 
 Enable monetization via different revenue channels with WooCommerce once you have built your website.
 
 
-[CubeWP Inbox](https://cubewp.com/cubewp-inbox/)
+[CubeWP Inbox](https://cubewp.com/cubewp-inbox)
 
 The CubeWP Inbox Pro add-on lets vendors respond to messages from their website without having to leave the site.
+
+
+[CubeWP Reviews](https://cubewp.com/downloads/cubewp-addon-reviews)
+
+This extension enables users to share their thoughts, opinions, and experiences by posting reviews and multi-criteria ratings.
+
+
+[CubeWP Booster](https://cubewp.com/downloads/cubewp-addon-booster)
+
+The Ads Booster feature within CubeWP Booster allows users to run targeted ad campaigns to boost their posts on a Pay-per-Click (ppc) or Pay-per-Day (PPD) basis.
+
+
+[CubeWP Booking](https://cubewp.com/downloads/cubewp-addon-booking)
+
+CubeWP Booking is a 3-in-1 Booking plugin, providing all necessary booking features including free or paid booking needs or build more advanced marketplaces.
+
+
+
+## ⭐ PREMIUM THEMES ⭐
+
+To kickstart an advanced website or web-app you can get all access to our premium themes library.
+
+
+[Streetwise](https://cubewp.com/downloads/streetwise)
+ 
+Streetwise is a WordPress Real Estate theme developed with the CubeWP Framework. It draws inspiration from top real-world real-estate websites.
+
+
+[YellowBooks](https://cubewp.com/downloads/yellowbooks)
+ 
+YellowBooks is a WordPress directory theme developed with the CubeWP Framework. It draws inspiration from top real-world directory websites.
+
+
+[CLX](https://cubewp.com/downloads/clx)
+ 
+CLX is a WordPress Classified Ads theme developed with the CubeWP Framework. It draws inspiration from top real-world classified ads websites.
+
+
+[Dubified](https://cubewp.com/downloads/dubified)
+ 
+Dubified is a WordPress Classified Ads theme developed with the CubeWP Framework. It draws inspiration from top real-world classified ads websites.
+
 
 
 Here are a few guides to quickly get you started with CubeWP and creating your own WordPress custom fields:
@@ -301,6 +375,142 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+= 1.1.15 2024-04-24
+
+- Session_Start issue fixed.
+
+= 1.1.14 2024-04-18
+
+- Compatibility with PHP 8.3
+- Compatibility with Bookings new search
+- Fixed: Fatal error on the backend if repeating fields were added
+- Fixed: Conditional field issue with radio button type
+- Fixed: CubeWP Post Element order by not working
+- Fixed: Feature image/File/Image replace issue
+- Tweaks: Typography Changes in CubeWP Settings
+
+= 1.1.13 2024-03-05
+
+* New: Posts Per Page option for search.
+* New: New Form Templates button added
+* Fixed: Radio button conditional field on page load.
+* Fixed: Select2 dropdown gap in non logged in.
+* Fixed: Taxonomy elementor widget drop-down shows slug instead of labels
+* Tweaks: CubeWP Welcome dashboard sidebar content updated.
+* Tweaks: AppSumo and WP vender promotional banner removed.
+* Tweaks: CubeWP FrontendPro banner updated for non subscriber to try demo.
+
+= 1.1.12 2023-11-22
+
+* Fixed: License Re-activation after license renewal
+* Fixed: Default Wordpress Reset setup before Reset Email Template configuration
+* Fixed: Documentation URL's giving 404 because of updating documentation
+* Fixed: Singular post type name is showing on the edit post button on the frontend
+* Fixed: Filter by Role is not mandatory while creating custom fields
+* Fixed: Few Warnings and Notices
+* Tweaks: Few changes in newly launched use cases in Dashboard
+* Tweaks: Alerts and Typography changes in Import & Export section
+
+= 1.1.11 2023-10-26
+
+Compatibility with Newly Launched Use Cases
+
+* New: A template added for newly launched use cases in Dashboard
+* Fixed: Post field Appearance is not mandatory in Repeating field
+* Fixed: Validation message option removed from search form and search filter
+* Fixed: Few Warnings and Notices
+* Fixed: Problem with import export on local servers without HTTPS
+* Tweaks: Content Modification in Dashboard 
+* Tweaks: UI/UX Improvements
+
+= 1.1.10 2023-09-01
+
+* Fixed: Fields load via Ajax in All Form Builders.
+* Fixed: Character limit not working with number fields.
+* Fixed: Unable to add sub fields in Repeating field when Gutenberg is active.
+* Tweaks: Few warnings and notices.
+* Tweaks: Compatibility with PHP 8.2.
+
+= 1.1.9 2023-08-17
+* Added:  webp Image Format Support
+* Fixed:  Repeating field display issue
+* Fixed:  Warnings and notices
+* Fixed: Builder resizer issue if we add two fields in first 2 columns
+* Fixed: Notice if the plugins are not activated
+* Tweaks: Content Update in CubeWP dashboard
+
+= 1.1.8 2023-08-10
+* Update: Compatibility with Newly Launched Plugin CubeWP Bookings
+  https://cubewp.com/downloads/cubewp-addon-booking/
+
+= 1.1.7 2023-07-13
+
+* Fixed:  If New Post Submitted From Admin Dashboard Then New Post Emails Was Not Working
+* Fixed:  Hide Email Templets for subscriber roles
+* Fixed:  Google Address issue in Repeating Field
+* Fixed:  Notices and Warnings
+* Tweaks: UI/UX Improvements
+* Tweaks: Typography
+
+= 1.1.7-beta1 2023-07-03
+
+* Fixed: Issue With Select2 UI Option.
+
+= 1.1.6 2023-06-15
+
+* Added: New Cube for Excerpt in WordPress default fields
+* Added: An option to fetch currently logged in user's posts in dashboard under field type 'post'
+* Added: An option to limit number of images in field type 'gallery'
+* Added: An option to delete media of a post when post will be removed from the trash
+* Fixed: Character limit option was not working with fields type number
+* Fixed: Warnings and notices
+* Fixed: Value lost of repeating field's google address sub field while editing a post on admin
+* Fixed: Now you use - in post type slug and custom field names.
+
+= 1.1.5 2023-05-24
+
+* Added: option to change the save format of file, image, gallery, multi dropdown and checkbox.
+* Hook: cubewp/{$post_type}/single/template hook for single page template overwritten by CubeWP.
+* Hook: cubewp/{$post_type}/archive/template hook for archive page template overwritten by CubeWP.
+* Hook: cubewp/{$taxonomy}/archive/template hook for taxonomy page template overwritten by CubeWP.
+* Fixed: issue empty variable added in permalink if multi select dropdown added in search filters.
+* Fixed: issue with multi select dropdown search filters doesn't work with single value.
+* Fixed: notices and warnings.
+
+
+= 1.1.4 2023-05-10
+
+* New: Post types other than CubeWP Post types are now compatible with CubeWP search & filter builder (Including all other CubeWP builders).
+* Update: Compatibility added CubeWP Forms custom form in CubeWP import & export.
+* Fixed: Fixed custom taxonomies terms meta not importing.
+
+= 1.1.3 2023-05-05
+
+* New: Option to create taxonomies with WordPress default POST post type.
+* New: Comments support option for custom post types.
+* New: Light box ( PrettyPhotoJS ) on gallery and image custom fields.
+* Update: Styling to frontend fields description.
+* Fixed: Validation option not working while creating/editing custom field.
+* Fixed: Layout of file and image fields in CubeWP Settings.
+* Fixed: Links in CubeWP Dashboard.
+* Fixed: Container size issue on archive.
+* Fixed: Featured image size issue on CubeWP single page.
+* Fixed: Switch custom fields showing no if not selected while post submission.
+* Fixed: Validation of number field can save non numeric on admin with Gutenberg active.
+* Fixed: Frontend form fields flex from space-between to flex-start.
+* Fixed: Typo issues.
+* Fixed: Serval Notices and Warnings.
+UI/UX Tweaks.
+
+= 1.1.2 2023-04-29
+
+* New: Custom fields for CubeWP settings. Now admin can create CubeWP settings for website using customf fields.
+* New: Add media is optional now while creating WYSIWYG editor custom field.
+
+= 1.1.1 2023-04-24
+
+* Update: Major UI/UX Changes.
 
 = 1.1.0 2023-04-21
 

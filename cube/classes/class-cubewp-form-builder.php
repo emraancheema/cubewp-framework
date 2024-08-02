@@ -34,7 +34,7 @@ class CubeWp_Form_Builder {
                 if ( isset( $_POST['cwpform'] ) && ! empty( $_POST['cwpform'] ) ) {
                     
                     if ( $form_type == 'loop_builder' ) {
-                        $cwp_forms[ $form_relation ] = $_POST['cwpform'][ $form_relation ];
+                        $cwp_forms[ $form_relation ] = apply_filters( 'cubewp/loop/builder/save', array() , $_POST['cwpform'], $form_relation );
                     }else {
                         $cwp_forms[ $form_relation ] = CubeWp_Sanitize_Dynamic_Array( $_POST['cwpform'][ $form_relation ] );
                     }
@@ -88,6 +88,7 @@ class CubeWp_Form_Builder {
             'section_description' => '',
             'section_type'        => '',
             'section_class'       => '',
+            'content_switcher'    => '',
             'open_close_class'    => 'close',
             'form_relation'       => '',
             'form_type'           => '',
@@ -230,6 +231,7 @@ class CubeWp_Form_Builder {
                 if ( isset( $field ) && is_array( $field ) ) {
                     $field['form_relation'] = $section['form_relation'];
                     $field['form_type']     = $section['form_type'];
+                    $field['content_switcher']  = $section['content_switcher'];
                     $output .= $this->cwpform_form_field( $field );
                 }
             }
@@ -481,6 +483,19 @@ class CubeWp_Form_Builder {
             $output      .= cwp_render_dropdown_input( $input_attrs );
             $output      .= '</div>';
         }
+        if ( $field['name'] == 'the_title' ) {
+            $output      .= '<div class="cubewp-builder-group-widget-setting-field">
+                <label>' . esc_html__( "Character Limit", "cubewp-framework" ) . '</label>';
+            $input_attrs = array(
+                'class'       => 'group-field field-required',
+                'name'        => 'char_limit',
+                'type'        => 'number',
+                'value'       => isset( $field['char_limit'] ) && ! empty( $field['char_limit'] ) ? $field['char_limit'] : '',
+                'extra_attrs' => 'data-name="char_limit"',
+            );
+            $output      .= cwp_render_text_input( $input_attrs );
+            $output      .= '</div>';
+        }
         $input_attrs = array(
             'class'       => 'group-field field-size',
             'name'        => 'field_size',
@@ -521,20 +536,39 @@ class CubeWp_Form_Builder {
      */
     private function cwpform_required_field( array $field ) {
         $output = '';
-        if ( ( $field['form_type'] == 'post_type' && $field['type'] == 'taxonomy' && empty( $field['filter_taxonomy'] ) ) || ( $field['form_type'] == 'post_type' && $field['name'] == 'the_title' ) ) {
+        if (
+                ( $field['form_type'] == 'post_type' && $field['type'] == 'taxonomy' && empty( $field['filter_taxonomy'] ) ) ||
+                ( $field['form_type'] == 'post_type' && $field['name'] == 'the_title' ) ||
+                ( $field['form_type'] == 'user' && $field['name'] != 'user_login' && $field['name'] != 'user_email' )
+        ) {
+            $default_required = 1;
+            if ( $field['form_type'] == 'user' ) {
+                $default_required = 0;
+            }
             $output      .= '<div class="cubewp-builder-group-widget-setting-field">
                 <label>' . esc_html__( "Required", "cubewp-framework" ) . '</label>';
             $input_attrs = array(
                 'class'       => 'group-field field-required',
                 'name'        => 'required',
-                'value'       => isset( $field['required'] ) ? $field['required'] : '1',
+                'value'       => isset( $field['required'] ) ? $field['required'] : $default_required,
                 'options'     => array( '1' => __( "Required" ), '0' => __( "Not required" ) ),
                 'extra_attrs' => 'data-name="required"',
             );
             $output      .= cwp_render_dropdown_input( $input_attrs );
             $output      .= '</div>';
         }
-
+        if ($field['form_type'] == 'post_type' || $field['form_type'] == 'user') {
+            $output      .= '<div class="cubewp-builder-group-widget-setting-field">
+            <label>' . esc_html__( "Required Message", "cubewp-framework" ) . '</label>';
+            $input_attrs = array(
+            'class'       => 'group-field field-validation_msg',
+            'name'        => 'validation_msg',
+            'value'       => isset( $field['validation_msg'] ) ? $field['validation_msg'] : '',
+            'extra_attrs' => 'data-name="validation_msg"',
+            );
+            $output      .= cwp_render_text_input( $input_attrs );
+            $output      .= '</div>';
+        }
         return $output;
     }
 
@@ -591,6 +625,9 @@ class CubeWp_Form_Builder {
             $output .= self::cubewp_form_builders_settings( $form_fields, $form_type );
             if ( $form_type == 'search_fields' ) {
                 $output .= self::cubewp_search_form_builder_settings( $form_fields );
+            }
+            if ( $form_type == 'search_filters' ) {
+                $output .= self::cubewp_search_filters_builder_settings( $form_fields );
             }
             if ( $form_type != 'search_filters' && $form_type != 'search_fields' ) {
                 $form_fields['form_type'] = $form_type;
@@ -700,6 +737,21 @@ class CubeWp_Form_Builder {
             'extra_attrs' => 'data-name="search_result_page"',
         );
         $output             .= cwp_render_dropdown_input( $input_attrs );
+        $output             .= '</div>';
+
+        return $output;
+    }
+
+    public static function cubewp_search_filters_builder_settings( $form_fields ) {
+        $output             = '<div class="cwpform-setting-field">';
+        $output             .= '<label>' . esc_html__( "Enable Conditional Fields", "cubewp-framework" ) . '</label>';
+        $input_attrs = array(
+            'name'        => 'conditional_filters',
+            'class'       => 'form-field conditional_filters',
+            'value'       => isset( $form_fields['conditional_filters'] ) ? $form_fields['conditional_filters'] : '0',
+            'extra_attrs' => 'data-name="conditional_filters"',
+        );
+        $output             .= cwp_render_switch_input( $input_attrs );
         $output             .= '</div>';
 
         return $output;

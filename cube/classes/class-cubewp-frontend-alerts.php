@@ -50,7 +50,7 @@ class CubeWp_Frontend_Alerts{
         if ($user_id == $author_id) {
             $post_type = get_post_type($post_id);
 	        $submit_edit_page = isset($cwpOptions['submit_edit_page'][$post_type]) ? $cwpOptions['submit_edit_page'][$post_type] : '';
-	        $post_admin_approved  =  isset($cwpOptions['post_admin_approved']) ? $cwpOptions['post_admin_approved'] : '';
+	        $post_admin_approved  =  isset($cwpOptions['post_admin_approved'][ $post_type ]) ? $cwpOptions['post_admin_approved'][ $post_type ] : 'pending';
 	        $paid_submission      =  isset($cwpOptions['paid_submission']) ? $cwpOptions['paid_submission'] : '';
 	        $postStatus           =  get_post_status($post_id);
 	        $plan_id              =  get_post_meta($post_id, 'plan_id', true);
@@ -68,7 +68,7 @@ class CubeWp_Frontend_Alerts{
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"  viewBox="0 0 16 16">
                               <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                             </svg>
-                            <?php esc_html_e("Edit", "cubewp-framework"); echo " ".$post_type; ?>
+                            <?php echo sprintf(esc_html__('Edit this %s', 'cubewp-framework'), get_post_type_object( $post_type )->labels->singular_name) ?>
                         </button>
                     </a>
                 <?php } ?>
@@ -115,9 +115,9 @@ class CubeWp_Frontend_Alerts{
             }
         }
         if( $free_msg ){
-            return sprintf(__('Your %s is pending for review.', 'cubewp-framework'), get_post_type($post_id));
+            return sprintf(__('Your %s is pending for review.', 'cubewp-framework'), get_post_type_object( get_post_type($post_id) )->labels->singular_name);
         }else{
-            return sprintf(__('Your %s is pending! Please proceed to make it published', 'cubewp-framework'), get_post_type($post_id));
+            return sprintf(__('Your %s is pending! Please proceed to make it published', 'cubewp-framework'), get_post_type_object( get_post_type($post_id) )->labels->singular_name);
         }
         
     }

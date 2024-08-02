@@ -145,7 +145,10 @@ final class CubeWp_Elementor {
 	public function register_widgets($widgets_manager) {
 		$classes = array(
 			'Taxonomy_Widget',
-			'Posts_Widget'
+			'Posts_Widget',
+			'CubeWP_Form_Widget',
+			'Archive_Map_Widget',
+			'Archive_Posts_Widget'
 		);
 		$classes = apply_filters("cubewp/elementor/widgets/classes", $classes);
 		if (!empty($classes && is_array($classes))) {

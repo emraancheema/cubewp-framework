@@ -23,12 +23,14 @@ class CubeWp_Shortcode_Posts {
 		$args = array(
 			'post_type'      => $parameters['posttype'],
 			'posts_per_page' => $parameters['posts_per_page'],
-//			'orderby'        => $parameters['orderby'],
+			'orderby'        => $parameters['orderby'],
 			'order'          => $parameters['order'],
+			'meta_query'     => isset($parameters['meta_query']) ? $parameters['meta_query'] : array(),
 		);
-        $show_boosted_posts = '';
+
+		$show_boosted_posts = '';
         if (class_exists('CubeWp_Booster_Load')) {
-            $show_boosted_posts = $parameters['show_boosted_posts'];
+            $show_boosted_posts = $parameters['boosted_only'];
         }
 		if (isset($parameters['post__in']) && ! empty($parameters['post__in']) && is_array($parameters['post__in'])) {
 			$args['post__in'] = $parameters['post__in'];
@@ -42,6 +44,7 @@ class CubeWp_Shortcode_Posts {
 				}
 			}
 		}
+		
 		$column_per_row = $parameters['column_per_row'];
 		$col_class = 'cwp-col-12 cwp-col-md-6';
 		if ($column_per_row == '0') {
@@ -69,25 +72,30 @@ class CubeWp_Shortcode_Posts {
             $row_class = 'list-view';
 		}
 		$query = new CubeWp_Query($args);
+		
 		$posts = $query->cubewp_post_query();
 		ob_start();
 		if ($posts->have_posts()) {
 			?>
             <div class="cwp-row <?php esc_attr_e($row_class); ?>">
-				<?php
-				if($show_boosted_posts == 'yes'){
+			<?php
+			if($show_boosted_posts == 'yes'){
                 if(class_exists('CubeWp_Booster_Load')){
                     while ($posts->have_posts()): $posts->the_post();
+					$post_type = get_post_type( get_the_ID() );
+					$style = isset($parameters['card_style'][$post_type]) ? $parameters['card_style'][$post_type]: '';
 					if (function_exists('is_boosted')) {
 						if (is_boosted(get_the_ID())) {
-							echo CubeWp_frontend_grid_HTML(get_the_ID(), $col_class);
+							echo CubeWp_frontend_grid_HTML(get_the_ID(), $col_class, $style);
 						}
 					}
                     endwhile;
                 }
             }else{
                 while ($posts->have_posts()): $posts->the_post();
-                    echo CubeWp_frontend_grid_HTML(get_the_ID(), $col_class);
+					$post_type = get_post_type( get_the_ID() );
+					$style = isset($parameters['card_style'][$post_type]) ? $parameters['card_style'][$post_type]: '';
+                    echo CubeWp_frontend_grid_HTML(get_the_ID(), $col_class, $style);
 				endwhile;
             }
 				?>

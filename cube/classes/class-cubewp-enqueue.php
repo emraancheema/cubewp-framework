@@ -39,8 +39,8 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 	 */
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_scripts' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'load_admin_scripts' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'localize_admin_printed_scripts' ), 5 );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'load_admin_scripts' ), 10 );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'localize_admin_printed_scripts' ), 10 );
 		add_action( 'wp_print_scripts', array( __CLASS__, 'localize_printed_scripts' ), 5 );
 		add_action( 'wp_print_footer_scripts', array( __CLASS__, 'localize_printed_scripts' ), 5 );
 	}
@@ -157,9 +157,19 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'deps'    => array( 'jquery' ),
 				'version' => CUBEWP_VERSION,
 			),
+			'cwp-business-hours-fields'     => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/business-hour-field.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			),
 			'cwp-google-address-field' => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/google-address-field.js',
 				'deps'    => array( 'google_map_api' ),
+				'version' => CUBEWP_VERSION,
+			),
+			'cubewp-pretty-photo'         => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/lib/pretty-photo/js/jquery.prettyPhoto.js',
+				'deps'    => array( 'jquery' ),
 				'version' => CUBEWP_VERSION,
 			),
 		);
@@ -239,6 +249,13 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/css/cubewp-taxonomy-shortcode.css',
 				'deps'    => array(),
 				'version' => CUBEWP_VERSION,
+				'has_rtl' => false,
+			),
+			'cubewp-pretty-photo'  => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/lib/pretty-photo/css/prettyPhoto.css',
+				'deps'    => array(),
+				'version' => CUBEWP_VERSION,
+				'media'   => 'all',
 				'has_rtl' => false,
 			),
 		);

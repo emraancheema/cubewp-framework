@@ -59,12 +59,13 @@ class CubeWp_Post_Types {
      * @version 1.0
      */
     public static function CWP_cpt() {
-        $defaultCPT = array(
-            'cwp_form_fields'            => array(
-                'label'                  => 'cwp_form_fields',
+        $post_types = array('cwp_form_fields','cwp_user_fields','cwp_settings_fields');
+        foreach($post_types as $post_type){
+            $defaultCPT[$post_type]   = array(
+                'label'                  => $post_type,
                 'singular'               => 'field',
                 'icon'                   => '',
-                'slug'                   => 'cwp_form_fields',
+                'slug'                   => $post_type,
                 'description'            => '',
                 'supports'               => array('title', 'author', 'custom-fields'),
                 'hierarchical'           => false,
@@ -83,32 +84,8 @@ class CubeWp_Post_Types {
                 'rewrite_slug'           => '',
                 'rewrite_withfront'      => false,
                 'show_in_rest'           => true,
-            ),
-            'cwp_user_fields'            => array(
-                'label'                  => 'cwp_user_fields',
-                'singular'               => 'field',
-                'icon'                   => '',
-                'slug'                   => 'cwp_user_fields',
-                'description'            => '',
-                'supports'               => array('title', 'author', 'custom-fields'),
-                'hierarchical'           => false,
-                'public'                 => false,
-                'show_ui'                => false,
-                'menu_position'          => false,
-                'show_in_menu'           => false,
-                'show_in_nav_menus'      => false,
-                'show_in_admin_bar'      => false,
-                'can_export'             => true,
-                'has_archive'            => false,
-                'exclude_from_search'    => true,
-                'publicly_queryable'     => true,
-                'query_var'              => false,
-                'rewrite'                => false,
-                'rewrite_slug'           => '',
-                'rewrite_withfront'      => false,
-                'show_in_rest'           => true,
-            )
-        );
+            );
+        };
         $default_cpt = apply_filters('cubewp/posttypes/new', $defaultCPT);
         foreach ($default_cpt as $single_cpt) {
            
@@ -136,7 +113,7 @@ class CubeWp_Post_Types {
                 'hierarchical'           => cwp_boolean_value($single_cpt['hierarchical']),
                 'public'                 => cwp_boolean_value($single_cpt['public']),
                 'show_ui'                => cwp_boolean_value($single_cpt['show_ui']),
-                'show_in_menu'           => cwp_boolean_value($single_cpt['show_in_menu']),
+                'show_in_menu'           => is_numeric($single_cpt['show_in_menu']) ? cwp_boolean_value($single_cpt['show_in_menu']) : $single_cpt['show_in_menu'],
                 'menu_position'          => $single_cpt['menu_position'],
                 'show_in_nav_menus'      => cwp_boolean_value($single_cpt['show_in_nav_menus']),
                 'show_in_admin_bar'      => cwp_boolean_value($single_cpt['show_in_admin_bar']),
@@ -158,7 +135,7 @@ class CubeWp_Post_Types {
             'label'                     => _x( 'Inactive ', 'Inactive', 'cubewp-framework' ),
             'public'                    => true,
             'label_count'               => _n_noop( 'Inactive s <span class="count">(%s)</span>', 'Inactive s <span class="count">(%s)</span>', 'cubewp-framework' ),
-            'post_type'                 => array( 'cwp_form_fields','cwp_user_fields' ), 
+            'post_type'                 => array( 'cwp_form_fields','cwp_user_fields','cwp_settings_fields' ), 
             'show_in_admin_all_list'    => true,
             'show_in_admin_status_list' => true,
             'show_in_metabox_dropdown'  => true,
@@ -626,7 +603,7 @@ class CubeWp_Post_Types {
         <div id="side-sortables" class="meta-box-sortables ui-sortable">
         <div class="postbox">
             <div class="postbox-header">
-                <h2 class="hndle"><?php esc_html_e('Options for Edit Post', 'cubewp-framework'); ?></h2>
+                <h2 class="hndle"><?php esc_html_e('Options with this Post Type', 'cubewp-framework'); ?></h2>
             </div>
             <div class="inside">
                 <div class="main">
@@ -639,6 +616,7 @@ class CubeWp_Post_Types {
                         'thumbnail'       => esc_html__('Featured Image', 'cubewp-framework'),
                         'author'          => esc_html__('Author', 'cubewp-framework'),
                         'excerpt'         => esc_html__('Excerpt', 'cubewp-framework'),
+                        'comments'        => esc_html__('Comments', 'cubewp-framework'),
                     );
                     $html = '<tr>
                         <td class="text-left">

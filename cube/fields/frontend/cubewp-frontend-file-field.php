@@ -59,11 +59,13 @@ class CubeWp_Frontend_File_Field extends CubeWp_Frontend {
                 </span>
 				<p class="cwp-file-field-trigger"><?php esc_html_e("Choose File", "cubewp-framework"); ?></p>
 				<?php
-				$input_attrs = array(
-					'name'  => ! empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
-					'value' => '0',
-				);
-				echo cwp_render_hidden_input($input_attrs);
+				if ( ! isset( $args['value'] ) || empty( $args['value'] ) ) {
+					$input_attrs = array(
+						'name'  => ! empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
+						'value' => '0',
+					);
+					echo cwp_render_hidden_input($input_attrs);
+				}
 				$input_attrs = array(
 					'type'  => ! empty($args['type']) ? $args['type'] : 'file',
 					'id'    => $args['id'],
@@ -77,6 +79,8 @@ class CubeWp_Frontend_File_Field extends CubeWp_Frontend {
 			</div>
 			<?php
 			$default_file = CWP_PLUGIN_URI . 'cube/assets/frontend/images/default_file.png';
+			$args['not_formatted_value'] = $args['value'];
+			$args['value'] = cwp_get_attachment_id( $args['value'] );
 			if (isset($args['value']) && ! empty($args['value'])) { ?>
 				<div class="cwp-file-field-preview" data-default-file="<?php echo esc_url($default_file); ?>" style="display: block;">
 					<?php
@@ -97,6 +101,7 @@ class CubeWp_Frontend_File_Field extends CubeWp_Frontend {
 					<?php
 					$input_attrs = array(
 						'name'  => ! empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
+						'class'  => 'cwp-image-preview',
 						'value' => $args['value'],
 					);
 					echo cwp_render_hidden_input($input_attrs);

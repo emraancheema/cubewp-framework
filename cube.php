@@ -3,7 +3,7 @@
 * Plugin Name: CubeWP Framework
 * Plugin URI: https://cubewp.com/
 * Description: CubeWP is an end-to-end dynamic content framework for WordPress to help you save up to 90% of your coding time.
-* Version: 1.1.1-beta
+* Version: 1.1.16
 * Author: CubeWP
 * Author URI: https://cubewp.com
 * Text Domain: cubewp-framework

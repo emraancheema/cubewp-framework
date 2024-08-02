@@ -52,7 +52,7 @@ class CubeWp_Import {
             </div>
             <form id="import_form" method="post" action="" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="cwp_import_data">
-                <input type="hidden" name="cwp_import_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
+                <input type="hidden" name="cwp_import_nonce" value="<?php echo wp_create_nonce( 'cwp_import_data_nonce' ); ?>">
                 <div class="cubewp-import-box-container">
                     <div class="cubewp-import-box">
                         <div class="cubewp-import-card">
@@ -78,7 +78,7 @@ class CubeWp_Import {
                             <div class="cubewp-import-content">
                                 <div class="cubewp-import-content-dummy-warning">
                                     <span class="dashicons dashicons-warning"></span>
-                                    <p><?php esc_html_e('This will import dummy content (Post Types, Taxonomies, Terms, Custom Fields, Forms, Posts, etc.) for testing purpose only. No file upload required.', 'cubewp-framework'); ?></p>
+                                    <p><?php esc_html_e('This is a dummy importer tool for testing purposes, including Post Types, Taxonomies, and Custom Fields. No file upload is required.', 'cubewp-framework'); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -115,8 +115,11 @@ class CubeWp_Import {
      * @since  1.0.0
      */
     public function cwp_import_data_callback(){
-
-        if($_FILES["file"]["name"]) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			// User doesn't have the required capabilities
+			wp_send_json( array( 'success' => 'false', 'msg' => esc_html__( "You do not have permission to perform this action.", 'cubewp-framework' ) ) );
+		}
+        if ( isset( $_FILES["file"]["name"] ) && isset( $_POST['cwp_import_nonce'] ) && wp_verify_nonce( $_POST['cwp_import_nonce'], 'cwp_import_data_nonce' ) ) {
             $import_file = $_FILES;
             $filename = sanitize_file_name($import_file["file"]["name"]);
             $source = $import_file["file"]["tmp_name"];
@@ -193,7 +196,7 @@ class CubeWp_Import {
             
             wp_die();
         }else {
-            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__("The file you are trying to upload is not a .zip file. Please try again.", 'cubewp-framework')) );
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__("Please upload a zip file to import data.", 'cubewp-framework')) );
         }
     }
 
@@ -262,6 +265,7 @@ class CubeWp_Import {
         return array(
             '/cwp_user_groups.json',
             '/cwp_post_groups.json',
+            '/cwp_custom_forms.json',
         );
     }
    
@@ -302,6 +306,12 @@ class CubeWp_Import {
                     break;
                     case 'post_type_forms':
                         $this->cwp_import_post_type_forms( $import_data );
+                    break;
+                    case 'loop_builder_forms':
+                        $this->cwp_import_loop_builder_forms( $import_data );
+                    break;
+                    case 'custom_forms_fields':
+                        $this->cwp_import_custom_forms_fields( $import_data );
                     break;
                     case 'search_forms':
                         $this->cwp_import_search_forms( $import_data );
@@ -544,6 +554,52 @@ class CubeWp_Import {
                     }
                 }
                 CWP()->update_form('post_type', $cwp_post_type_forms);
+            }
+        }
+    }
+
+    /**
+     * Method cwp_import_loop_builder_forms
+     *
+     * @param array $import_data 
+     *
+     * @return void
+     * @since  1.0.0
+     */
+    public function cwp_import_loop_builder_forms( $import_data = array() ){
+        if(isset($import_data) && !empty($import_data)){
+            $cwp_loop_builder_forms = CWP()->get_form('loop_builder');
+            $cwp_loop_builder_forms = $cwp_loop_builder_forms == '' ? array() : $cwp_loop_builder_forms;
+            if(!empty($import_data) && count($import_data) > 0){
+                foreach($import_data as $post_type => $form_data){
+                    if(!isset($cwp_loop_builder_forms[$post_type])){
+                        $cwp_loop_builder_forms[$post_type] = $form_data;
+                    }
+                }
+                CWP()->update_form('loop_builder', $cwp_loop_builder_forms);
+            }
+        }
+    }
+
+    /**
+     * Method cwp_import_custom_forms_fields
+     *
+     * @param array $import_data
+     *
+     * @return void
+     * @since  1.1.4
+     */
+    public function cwp_import_custom_forms_fields( $import_data = array() ){
+        if(isset($import_data) && !empty($import_data)){
+            $cwp_custom_fields = CWP()->get_custom_fields('custom_forms');
+            $cwp_custom_fields = $cwp_custom_fields == '' ? array() : $cwp_custom_fields;
+            if(!empty($import_data) && count($import_data) > 0){
+                foreach($import_data as $field_slug => $field_options){
+                    if(!isset($cwp_custom_fields[$field_slug])){
+                        $cwp_custom_fields[$field_slug] = $field_options;
+                    }
+                }
+                CWP()->update_custom_fields('custom_forms', $cwp_custom_fields);
             }
         }
     }

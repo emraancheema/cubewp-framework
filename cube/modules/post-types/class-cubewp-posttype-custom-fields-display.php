@@ -58,6 +58,7 @@ class CubeWp_Posttype_Custom_Fields_Display extends CubeWp_Custom_Fields_Process
                     <a class="nav-tab nav-tab-active" href="?page=custom-fields"><?php esc_html_e("Post Types", 'cubewp-framework'); ?></a>
                     <a class="nav-tab" href="?page=taxonomy-custom-fields"><?php esc_html_e('Taxonomies', 'cubewp-framework'); ?></a>
                     <a class="nav-tab" href="?page=user-custom-fields"><?php esc_html_e('User Roles', 'cubewp-framework'); ?></a>
+                    <a class="nav-tab" href="?page=settings-custom-fields"><?php esc_html_e('Settings', 'cubewp-framework'); ?></a>
                 </nav>
             </div>
             <a href="<?php echo CubeWp_Submenu::_page_action('custom-fields', 'new'); ?>" class="page-title-action">+ <?php esc_html_e('Add New', 'cubewp-framework'); ?></a>

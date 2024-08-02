@@ -1,0 +1,1472 @@
+/* CubeWP Template Page */
+
+* {
+    box-sizing: border-box;
+}
+
+.cwp-welcome-title {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    margin-left: -20px;
+    box-shadow: 0px 3px 6px #00000029;
+}
+
+.cwp-welcome-title h2 {
+    text-align: left;
+    font: normal normal bold 20px/24px;
+    letter-spacing: 0px;
+    color: #32373C;
+    opacity: 1;
+    padding-left: 35px;
+    padding-top: 5px;
+}
+
+li {
+    list-style: none;
+    margin: 0;
+}
+
+.cwp-welcome-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cwp-img-width {
+    max-width: 100%;
+}
+
+.cwp-welcome-col-md-auto {
+    flex: 0 0 auto;
+    width: auto
+}
+
+.cwp-welcome-col-md-1 {
+    flex: 0 0 auto;
+    width: 8.33333333%
+}
+
+.cwp-welcome-col-md-2 {
+    flex: 0 0 auto;
+    width: 16.66666667%
+}
+
+.cwp-welcome-col-md-3 {
+    flex: 0 0 auto;
+    width: 25%
+}
+
+.cwp-welcome-col-md-4 {
+    flex: 0 0 auto;
+    width: 33.33333333%
+}
+
+.cwp-welcome-col-md-5 {
+    flex: 0 0 auto;
+    width: 41.66666667%
+}
+
+.cwp-welcome-col-md-6 {
+    flex: 0 0 auto;
+    margin: 10px 0;
+    width: 50%
+}
+
+.cwp-welcome-col-md-7 {
+    flex: 0 0 auto;
+    width: 58.33333333%
+}
+
+.cwp-welcome-col-md-8 {
+    flex: 0 0 auto;
+    width: 66.66666667%
+}
+
+.cwp-welcome-col-md-9 {
+    flex: 0 0 auto;
+    width: 75%
+}
+
+.cwp-welcome-col-md-10 {
+    flex: 0 0 auto;
+    width: 83.33333333%
+}
+
+.cwp-welcome-col-md-11 {
+    flex: 0 0 auto;
+    width: 91.66666667%
+}
+
+.cwp-welcome-col-md-12 {
+    flex: 0 0 auto;
+    width: 100%
+}
+
+.cwp-welcome-faqs {
+    padding: 0;
+    margin-bottom: 20px;
+    position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #00000029;
+    opacity: 1;
+    border-radius: 12px;
+}
+
+.cwp-welcome-section-heading {
+    letter-spacing: 0px;
+    color: #262626;
+    opacity: 1;
+    font-size: 13px;
+    line-height: 22px;
+    font-weight: 600;
+    margin: 0;
+    margin-left: 10px;
+}
+
+.cwp-welcome-faqs .cwp-faqs-top span,
+.cwp-welcome-faqs .cwp-faqs-top svg {
+    color: #000;
+}
+
+.cwp-welcome-faqs .cwp-faqs-top .cwp-welcome-header {
+    padding: 0 0 0 15px;
+}
+
+.cwp-welcome-faqs .cwp-faqs-top {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #E9EAEA;
+    padding: 24px 19px 22px 19px;
+}
+
+.cwp-nav-menu-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cwp-nav-menu-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cwp-nav-menu-list li {
+    padding: 24px 0 19px 0;
+}
+
+.cwp-nav-menu-list li a {
+    color: #000;
+    text-decoration: none;
+    font-size: 15px;
+    letter-spacing: 0.45px;
+    font-weight: 500;
+    padding: 22px 28px;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box .cwp-welcome-box-logo img {
+    max-width: 100%;
+}
+
+.cwp-dashboard-content-sidebar {
+    max-width: 530px;
+}
+
+.cwp-dashboard-content {
+    width: calc(100% - 530px);
+}
+
+.cwp-dashboard-content-panel {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cwp-dashboard-content-panel {
+    margin-top: 25px;
+}
+
+.cwp-dashboard-sidebar {
+    padding: 0 0 0 25px;
+}
+
+.cwp-dashboard-sidebar .Recommended_Extensions {
+    display: flex;
+    align-items: center;
+    margin: 0 0 8px 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.margin-right-10 {
+    margin-right: 10px;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.cwp-welcome-header-info {
+    display: flex;
+    align-items: center;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box {
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+    position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #00000029;
+    opacity: 1;
+    border-radius: 12px;
+    flex-direction: row-reverse;
+    gap: 20px;
+    align-items: center;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box-content {
+    width: 80%;
+}
+
+.cwp-welcome-section-all-faqs {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2271B1;
+    margin-bottom: 4px;
+    letter-spacing: 0;
+    line-height: 30px;
+    float: right;
+    position: absolute;
+    margin-top: 8px;
+    right: 18px;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box-content .cwp-learmore-addons a {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2271B1;
+    margin-bottom: 4px;
+    letter-spacing: 0;
+    line-height: 30px;
+    margin-top: 0;
+}
+
+.cubwp-welcome {
+    padding: 20px 26px 40px 16px;
+    max-width: 2000px;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box-content p {
+    font-size: 15px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #6c7780;
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 3px;
+    margin-bottom: 6px;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box-content h2 {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #32373C;
+    opacity: 1;
+    font-size: 17px;
+    line-height: 42px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 0;
+}
+
+
+/* new code  */
+
+.cwp-dashboard-content-panel .cwp-welcome-box .cwp-welcome-box-logo img {
+    border-radius: 10px;
+}
+
+.cwp-dashboard-content-panel .cwp-welcome-box .cwp-welcome-box-logo {
+    opacity: 1;
+    max-width: 132px;
+    height: auto;
+}
+
+.Faqs-section span.dashicons.dashicons-arrow-up-alt2 {
+    transform: rotate(180deg);
+    float: right;
+}
+
+.Faqs-section a.Section-Faqs.active span.dashicons.dashicons-arrow-up-alt2 {
+    transform: rotate(360deg);
+    transition: 0.5s;
+}
+
+.cwp-welcome-faqs .faqs-area a.Section-Faqs {
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+}
+
+.cwp-welcome-faqs .Faqs-section-content p {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #6C7780;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    margin: 6px 0px 0px 0px;
+    font-weight: 500;
+    line-height: 17px;
+}
+
+.cwp-welcome-faqs .Faqs-section {
+    position: relative;
+    padding: 15px 34px 15px 54px;
+}
+
+.border-bottom-welcome {
+    border-bottom: 1px solid #E9EAEA;
+}
+
+.cwp-welcome-faqs .cwp-Q-svg {
+    position: absolute;
+    margin-left: -30px;
+}
+
+.cwp-welcome-faqs .cwp-faq-footer {
+    padding: 17px 30px;
+    text-align: end;
+}
+
+.cwp-welcome-faqs .cwp-faq-footer a {
+    letter-spacing: 0px;
+    color: #0979B0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    opacity: 1;
+    font-weight: bold;
+}
+
+.read-more a:hover,
+.cwp-cutom-post-info-row .right-info a:hover,
+.all-documentations a:hover {
+    color: #03618f;
+}
+
+.cwp-welcome-faqs .cwp-faq-footer a span.dashicons {
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+.cwp-cutom-post-info-row {
+    padding: 0 22px 2px 22px;
+    align-items: center;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+}
+
+.cwp-cutom-post-info-row .left-info p {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.7;
+}
+
+.cwp-links-footer {
+    padding: 15px;
+    text-align: end;
+}
+
+.all-documentations a {
+    letter-spacing: 0px;
+    color: #0878B0;
+    opacity: 1;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+}
+
+.all-documentations a span {
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+.cwp-welcome-faqs .texonomy-description p {
+    font-size: 14px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #6C7780;
+    margin: 20px 0 19px 0;
+}
+
+.Close-texonomy.section span.dashicons.dashicons-no {
+    color: #6C7780;
+}
+
+.cwp-welcome-faqs .texonomy-description {
+    padding: 0 30px 30px 30px;
+}
+
+.cwp-welcome-faqs .texonomy-description h3 {
+    margin: 0;
+}
+
+.cwp-welcome-faqs .texonomy-description {
+    padding: 18px 30px 30px 30px;
+    position: relative;
+}
+
+.cwp-welcome-faqs .texonomy-description h3 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #000000CC;
+}
+
+.Close-texonomy.section {
+    position: absolute;
+    right: 22px;
+    cursor: pointer;
+    z-index: 999999;
+}
+
+.cwp-post-grid-contentarea .cwp-shordcodes .cwp-set-title-copyarea h3 {
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+}
+
+.cwp-post-grid-contentarea .cwp-shordcodes .cwp-set-title-copyarea {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.cwp-post-grid-contentarea .shoftcode-area {
+    background-color: #E0F2C8;
+    border: 1px solid #90C154;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #1A2432;
+    padding: 5px 12px;
+}
+
+.shoftcode-area .cwpform-shortcode .inner.copy-to-clipboard {
+    user-select: all;
+    cursor: pointer;
+    position: relative;
+    max-width: 113px;
+    overflow: hidden;
+    height: 18px;
+    width: 140px;
+}
+
+.shoftcode-area .cwpform-shortcode .inner.copy-to-clipboard p {
+    float: right;
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    width: 92%;
+    background: #e0f2c8;
+}
+
+.cwp-post-grid-contentarea .shoftcode-area svg {
+    padding-right: 2px;
+    display: inline-block;
+    margin: 0 5px -3px 0;
+}
+
+.padding-bottom-18 {
+    padding-bottom: 18px !important;
+}
+
+.padding-bottom-25 {
+    padding-bottom: 25px !important;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0px;
+}
+
+.cwp-post-grid-contentarea .cwp-shordcodes {
+    padding: 6px 24px;
+}
+
+.cwp-post-grid-contentarea .cwp-shordcodes:last-child {
+    padding-bottom: 19px;
+}
+
+.cwp-dashboard-sidebar .Recommended_Extensions h2 {
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 700;
+}
+
+.cwp-dashboard-sidebar .Recommended_Extensions .diamond svg {
+    width: 26px;
+    height: 23px;
+}
+
+.cwp-sidebar-black-friday {
+    background: #000000;
+    padding: 34px 0 12px 0;
+    margin: 28px 0px;
+    text-align: center;
+}
+
+.cwp-sidebar-black-friday-footer-section {
+    border-top: 2px #D05C5C dashed;
+    margin-top: 20px;
+}
+
+.cwp-sidebar-black-friday-footer-section p {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+ul.black-friday-counter li.black-friday-counter-number {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+ul.black-friday-counter {
+    display: flex;
+    justify-content: center;
+}
+
+ul.black-friday-counter li.black-friday-counter-number span.Hours-counter,
+ul.black-friday-counter li.black-friday-counter-number span.Minutes-counter,
+ul.black-friday-counter li.black-friday-counter-number span.Seconds-counter,
+ul.black-friday-counter li.black-friday-counter-number span.Days-counter {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #D05C5C;
+    opacity: 1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 24px;
+    margin: 5px 28px;
+    font-weight: 600;
+}
+
+li.black-friday-counter-number:nth-child(1)::after {
+    display: none;
+}
+
+li.black-friday-counter-number::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 7px;
+    width: 1px;
+    background: #7696ae91;
+}
+
+ul.black-friday-counter li.black-friday-counter-number span.days-title,
+ul.black-friday-counter li.black-friday-counter-number span.Hours-title,
+ul.black-friday-counter li.black-friday-counter-number span.Minutes-title,
+ul.black-friday-counter li.black-friday-counter-number span.Seconds-title {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+}
+
+.cwp-sidebar-black-friday-content-section h2.heading {
+    font-size: 32px;
+    margin: 0;
+    text-align: center;
+    letter-spacing: 0px;
+    color: #F7DB00;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.cwp-sidebar-black-friday-content-section img {
+    width: 92%;
+    margin: 8px 0;
+}
+
+.cwp-sidebar-ads {
+    margin-top: 28px;
+}
+
+.cwp-dashboard-sidebar .cwp-sidebar-ads img {
+    max-width: 100%;
+}
+
+.cwp-sidebar-black-friday-content-section h2.heading-flat-off {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #D05C5C;
+    opacity: 1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 30px;
+    margin: 5px 0;
+}
+
+.cwp-sidebar-black-friday-content-section h3.heading-lifetime {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    font-size: 22px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 20px 0 4px 0;
+}
+
+@media (max-width:1200px) {
+    .cwp-welcome-col-md-6,
+    .cwp-welcome-col-md-3,
+    .cwp-welcome-col-md-4 {
+        width: 100%;
+    }
+    .cwp-welcome-faqs {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .cwp-dashboard-sidebar .Recommended_Extensions h2 {
+        font-size: 12px;
+        margin: 0 0 4px 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+}
+
+@media (max-width:890px) {
+    .cwp-dashboard-content {
+        width: 100%;
+    }
+    .cwp-dashboard-content-sidebar {
+        width: 100%;
+    }
+    .cwp-dashboard-sidebar {
+        padding: 0;
+        margin-top: 20px;
+    }
+    .cwp-dashboard-sidebar .Recommended_Extensions h2 {
+        font-size: 22px;
+        margin: 0 0 4px 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+}
+
+.cwp-welcome-why-cube .cwp-cutom-post-info-row {
+    padding: 9px 15px;
+    justify-content: flex-start;
+}
+
+.cwp-welcome-why-cube .left-info span {
+    font-size: 30px;
+    display: block;
+    color: #61B706;
+    margin-bottom: 10px;
+}
+
+.cwp-welcome-why-cube .cwp-cutom-post-info .left-info {
+    margin-right: 14px;
+}
+
+.cwp-welcome-why-cube .cwp-cutom-post-info .right-info {
+    text-align: left;
+}
+
+.cwp-welcome-why-cube .cwp-cutom-post-info .right-info p {
+    margin: 0;
+    line-height: 1.6;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 0px;
+    color: #333;
+    opacity: 1;
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+}
+
+.cwp-welcome-addons-outer {
+    position: relative;
+}
+
+.cwp-dashboard-data-structure-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E9EAEA;
+    padding: 0;
+    margin-bottom: 20px;
+    width: 68%;
+    padding-bottom: 20px;
+}
+
+.cwp-welcome-addons-outer img.cwp-coming-soon {
+    position: absolute;
+    top: -7px;
+    left: -2px;
+    height: 70px;
+}
+
+.cwp-dashboard-data-structure-header .cwp-dashboard-data-structure-svg {
+    width: 49px;
+    height: 49px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+}
+
+.cwp-dashboard-data-structure-header-details h3 {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 0 0 5px 0;
+}
+
+.cwp-dashboard-data-structure-header-details p {
+    margin: 0 0;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #333333;
+    margin-bottom: 4px;
+    letter-spacing: 0;
+    line-height: 21px;
+    margin-top: 0;
+}
+
+.cwp-dashboard-data-structure-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 38px 0;
+}
+
+.cwp-dashboard-data-customs-links {
+    max-width: 188px;
+    min-height: 140px;
+    display: flex;
+    transition: 0.3s ease-in-out;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 0 10px 20px 10px;
+    max-height: 160px;
+    justify-content: center;
+    min-width: 180px;
+}
+
+.cwp-dashboard-data-customs-links p {
+    font-size: 13px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #000;
+    letter-spacing: 0;
+    line-height: 21px;
+    margin: 14px auto;
+    margin-top: 7px !important;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings p b {
+    font-size: 9px;
+    line-height: 0;
+}
+
+.cwp-dashboard-data-customs-links span {
+    color: #000;
+    transition: 0.3s ease-in-out;
+}
+
+.cwp-dashboard-data-customs-links:hover {
+    background: #E9E5FF 0% 0% no-repeat padding-box;
+    border: 1px solid #6852EB;
+}
+
+.cwp-dashboard-data-customs-links:hover span {
+    color: #6852EB;
+}
+
+.cwp-dashboard-data-structure-inner-content {
+    background: #F9F8FF 0% 0% no-repeat padding-box;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 10px;
+    padding: 13px 9px 5px 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    height: max-content;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links .custom-cube-icons.inner {
+    width: 29px;
+    height: 29px;
+    border-radius: 7px;
+    padding: 6px;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links p {
+    font-size: 9px;
+    line-height: 16px;
+    margin: 3px auto;
+}
+
+.custom-cube-icons img {
+    max-width: 100%;
+}
+
+.custom-cube-icons svg {
+    fill: #9891AF;
+}
+
+.custom-cube-icons {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 43px;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid #00000029;
+    border-radius: 10px;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links span {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links {
+    margin: 0 7px 8px 4px;
+    max-width: 163px;
+    min-height: 112px;
+    max-height: 143px;
+    padding: 17px 22px 8px 22px;
+    min-width: 124px;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: unset;
+    min-width: 113px;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings svg {
+    color: #38688f;
+    border: 1px solid #DDDDDD;
+    opacity: 1;
+    padding: 6px;
+    width: 33px;
+    height: 35px;
+    border-radius: 7px;
+    background: #fff;
+}
+
+.cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings p {
+    font-size: 13px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #000;
+    letter-spacing: 0;
+    line-height: 17px;
+    margin: 14px auto;
+}
+
+@media (max-width:1612px) {
+    .cwp-dashboard-data-customs-links p {
+        font-size: 11px;
+        margin: 8px auto;
+    }
+    .custom-cube-icons {
+        width: 38px;
+        height: 40px;
+    }
+    .custom-cube-icons {
+        width: 31px;
+        height: 34px;
+        border-radius: 8px;
+        padding: 6px;
+    }
+    .cwp-dashboard-data-customs-links {
+        max-width: 150px;
+        min-height: 146px;
+        padding: 14px;
+        max-height: 146px;
+        min-width: 150px;
+    }
+}
+
+@media (max-width:1470px) {
+    .cwp-dashboard-content-panel .cwp-welcome-box-content p {
+        line-height: 24px;
+        font-size: 14px;
+    }
+    .cwp-dashboard-content-panel .cwp-welcome-box-content h2 {
+        font-size: 16px;
+        line-height: 22px;
+    }
+    .cwp-dashboard-sidebar .Recommended_Extensions h2 {
+        font-size: 16px;
+        margin: 0 0 4px 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+    .cwp-welcome-col-md-6 {
+        width: 100%;
+    }
+    .cwp-welcome-col-md-6 .cwp-welcome-faqs.cwp-welcome-why-cube.margin-right-10,
+    .cwp-welcome-col-md-6 .cwp-welcome-faqs.margin-right-10 {
+        margin-right: 0;
+    }
+    .cwp-welcome-col-md-6 .cwp-welcome-faqs.cwp-welcome-why-cube.margin-left-10,
+    .cwp-welcome-col-md-6 .cwp-welcome-faqs.margin-left-10 {
+        margin-left: 0;
+    }
+    .cwp-dashboard-sidebar .Recommended_Extensions .diamond svg {
+        width: 18px;
+        height: 18px;
+    }
+    .cwp-welcome-section-heading {
+        font-size: 14px;
+    }
+    .cwp-cutom-post-info-row .left-info p,
+    .cwp-welcome-faqs .faqs-area a.Section-Faqs {
+        font-size: 12px;
+    }
+    .cwp-dashboard-top-panel-right .list-menu a {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        font-weight: 500;
+        color: #0878B0;
+        text-decoration: none;
+        margin: 0 13px;
+    }
+    .cwp-welcome-faqs .texonomy-description p {
+        font-size: 12px;
+    }
+    .cwp-post-grid-contentarea .shoftcode-area {
+        background-color: #E0F2C8;
+        border: 1px solid #90C154;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #1A2432;
+        padding: 4px 5px;
+    }
+    .cwp-post-grid-contentarea .cwp-shordcodes {
+        padding: 2px 13px;
+    }
+    .first-data-structure .cwp-dashboard-data-customs-links {
+        min-height: 100px;
+        padding: 15px;
+        margin-right: 4px;
+        min-width: 110px;
+    }
+    .cwp-dashboard-data-customs-links {
+        max-width: 134px;
+        min-height: 123px;
+        padding: 14px;
+        max-height: 130px;
+        min-width: 136px;
+    }
+    .custom-cube-icons {
+        width: 27px;
+        height: 29px;
+        padding: 6px;
+    }
+    .cwp-dashboard-data-customs-links p {
+        font-size: 9px;
+        margin: 6px auto;
+    }
+    .cwp-dashboard-data-structure-inner-content {
+        padding: 9px 8px 5px 10px;
+    }
+    .cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings {
+        min-width: 92px;
+    }
+    .cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings p {
+        font-size: 9px;
+    }
+    .cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links.headings p b {
+        font-size: 8px;
+    }
+    .cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links {
+        margin: 0 7px 8px 4px;
+        max-width: 163px;
+        min-height: 94px;
+        max-height: 143px;
+        padding: 3px 11px 1px 8px;
+        min-width: 108px;
+    }
+    .cwp-dashboard-data-structure-inner-content .cwp-dashboard-data-customs-links .custom-cube-icons.inner {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        padding: 5px;
+    }
+}
+
+
+/* new content box  */
+
+.cwp-welcome-sidebar-box {
+    padding: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #00000029;
+    opacity: 1;
+    border-radius: 12px;
+}
+
+.cwp-welcome-sidebar-box .cwp-welcome-alert-box {
+    background: #eeee;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.cwp-welcome-sidebar-box .cwp-welcome-alert-box svg {
+    color: #FF9800;
+    margin-right: 8px;
+}
+
+.cwp-welcome-sidebar-box .cwp-welcome-alert-box h5 {
+    display: inline-block;
+    text-align: left;
+    letter-spacing: 0px;
+    color: #32373C;
+    opacity: 1;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 0;
+}
+
+.cwp-welcome-sidebar-box .cwp-welcome-box-content {
+    max-width: 62%;
+    width: auto;
+    display: inline-block;
+}
+
+.cwp-welcome-sidebar-box .cwp-welcome-box-logo {
+    max-width: 38%;
+    width: auto;
+    display: inline-block;
+    float: right;
+}
+
+.cwp-welcome-sidebar-box .cwp-welcome-box-logo img {
+    max-width: 100%;
+}
+
+.cwp-welcome-sidebar-box .cwp-learmore-addons {
+    margin-top: 12px;
+}
+
+.cwp-dashboard-data-structure-header-details h3 {
+    letter-spacing: 0px;
+    color: #000000;
+    font: normal normal bold 18px/22px;
+    margin-bottom: 12px;
+}
+
+.cwp-dashboard-data-structure-header-details p {
+    font: normal normal normal 16px/21px;
+    color: #333333;
+}
+
+.cwp-dashboard-data-structure-header-details p a {
+    font: normal normal normal 16px/21px;
+    color: #0058FF;
+    cursor: pointer;
+}
+
+.cwp-dashboard-data-structure-pages.yellowBooks {
+    background: #FFF7CE;
+}
+
+.cwp-dashboard-data-structure-pages.dubified {
+    background: #ffeaeb;
+}
+
+.cwp-dashboard-data-structure-pages.clx {
+    background: #ede3ff;
+}
+
+.cwp-dashboard-data-structure-pages.streetWise {
+    background: #D9ECFF;
+}
+
+.cwp-dashboard-data-structure-pages-details-data {
+    width: calc(100% - 45%);
+	max-height: 305px;
+}
+
+.cwp-dashboard-data-structure-pages.classifiedPro {
+    background: #FFEDF1;
+}
+
+.cwp-dashboard-data-structure-pages {
+    padding: 25px 31px 25px 35px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.cwp-dashboard-data-structure-pages-image {
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    max-width: calc(100% - 70%);
+}
+
+.cwp-dashboard-data-structure-pages-image img {
+    width: 100%;
+}
+
+.cwp-dashboard-data-structure-pages-details {
+    width: 100%
+}
+
+.cwp-dashboard-data-structure-pages-details h2.title {
+    color: #000000;
+    margin: 0 0 12px 0;
+    font: normal normal normal 30px/37px HelveticaNeue-Medium;
+    font-weight: 600;
+}
+
+.cwp-dashboard-data-structure-pages-details p.description {
+    color: #000000;
+    font-size: 14px;
+    margin: 0 0 5px 0;
+    font-weight: 500;
+}
+
+.cwp-dashboard-data-structure-pages-details span.featured-text {
+    color: #9CA4B2;
+    font-size: 10px;
+}
+
+.cwp-dashboard-data-structure-pages-details .features {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.cwp-dashboard-data-structure-pages-details .features ul {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px 0;
+}
+
+.cwp-dashboard-data-structure-pages-details .download-btn .higlighted {
+    background: #5E17EB;
+    display: flex;
+    align-items: center;
+    padding: 5px 18px;
+    border-color: #000000;
+    border-width: 1px;
+    border-style: dashed;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    color: #ffffff;
+    line-height: 12px;
+}
+
+.cwp-dashboard-data-structure-pages-details .features ul li {
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 0 4px;
+    font-weight: 500;
+}
+
+.cubewp-library-small-headings {
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: left;
+    letter-spacing: 0px;
+    color: #484848;
+    display: flex;
+    opacity: 1;
+}
+
+.data-envato-logo {
+    max-width: 62px;
+    line-height: 16px;
+}
+
+.cwp-dashboard-data-structure-pages-details .features ul li span {
+    border: 1px solid #000000;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 12px;
+    height: 12px;
+    font-size: 13px;
+}
+
+.cwp-dashboard-data-structure-pages-details .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 0 17px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.cwp-dashboard-data-structure-pages-details .download-btn p {
+    color: #868686;
+    font-size: 12px;
+    margin: 0 0 12px 0;
+}
+
+.cwp-dashboard-data-structure-pages-details .download-btn a:hover {
+    box-shadow: 1px 1px 5px 1px #2271b13d;
+    transition: 0.3s;
+}
+
+.cwp-dashboard-data-structure-pages-details .download-btn a {
+    border: 1px solid #2271B1;
+    border-radius: 18px;
+    background: transparent;
+    padding: 6px 17px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    color: #2271b1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cwp-dashboard-data-structure-pages-details .download-btn a span {
+    font-size: 15px;
+    width: auto;
+    height: auto;
+}
+
+
+/* css for sidebar  */
+
+
+/* right sidebar extension and theme  */
+
+.cwp-leads-template-addons {
+    display: flex;
+    flex-direction: column;
+}
+
+.cwp-leads-template-addons-titles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.cwp-leads-template-addons-titles h3 {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-size: 17px;
+    line-height: 19px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.cwp-leads-template-addons-titles h3 span {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #000000;
+    background: #F9F8FF 0% 0% no-repeat padding-box;
+    border: 0.5px solid #F5F5F5;
+    border-radius: 9px;
+    opacity: 1;
+    font-size: 10px;
+    line-height: 12px;
+    font-weight: 400;
+    padding: 2px 6px;
+}
+
+.cwp-leads-template-addons-cotent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 4px 0 8px 0;
+}
+
+.cwp-leads-template-addons-cotent .cwp-lead-content-imges.four {
+    max-width: calc(100% / 4 - 10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    letter-spacing: 0px;
+    color: #32373C;
+    opacity: 1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.cwp-leads-template-addons-cotent .cwp-lead-content-imges.three {
+    max-width: calc(100% / 3 - 10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 7px;
+    letter-spacing: 0px;
+    color: #32373C;
+    opacity: 1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.cwp-leads-template-addons-cotent .cwp-lead-content-imges.two {
+    font-size: 15px;
+    max-width: calc(100% / 2 - 10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 5px;
+    letter-spacing: 0px;
+}
+
+img {
+    max-width: 100%;
+}
+
+.cwp-leads-template-addons-titles a {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #2271B1;
+    opacity: 1;
+    font-size: 16px;
+}
+
+.cwp-welcome-box.cwp-leads-template-addons {
+    flex-direction: column;
+    justify-content: start;
+    align-items: baseline;
+}
+
+@media (max-width:1390px) {
+    .cwp-templates-grids-buttons-form {
+        padding: 2px 8px;
+    }
+    .cwp-leads-templates-main-grids-buttons a {
+        padding: 6px 10px;
+    }
+    .cwp-leads-template-addons-cotent .cwp-lead-content-imges.four {
+        max-width: calc(100% / 3 - 10px);
+    }
+    .cwp-leads-templates-main-grids {
+        width: calc(100% / 2 - 60px);
+    }
+    .cwp-dashboard-data-structure-pages {
+        flex-direction: column !important;
+    }
+    .cwp-dashboard-data-structure-pages-details .download-btn {
+        flex-direction: column;
+        justify-content: start;
+        align-items: baseline;
+    }
+}
+
+@media (max-width:1240px) {
+    .cwp-leads-templates-content .cwp-leads-templates-sidebar,
+    .cwp-leads-templates-main {
+        max-width: 100%;
+        padding: 0;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .cwp-leads-templates-content {
+        flex-direction: column;
+    }
+    .cwp-dashboard-content {
+        width: 100%;
+    }
+    .cwp-dashboard-content-sidebar {
+        margin-top: 22px;
+    }
+    .cwp-dashboard-sidebar {
+        padding: 0;
+    }
+}
+
+@media (max-width:780px) {
+    .cwp-dashboard-data-structure-pages-details-data {
+        width: 100%;
+    }
+    .cwp-dashboard-data-structure-pages-image {
+        display: none;
+    }
+}

@@ -65,8 +65,8 @@ class CubeWp_Saved{
             wp_send_json(
                 array(
                     'type'        =>  'success',
-                    'msg'         =>  sprintf(__('Success! Your %s has been saved.', 'cubewp-framework'), get_post_type($post_id)),
-                    'text'        =>  sprintf(__('Saved', 'cubewp-framework'), get_post_type($post_id)),
+                    'msg'         =>  sprintf(__('Success! Your %s has been saved.', 'cubewp-framework'), get_post_type_object( get_post_type($post_id) )->labels->singular_name),
+                    'text'        =>  sprintf(__('Saved', 'cubewp-framework'),get_post_type($post_id)),
                 )
             );
         }
@@ -111,7 +111,7 @@ class CubeWp_Saved{
             wp_send_json(
                 array(
                     'type'        =>  'success',
-                    'msg'         =>  sprintf(__('Success! Your %s has been removed from saved posts.', 'cubewp-framework'), get_post_type($post_id)),
+                    'msg'         =>  sprintf(__('Success! Your %s has been removed from saved posts.', 'cubewp-framework'), get_post_type_object( get_post_type($post_id) )->labels->singular_name),
                     'text'        =>  sprintf(__('Save', 'cubewp-framework'), get_post_type($post_id)),
                 )
             );

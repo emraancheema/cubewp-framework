@@ -294,20 +294,10 @@ class CubeWp_Update_Frontend_Forms{
                             }elseif(self::$FORM_TYPE == 'user'){
                                 $field_options = get_user_field_options($group_field);
                             }
-                            if(!empty($field_options)){
-                                $new_options = array(
-                                    'label'             => $field_options['label'],
-                                    'class'             => $field_options['class'],
-                                    'container_class'   => $field_options['container_class'],
-                                    'name'              => $field_options['name'],
-                                    'display_ui'        => $field_options['type'],
-                                    'type'              => $field_options['type'],
-                                );
-                            
-                                if(isset($fields[$group_field]['field_size'])){
-                                    $new_options['field_size'] = $fields[$group_field]['field_size'];
-                                }
-                                $fields[$group_field]=$new_options;
+                            if(isset($fields[$group_field]['name'])){
+                                $fields[$group_field]['name'] = $field_options['name'];
+                                $fields[$group_field]['type'] = $field_options['type'];
+                                $fields[$group_field]['display_ui'] = $field_options['type'];
                             }
                         }
                         if( (!in_array($group_field, $updatedFields)) ){        

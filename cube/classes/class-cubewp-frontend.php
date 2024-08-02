@@ -28,7 +28,7 @@ class CubeWp_Frontend {
         $this->include_fields();
         add_filter('cubewp/frontend/field/parametrs', array($this, 'frontend_field_parameters'), 10, 1);
         add_action('cubewp_loaded', array('CubeWp_Frontend_Alerts', 'init'), 10);
-        add_action('cubewp_loaded', array('CubeWp_Frontend_Templates', 'init'), 10);
+        add_action('wp', array('CubeWp_Frontend_Templates', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Saved', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Pagination', 'init'), 10);
         add_action('cubewp_loaded', array('CubeWp_Frontend_Search_Fields', 'init'), 10);
@@ -87,7 +87,7 @@ class CubeWp_Frontend {
      */
     public function include_fields(){
         $frontend_fields = array(
-            'text', 'number','color', 'range', 'email', 'url', 'password', 'textarea', 'wysiwyg-editor', 'oembed', 'file', 'image', 'gallery', 'dropdown', 'checkbox', 'radio', 'switch', 'google-address', 'date-picker', 'date-time-picker', 'time-picker', 'post', 'taxonomy', 'terms', 'user', 'repeater'
+            'text', 'number','color', 'range', 'email', 'url', 'password', 'textarea', 'wysiwyg-editor', 'oembed', 'file', 'image', 'gallery', 'dropdown', 'checkbox', 'radio', 'switch', 'business-hours', 'google-address', 'date-picker', 'date-time-picker', 'time-picker', 'post', 'taxonomy', 'terms', 'user', 'repeater'
         );
         foreach($frontend_fields as $frontend_field){
             $field_path = CWP_PLUGIN_PATH . "cube/fields/frontend/cubewp-frontend-{$frontend_field}-field.php";
@@ -123,10 +123,13 @@ class CubeWp_Frontend {
             'file_types'            =>   '',
             'placeholder'           =>    '',
             'upload_size'           =>   '',
+            'max_upload_files'      =>   '',
             'label'                 =>    '',
             'description'           =>    '',
             'multiple'              =>    0,
             'select2_ui'            =>    0,
+            'current_user_posts'    =>    0,
+            'editor_media'          =>    0,
             'auto_complete'         =>    0,
             'appearance'            =>    '',
             'required'              =>    false,
@@ -139,6 +142,9 @@ class CubeWp_Frontend {
             'extra_attrs'           =>    '',
             'field_size'            =>    '',
             'sub_fields'            =>    array(),
+            'files_save'            =>    'ids',
+            'filter_post_types'     =>    '',
+            'files_save_separator'  =>    'array',
         );
         return wp_parse_args($args, $default);
 
@@ -426,20 +432,36 @@ class CubeWp_Frontend {
      */
     public static function sorting_filter( ) {
         $sorting = apply_filters('cubewp/frontend/sorting/filter','');
-        $option = array();
-        $option['DESC'] = esc_html__('Newest','cubewp-framework');
-        $option['ASC'] = esc_html__('Oldest','cubewp-framework');
+        $order = [
+            'DESC' => esc_html__('Descending','cubewp-framework'),
+            'ASC' => esc_html__('Ascending','cubewp-framework'),
+        ];
+        $option = [
+            'relevance' => esc_html__('Best Match','cubewp-framework'),
+            'title' => esc_html__('Title','cubewp-framework'),
+            'date' => esc_html__('Date','cubewp-framework'),
+            'rand' => esc_html__('Random','cubewp-framework'),
+        ];
         if(!empty($sorting)){
             foreach($sorting as $k=>$v){
-                $option[$v.'-ASC'] = $k.': '.esc_html__('Low to high','cubewp-framework');
-                $option[$v.'-DESC'] = $k.': '.esc_html__('High to low','cubewp-framework');
+                $option['cwpsorting-' . $v] = $k;
             }
         }
         $input_attrs = array( 
             'class'        => 'cwp-orderby',
+            'id'           => 'cwp-order-filter',
+            'name'         => 'cwp_order',
+            'value'        => isset($_GET['order']) && !empty($_GET['order']) ? sanitize_text_field($_GET['order']) : 'DESC',
+            'options'      => $order,
+            'extra_attrs'  => '',
+            'placeholder'  => esc_html__('Order','cubewp-framework')
+        );
+        echo cwp_render_dropdown_input( $input_attrs );
+        $input_attrs = array( 
+            'class'        => 'cwp-orderby',
             'id'           => 'cwp-sorting-filter',
             'name'         => 'cwp_orderby',
-            'value'        => isset($_GET['orderby']) && !empty($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'DESC',
+            'value'        => isset($_GET['orderby']) && !empty($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'none',
             'options'      => $option,
             'extra_attrs'  => '',
             'placeholder'  => esc_html__('Sort By','cubewp-framework')
@@ -455,6 +477,7 @@ class CubeWp_Frontend {
      */
     public static function is_cubewp_single() {
 		$get_CustomTypes = CWP_types();
+        $get_CustomTypes = apply_filters( 'cubewp/is_single/post_types', $get_CustomTypes );
         if (is_array($get_CustomTypes) && !empty($get_CustomTypes) && count($get_CustomTypes)!=0) {
             foreach ($get_CustomTypes as $single_cpt) {
                 self::$post_type = $single_cpt['slug'];
@@ -551,6 +574,28 @@ class CubeWp_Frontend {
 		if(isset($parent_field[$post_count][$field])){
 			return $parent_field[$post_count][$field]['value'];
 		}
+	}
+
+     /**
+     * Method cubewp_post_confirmation
+     *
+     * @return void
+     */
+    public static function cubewp_post_confirmation() {
+		if(is_singular( )){
+            do_action('cubewp_post_confirmation', get_the_ID());
+        }
+	}
+
+    /**
+     * Method cubewp_post_notification
+     *
+     * @return void
+     */
+    public static function cubewp_post_notification() {
+		if(is_singular( )){
+            do_action('cubewp_single_page_notification', get_the_ID());
+        }
 	}
         
     /**

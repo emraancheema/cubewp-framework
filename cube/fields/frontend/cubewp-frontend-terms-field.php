@@ -387,6 +387,17 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
      */
     public function render_search_filters_dropdown_taxonomy_field( $output = '', $args = array() ){
         $args    =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
+		
+		if(is_tax() && !is_search() && !is_page()){
+            $queried_object = get_queried_object();
+            if (is_object($queried_object) && !empty($queried_object) && !is_wp_error($queried_object)) {
+                $CurrentSlug = $queried_object->slug;
+                if(isset($CurrentSlug)){
+                    $args['value'] = $CurrentSlug;
+                }
+            }
+        }
+		
         $values  =  !empty($args['value']) ? explode(',', $args['value']) : $args['value'];
 
         if(isset($args['options']) && !empty($args['options'])){
@@ -402,7 +413,7 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                 );
                 if( (isset($args['multi']) && $args['multi'] == true) || (isset($args['multiple']) && $args['multiple'] == 1)){
                     unset($input_attrs['name']);
-                    $input_attrs['class']  = $args['multi'].' multi-select';
+                    $input_attrs['class']  = $args['class'].' '.$args['multi'].' multi-select';
                     $output .= cwp_render_multi_dropdown_input( $input_attrs );
                     $input_attrs = array( 
                         'name'         => $args['name'],
@@ -454,11 +465,13 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
     private function cwp_sub_terms_dropdown_output_id($args = array()){
         $output = array();
             foreach($args as $k => $v){
-                    $output[$v['term_id']] = $v['term_name'];
-                foreach($v['childern'] as $k2 => $v2){
-                    $output[$v2['term_id']] = '-'.$v2['term_name'];
-                    foreach($v2['childern'] as $k3 => $v3){
-                        $output[$v3['term_id']] = '--'.$v3['term_name'];
+                $output[$v['term_id']] = $v['term_name'];
+                if ( isset( $v['childern'] ) && ! empty( $v['childern'] ) ) {
+                    foreach($v['childern'] as $k2 => $v2){
+                        $output[$v2['term_id']] = '-'.$v2['term_name'];
+                        foreach($v2['childern'] as $k3 => $v3){
+                            $output[$v3['term_id']] = '--'.$v3['term_name'];
+                        }
                     }
                 }
             }

@@ -294,23 +294,23 @@ function cwp_author_share($author_id,$author_name) {
 				<ul class="cwp-share-options">
 
 						<li style="background-color: #4099FF;">
-							<?php echo CubeWp_Single_Page_Trait::get_twitter_svg(esc_url($twitterURL)) ?>
+							<?php echo CubeWp_Single_Cpt::get_twitter_svg(esc_url($twitterURL)) ?>
 						</li>
 
 						<li style="background-color: #3b5998;">
-							<?php echo CubeWp_Single_Page_Trait::get_facebook_svg(esc_url($facebookURL)) ?>
+							<?php echo CubeWp_Single_Cpt::get_facebook_svg(esc_url($facebookURL)) ?>
 						</li>
 
 						<li style="background-color: #C92228;">
-							<?php echo CubeWp_Single_Page_Trait::get_pinterest_svg(esc_url($pinterest)) ?>
+							<?php echo CubeWp_Single_Cpt::get_pinterest_svg(esc_url($pinterest)) ?>
 						</li>
 
 						<li style="background-color: #0077B5;">
-							<?php echo CubeWp_Single_Page_Trait::get_linkedIn_svg(esc_url($linkedin)) ?>
+							<?php echo CubeWp_Single_Cpt::get_linkedIn_svg(esc_url($linkedin)) ?>
 						</li>
 
 						<li style="background-color: #fe6239;">
-							<?php echo CubeWp_Single_Page_Trait::get_reddit_svg(esc_url($reddit)) ?>
+							<?php echo CubeWp_Single_Cpt::get_reddit_svg(esc_url($reddit)) ?>
 						</li>
 				</ul>
 			</div>

@@ -55,7 +55,7 @@ class CubeWp_Elementor_Taxonomy_Widget extends Widget_Base {
 			'_builtin' => false
 		);
 		$taxonomies = get_taxonomies( $args );
-
+		$taxonomies = self::cwp_get_taxonomies_label($taxonomies);
 		$this->start_controls_section( 'cubewp_widgets_section', array(
 			'label' => esc_html__( 'Widget Options', 'cubewp-framework' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
@@ -95,7 +95,7 @@ class CubeWp_Elementor_Taxonomy_Widget extends Widget_Base {
 		$this->add_control( 'icon_media_name', array(
 			'type'        => Controls_Manager::TEXT,
 			'label'       => esc_html__( 'Icon Or Image', 'cubewp-framework' ),
-			'description' => esc_html__( 'Enter taxonomy custom field name for term icon or image. ', 'cubewp-framework' ),
+			'description' => esc_html__( 'Enter taxonomy custom field slug for term icon or image.', 'cubewp-framework' ),
 			'condition'   => array(
 				'output_style' => 'boxed_view',
 			),
@@ -160,7 +160,20 @@ class CubeWp_Elementor_Taxonomy_Widget extends Widget_Base {
 		) );
 		$this->end_controls_section();
 	}
-
+	
+	public function cwp_get_taxonomies_label($taxonomies)
+	{
+		$taxonomy_labels = array();
+		if (!empty($taxonomies) && is_array($taxonomies))
+			foreach ($taxonomies as $slug => $taxonomy) {
+				if (taxonomy_exists($taxonomy)) {
+					$label = get_taxonomy($taxonomy)->labels->name;
+					$taxonomy_labels[$slug] = $label;
+				}
+			}
+		return $taxonomy_labels;
+	}
+	
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$args     = array(

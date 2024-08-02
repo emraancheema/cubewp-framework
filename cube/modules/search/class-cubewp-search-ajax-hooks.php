@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CubeWp_Search_Ajax_Hooks{
     
     private static $terms = null;
-    private static $map_meta_key = null;
         
     /**
      * Method cwp_search_filters_ajax_content
@@ -28,6 +27,7 @@ class CubeWp_Search_Ajax_Hooks{
         global $cwpOptions;
         $archive_map = isset($cwpOptions['archive_map']) ? $cwpOptions['archive_map'] : 1;
         $archive_filters = isset($cwpOptions['archive_filters']) ? $cwpOptions['archive_filters'] : 1;
+		$posts_per_page = isset($cwpOptions['archive_posts_per_page']) ? $cwpOptions['archive_posts_per_page'] : 10;
         $grid_class = 'cwp-col-12 cwp-col-md-6';
         if ( ! $archive_map || ! $archive_filters) {
             $grid_class = 'cwp-col-12 cwp-col-md-4';
@@ -37,7 +37,7 @@ class CubeWp_Search_Ajax_Hooks{
         
         $post_type = isset($post_data['post_type']) ? $post_data['post_type'] : '';
 
-        $post_data['posts_per_page'] = apply_filters( 'cubewp/search/post_per_page', 10, $post_data );
+        $post_data['posts_per_page'] = apply_filters( 'cubewp/search/post_per_page', $posts_per_page, $post_data );
 
         $_DATA = apply_filters('cubewp/search/query/update',$post_data,sanitize_text_field($post_type));
         
@@ -45,7 +45,6 @@ class CubeWp_Search_Ajax_Hooks{
         $post_type    =  isset($_DATA['post_type']) ? $_DATA['post_type'] : '';
         $post_per_page = isset($_DATA['posts_per_page']) ? $_DATA['posts_per_page'] : 10;
 
-        self::$map_meta_key = self::cwp_map_meta_key($post_type);
         $query = new CubeWp_Query($_DATA);
         $the_query = $query->cubewp_post_query();
         
@@ -67,7 +66,7 @@ class CubeWp_Search_Ajax_Hooks{
                         if(!empty(self::cwp_map_lat_lng(get_the_ID()))){
                             $latLng[] = self::cwp_map_lat_lng(get_the_ID());
                         }
-                        echo apply_filters('cubewp/frontend/loop/grid/html', CubeWp_frontend_grid_HTML(get_the_ID(),$grid_class));
+                        echo CubeWp_frontend_grid_HTML(get_the_ID(), $grid_class);
                     }
                     endwhile;
                 ?>
@@ -93,17 +92,19 @@ class CubeWp_Search_Ajax_Hooks{
         
     }
     
-    private static function cwp_map_lat_lng($postid=''){
+    public static function cwp_map_lat_lng($postid=''){
         $Map=array();
-        if(self::$map_meta_key && !empty(self::$map_meta_key) && !empty($postid)){
-            $Lat = get_post_meta($postid, self::$map_meta_key.'_lat', true);
-            $Lng = get_post_meta($postid, self::$map_meta_key.'_lng', true);
+        $map_meta_key = self::cwp_map_meta_key(get_post_type( $postid ));
+        if($map_meta_key && !empty($map_meta_key) && !empty($postid)){
+            $Lat = get_post_meta($postid, $map_meta_key.'_lat', true);
+            $Lng = get_post_meta($postid, $map_meta_key.'_lng', true);
             if(!empty($Lat) && !empty($Lng)){
                 $Map[0] = $Lat;
                 $Map[1] = $Lng;
                 $Map[2] = get_the_title($postid);
                 $Map[3] = get_the_permalink($postid);
                 $Map[4] = cubewp_get_post_thumbnail_url($postid);
+                $Map[5] = apply_filters( 'cubewp/search_result/map/pin', '', $postid );
                 return $Map;
             }
         }

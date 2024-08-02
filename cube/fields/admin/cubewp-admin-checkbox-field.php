@@ -33,6 +33,8 @@ class CubeWp_Admin_Checkbox_Field extends CubeWp_Admin {
 	public function render_checkbox_field($output = '', $args = array()) {
 		$args = apply_filters('cubewp/admin/field/parametrs', $args);
 		$args['extra_attrs'] = $args['extra_attrs'] ?? '';
+        $args['not_formatted_value'] = $args['value'];
+        $args['value'] = cwp_handle_data_format( $args );
 		if (isset($args['required']) && $args['required'] == 1) {
 			$args['container_class'] .= ' required';
 			$validation_msg          = isset($args['validation_msg']) ? $args['validation_msg'] : '';

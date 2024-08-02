@@ -37,6 +37,10 @@ class CubeWp_Frontend_Dropdown_Field extends CubeWp_Frontend {
     public function render_dropdown_field( $output = '', $args = array() ) {
 
         $args           =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
+        if( (isset($args['multi']) && $args['multi'] == true) || (isset($args['multiple']) && $args['multiple'] == 1)) {
+            $args['not_formatted_value'] = $args['value'];
+            $args['value']               = cwp_handle_data_format( $args );
+        }
         $required       = self::cwp_frontend_field_required($args['required']);
         $required       = !empty($required['class']) ? $required['class'] : '';
         $options        = cwp_convert_choices_to_array($args['options']);
@@ -94,7 +98,8 @@ class CubeWp_Frontend_Dropdown_Field extends CubeWp_Frontend {
                 );
                 if(isset($args['multiple']) && $args['multiple'] == 1){
                     unset($input_attrs['name']);
-                    $input_attrs['class']  = $args['multiple'].' multi-select';
+                    $input_attrs['class']  = ' multi-select';
+                    $input_attrs['hidden_input'] = false;
                     $output .= cwp_render_multi_dropdown_input( $input_attrs );
                     $input_attrs = array( 
                         'name'         => $args['name'],
@@ -145,6 +150,7 @@ class CubeWp_Frontend_Dropdown_Field extends CubeWp_Frontend {
                 if( (isset($args['multi']) && $args['multi'] == true) || (isset($args['multiple']) && $args['multiple'] == 1)){
                     unset($input_attrs['name']);
                     $input_attrs['class']  = isset($args['multi']) ? $args['multi'].' multi-select' : $args['multiple'].' multi-select' ;
+                    $input_attrs['hidden_input'] = false;
                     $output .= cwp_render_multi_dropdown_input( $input_attrs );
                     $input_attrs = array( 
                         'name'         => $args['name'],
