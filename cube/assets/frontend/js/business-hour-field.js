@@ -111,7 +111,7 @@ jQuery(document).on('click', 'button.cwp-add-new-business-hour', function (event
         };
         if(weekdayAdded.hasClass(weekday)){
             args['day_name'] = '';
-            $this.closest('.cwp-field-business_hours').find('.yb-business-hours-display').children(weekdayAdded).append(BusinessHourHTML(args));
+            $this.closest('.cwp-field-business_hours').find('.yb-business-hours-display').children(weakdayClass).append(BusinessHourHTML(args));
         }else{
             $this.closest('.cwp-field-business_hours').find('.yb-business-hours-display').append(
                 `<div class='business-hours ${weekday} ${weekday}-${field_name} ${fullhoursclass}'>
@@ -233,7 +233,7 @@ function BusinessHourHTML(object){
         <span class='open'>${$start_time}</span>
         <span class='dash'>${$dash}</span>
         <span class='close'>${$end_time}</span>
-        <a class='remove-business-hours' href='#' data-field_name ='${field_name }' data-weekday ='${DayName }'>${remove}</a>
+        <a class='remove-business-hours' href='#' data-field_name ='${field_name }' data-weekday ='${weekday }'>${remove}</a>
         <input class="${weekday}-open" name='${$meta}${$metaOpen}' value='${open_time}' type='hidden'>
         <input class="${weekday}-close" name='${$meta}${$metaClose}' value='${close_time}' type='hidden'>
     </div>`;
