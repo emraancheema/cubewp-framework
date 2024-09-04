@@ -233,7 +233,7 @@ function BusinessHourHTML(object){
         <span class='open'>${$start_time}</span>
         <span class='dash'>${$dash}</span>
         <span class='close'>${$end_time}</span>
-        <a class='remove-business-hours' href='#' data-field_name ='${field_name }' data-weekday ='${DayName }'>${remove}</a>
+        <a class='remove-business-hours' href='#' data-field_name ='${field_name }' data-weekday ='${weekday }'>${remove}</a>
         <input class="${weekday}-open" name='${$meta}${$metaOpen}' value='${open_time}' type='hidden'>
         <input class="${weekday}-close" name='${$meta}${$metaClose}' value='${close_time}' type='hidden'>
     </div>`;
