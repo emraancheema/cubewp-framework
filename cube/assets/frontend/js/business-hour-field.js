@@ -111,7 +111,7 @@ jQuery(document).on('click', 'button.cwp-add-new-business-hour', function (event
         };
         if(weekdayAdded.hasClass(weekday)){
             args['day_name'] = '';
-            $this.closest('.cwp-field-business_hours').find('.yb-business-hours-display').children(weekdayAdded).append(BusinessHourHTML(args));
+            $this.closest('.cwp-field-business_hours').find('.yb-business-hours-display').children(weakdayClass).append(BusinessHourHTML(args));
         }else{
             $this.closest('.cwp-field-business_hours').find('.yb-business-hours-display').append(
                 `<div class='business-hours ${weekday} ${weekday}-${field_name} ${fullhoursclass}'>
