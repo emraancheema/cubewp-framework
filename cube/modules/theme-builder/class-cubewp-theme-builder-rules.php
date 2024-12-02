@@ -83,7 +83,7 @@ class CubeWp_Theme_Builder_Rules {
         $template_options .= '<option value="single_all">All Single</option>';
         foreach (self::get_public_post_types() as $post_type) {
             $template_options .= '<option value="single_' . esc_attr($post_type['name']) . '">Single ' . esc_html($post_type['label']) . '</option>';
-            $exclude_options .= '<option value="exclude_single_' . esc_attr($post_type['name']) . '">Exclude Single ' . esc_html($post_type['label']) . '</option>';
+            //$exclude_options .= '<option value="exclude_single_' . esc_attr($post_type['name']) . '">Exclude Single ' . esc_html($post_type['label']) . '</option>';
         }
         $template_options .= '</optgroup>';
         return $template_options;
@@ -101,7 +101,7 @@ class CubeWp_Theme_Builder_Rules {
         $template_options .= '<option value="archive_all">All Archives</option>';
         foreach (self::get_public_taxonomies() as $taxonomy) {
             $template_options .= '<option value="archive_' . esc_attr($taxonomy['name']) . '">Archive ' . esc_html($taxonomy['label']) . '</option>';
-            $exclude_options .= '<option value="exclude_archive_' . esc_attr($taxonomy['name']) . '">Exclude Archive ' . esc_html($taxonomy['label']) . '</option>';
+            //$exclude_options .= '<option value="exclude_archive_' . esc_attr($taxonomy['name']) . '">Exclude Archive ' . esc_html($taxonomy['label']) . '</option>';
         }
         $template_options .= '<option value="archive_author">Author Archive</option>';
         $template_options .= '<option value="archive_search">Search Results</option>';
@@ -111,7 +111,7 @@ class CubeWp_Theme_Builder_Rules {
         foreach (self::get_public_post_types() as $post_type) {
             if ($post_type['hasArchive']) {
                 $template_options .= '<option value="archive_' . esc_attr($post_type['name']) . '">Archive ' . esc_html($post_type['label']) . '</option>';
-                $exclude_options .= '<option value="exclude_archive_' . esc_attr($post_type['name']) . '">Exclude Archive ' . esc_html($post_type['label']) . '</option>';
+                //$exclude_options .= '<option value="exclude_archive_' . esc_attr($post_type['name']) . '">Exclude Archive ' . esc_html($post_type['label']) . '</option>';
             }
         }
         $template_options .= '</optgroup>';
@@ -197,7 +197,7 @@ class CubeWp_Theme_Builder_Rules {
     
         $template_type = sanitize_text_field($_POST['template_type']);
         $template_options = '';
-        $exclude_options = '';
+        //$exclude_options = '';
     
         switch ($template_type) {
             case 'single':
@@ -214,6 +214,7 @@ class CubeWp_Theme_Builder_Rules {
     
             case '404':
             case 'mega-menu':
+            case 'shop':
                 $template_options .= '<option value="all">all</option>';
                 break;
     
@@ -224,7 +225,7 @@ class CubeWp_Theme_Builder_Rules {
     
         wp_send_json_success([
             'template_options' => $template_options,
-            'exclude_options' => $exclude_options
+            //'exclude_options' => $exclude_options
         ]);
     }
 

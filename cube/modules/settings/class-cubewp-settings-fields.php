@@ -29,6 +29,9 @@ class CubeWp_Settings_Fields {
         add_filter('cubewp/settings/font_subsets/options', array($this, 'font_subsets_options'), 10, 2);
         add_filter('cubewp/settings/pages/field', array($this, 'pages'), 10, 2);
         add_filter('cubewp/settings/submit_edit_page/field', array($this, 'submit_edit_page'), 10, 2);
+        add_filter('cubewp/settings/post_type_assignment/field', array($this, 'post_type_assignment_field'), 10, 2);
+        add_filter('cubewp/settings/repeating_field/field', array($this, 'repeating_field'), 10, 2);
+
         
     }
     public function submit_edit_page( $output = '', $args = array() ) {
@@ -183,6 +186,82 @@ class CubeWp_Settings_Fields {
             $output   .= '</fieldset>';
         $output .= '</td>';
         
+        return $output;
+    }
+
+    public function repeating_field( $output = '', $args = array() ){
+        
+        $args = $this->default_input_parameters( $args );
+
+        $output = apply_filters( "cubewp/settings/heading/field", '', $args );
+        $output .= '<td>';
+        $value = isset($args['value']) ? $args['value'] : '';
+        $output .= '<fieldset id="cwp-' . esc_attr( $args['id'] ) . '" class="cwp-field-container cwp-' . esc_attr( $args['type'] ) . '-container" data-id="' . esc_attr( $args['id'] ) . '" data-type="' . esc_attr( $args['type'] ) . '" style="margin-bottom: 10px;">';
+        $field_args = array(
+            'id'          => $args['id'],
+            'placeholder' => $args['placeholder'] == '' ? esc_html__( 'Put here WP hook eg: woocommerce_before_add_to_cart_quantity', "cubewp-framework" ) : '',
+            'class'       => $args['class'],
+            'extra_attrs' => $args['extra_attrs'],
+        );
+        $field_args['class'] = $field_args['class'] . ' cwp-repeating-field';
+        $output .= cwp_render_text_input( $field_args );
+        $output .= '<button data-option-name="'.$args['id'].'" type="button" class="cwp-repeating-field-add-btn button">+ Add</button>';
+        $output .= apply_filters( "cubewp/settings/desc/field", '', $args );
+        $output .= '<div class="cwp-repeating-field-selected-options">'.$this->repeating_field_values( $value, $args['id']).'</div>';
+        $output .= '</fieldset>';
+        $output .= '</td>';
+        return $output;
+    }
+
+    public function repeating_field_values( $value = '', $name = '' ){
+        if(empty($value) || !is_array($value) || empty($name)) return;
+        $output = '';
+        foreach($value as $post_type => $styles){
+            $output .= '<div class="remove_'.$post_type.'">
+                            <span class="cwp-assign-post_type">'.$styles.' </span>
+                            <input type="hidden" id="'.$name.'_'.$post_type.'" name="'.$name.'['.$post_type.']" value="'.$styles.'">
+                            <span class="cwp-repeating-field-remove-btn button" data-value="'.$post_type.'">&times;</span>
+                        </div>';
+        }
+        return $output;
+    }
+
+    public function post_type_assignment_field( $output = '', $args = array() ){
+        
+        $args = $this->default_input_parameters( $args );
+
+        $output = apply_filters( "cubewp/settings/heading/field", '', $args );
+        $output .= '<td>';
+        $value = isset($args['value']) ? $args['value'] : '';
+        $output .= '<fieldset id="cwp-' . esc_attr( $args['id'] ) . '" class="cwp-field-container cwp-' . esc_attr( $args['type'] ) . '-container" data-id="' . esc_attr( $args['id'] ) . '" data-type="' . esc_attr( $args['type'] ) . '" style="margin-bottom: 10px;">';
+        $field_args = array(
+            'id'          => $args['id'],
+            'placeholder' => $args['placeholder'] == '' ? esc_html__( 'Select Option', "cubewp-framework" ) : '',
+            'class'       => $args['class'],
+            'options'     => $args['parent_options'],
+            'extra_attrs' => $args['extra_attrs'],
+        );
+        $field_args['class'] = $field_args['class'] . ' cwp-post_type_assignment';
+        $output .= cwp_render_dropdown_input( $field_args );
+        $output .= '<input type="text" class="cwp-post_type_assignment-multi-value-field" placeholder="Enter values (comma-separated)" disabled>';
+        $output .= '<button data-option-name="'.$args['id'].'" type="button" class="cwp-post_type_assignment-add-btn button">+ Add</button>';
+        $output .= apply_filters( "cubewp/settings/desc/field", '', $args );
+        $output .= '<div class="cwp-post_type_assignment-selected-options">'.$this->post_type_assignment_values( $value, $args['id']).'</div>';
+        $output .= '</fieldset>';
+        $output .= '</td>';
+        return $output;
+    }
+
+    public function post_type_assignment_values( $value = '', $name = '' ){
+        if(empty($value) || !is_array($value) || empty($name)) return;
+        $output = '';
+        foreach($value as $post_type => $styles){
+            $output .= '<div class="remove_'.$post_type.'">
+                            <span class="cwp-assign-post_type">'.$post_type.' :</span><span class="cwp-assign-post_options"> '.$styles.' </span>
+                            <input type="hidden" id="'.$name.'_'.$post_type.'" name="'.$name.'['.$post_type.']" value="'.$styles.'">
+                            <span class="cwp-post_type_assignment-remove-btn button" data-value="'.$post_type.'">&times;</span>
+                        </div>';
+        }
         return $output;
     }
     
@@ -674,7 +753,7 @@ class CubeWp_Settings_Fields {
     }
     
     public function font_styles_options( $output = '', $font_family = '' ){
-        $google_fonts = apply_filters("cubewp/settings/google_fonts", array());
+        $google_fonts = apply_filters("cubewp/settings/google_fonts", self::google_fonts());
         
         $options = array();
         if(isset($google_fonts[$font_family]['variants']) && !empty($google_fonts[$font_family]['variants'])){
@@ -686,7 +765,7 @@ class CubeWp_Settings_Fields {
     }
     
     public function font_subsets_options( $output = '', $font_family = '' ){
-        $google_fonts = apply_filters("cubewp/settings/google_fonts", array());
+        $google_fonts = apply_filters("cubewp/settings/google_fonts", self::google_fonts());
         
         $options = array();
         if(isset($google_fonts[$font_family]['subsets']) && !empty($google_fonts[$font_family]['subsets'])){

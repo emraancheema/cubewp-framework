@@ -158,6 +158,9 @@ class CubeWp_Post_Types {
                 return '';
             
             $CPT_slug = sanitize_text_field($_POST['cwp']['postType']['slug']);
+            if(is_numeric($CPT_slug)){
+                return '';
+            }
             $cpt = array(
                 $CPT_slug                     => array(
                     'label'                   => sanitize_text_field($_POST['cwp']['postType']['label']),
@@ -303,7 +306,7 @@ class CubeWp_Post_Types {
         $postType = wp_parse_args($postType, $defaults);
         
         ?>
-        <div class="cpt-form">
+        <div class="cpt-form wrap cubewp-wrap">
             <form id="post" class="cwpposttype" method="post" action="" enctype="multipart/form-data">				
                 <div class="wrap cwp-post-type-title">
                     <?php echo self::_title();	?>	
@@ -319,7 +322,7 @@ class CubeWp_Post_Types {
                             <?php echo self::post_type_options($postType); ?>
 
                         </div>
-
+                        <div class="clear"></div>
                     </div>
                 </div>
             </form>

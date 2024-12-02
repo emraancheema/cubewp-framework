@@ -142,13 +142,13 @@ jQuery(document).ready(function () {
         var s_font_subset = thisObj.closest('.cwp-typography-container').find('.typography-subset select').data('val');
 
         jQuery.ajax({
-            type: 'POST', url: cwp_settings.ajax_url, dataType: 'json', data: {
+            type: 'POST', url: cubewp_settings_params.ajax_url, dataType: 'json', data: {
                 action: 'cwp_get_font_attributes', font_family: _val,
             }, success: function (response) {
                 thisObj.closest('.cwp-typography-container').find('.typography-style select').html(response.font_styles);
-                thisObj.closest('.cwp-typography-container').find('.typography-style select').val(s_font_style).select2("destroy").select2();
+                //thisObj.closest('.cwp-typography-container').find('.typography-style select').val(s_font_style).select2("destroy").select2();
                 thisObj.closest('.cwp-typography-container').find('.typography-subset select').html(response.font_subsets);
-                thisObj.closest('.cwp-typography-container').find('.typography-subset select').val(s_font_subset).select2("destroy").select2();
+                //thisObj.closest('.cwp-typography-container').find('.typography-subset select').val(s_font_subset).select2("destroy").select2();
             }
         });
 
@@ -194,4 +194,111 @@ jQuery(document).ready(function () {
         );
     }
 
+    var selectedOptions = [];
+    GetAssignedValues();
+    function CwpOptionsPostAsignUpdate() {
+        jQuery('.cwp-post_type_assignment').each(function() {
+
+            jQuery(this).find('option').each(function() {
+                var optionVal = jQuery(this).val();
+
+                // If option value is in selectedOptions but not equal to currentVal, remove it
+                if (optionVal && selectedOptions.includes(optionVal)) {
+                    jQuery(this).prop('disabled', true);
+                }else {
+                    jQuery(this).prop('disabled', false);
+                }
+            });
+        });
+    }
+
+    function GetAssignedValues() {        
+        const inputs = document.querySelectorAll('input[type="hidden"][name^="cwp_loop_style["]');
+        
+        // Loop through the selected inputs
+        inputs.forEach(input => {
+            // Extract the name attribute value
+            const name = input.name;
+            
+            const match = name.match(/^cwp_loop_style\[(.*?)\]$/);
+            
+            if (match && match[1]) {
+                selectedOptions.push(match[1]);
+            }
+        });
+        CwpOptionsPostAsignUpdate();
+    }
+
+    function removeFromArray(array, value) {
+        var index = array.indexOf(value);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
+
+    jQuery(document).on('change', '.cwp-post_type_assignment', function() {
+        var selectedValue = jQuery(this).val();
+        if (selectedValue) {
+            jQuery('.cwp-post_type_assignment-add-btn').prop('disabled', false);
+            jQuery(this).siblings('.cwp-post_type_assignment-multi-value-field').prop('disabled', false);
+        } else {
+            jQuery(this).siblings('.cwp-post_type_assignment-multi-value-field').prop('disabled', true);
+        }
+    });
+
+    jQuery(document).on('click', '.cwp-post_type_assignment-add-btn', function() {
+        var dropdown = jQuery(this).siblings('.cwp-post_type_assignment'),
+            name = jQuery(this).data('option-name'),
+            textField = jQuery(this).siblings('.cwp-post_type_assignment-multi-value-field'),
+            selectedValue = dropdown.val(),
+            textValue = textField.val();
+        textField.val('');
+        dropdown.val('');
+
+        if (selectedValue && textValue) {
+            selectedOptions.push(selectedValue);
+            CwpOptionsPostAsignUpdate();
+
+            jQuery('.cwp-post_type_assignment-selected-options').append(
+                `<div class="remove_${selectedValue}">
+                <span class="cwp-assign-post_type">${selectedValue} :</span><span class="cwp-assign-post_options"> ${textValue} </span>
+                <input type="hidden" id="${name}_${selectedValue}" name="${name}[${selectedValue}]" value="${textValue}">
+                <span class="cwp-post_type_assignment-remove-btn button" data-value="${selectedValue}">&times;</span>
+                </div>`
+            );
+
+            textField.prop('disabled', true);
+            jQuery(this).prop('disabled', true);
+
+        }
+    });
+
+    jQuery(document).on('click', '.cwp-post_type_assignment-remove-btn', function() {
+        var valueToRemove = jQuery(this).data('value');
+        jQuery('.remove_'+valueToRemove).remove();
+        removeFromArray(selectedOptions, valueToRemove);
+        CwpOptionsPostAsignUpdate();
+    });
+
+
+    jQuery(document).on('click', '.cwp-repeating-field-add-btn', function() {
+        var field = jQuery(this).siblings('.cwp-repeating-field'),
+            name = jQuery(this).data('option-name'),
+            selectedValue = field.val();
+            field.val('');
+
+        if (selectedValue) {
+            jQuery('.cwp-repeating-field-selected-options').append(
+                `<div class="remove_${selectedValue}">
+                <span class="cwp-repeating-field"> ${selectedValue} </span>
+                <input type="hidden" id="${name}_${selectedValue}" name="${name}[${selectedValue}]" value="${selectedValue}">
+                <span class="cwp-repeating-field-remove-btn button" data-value="${selectedValue}">&times;</span>
+                </div>`
+            );
+        }
+    });
+    jQuery(document).on('click', '.cwp-repeating-field-remove-btn', function() {
+        var valueToRemove = jQuery(this).data('value');
+        jQuery('.remove_'+valueToRemove).remove();
+    });
 });

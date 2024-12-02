@@ -432,36 +432,24 @@ class CubeWp_Frontend {
      */
     public static function sorting_filter( ) {
         $sorting = apply_filters('cubewp/frontend/sorting/filter','');
-        $order = [
-            'DESC' => esc_html__('Descending','cubewp-framework'),
-            'ASC' => esc_html__('Ascending','cubewp-framework'),
-        ];
         $option = [
+            'DESC' => esc_html__('Newest','cubewp-framework'),
+            'ASC' => esc_html__('Oldest','cubewp-framework'),
             'relevance' => esc_html__('Best Match','cubewp-framework'),
             'title' => esc_html__('Title','cubewp-framework'),
-            'date' => esc_html__('Date','cubewp-framework'),
             'rand' => esc_html__('Random','cubewp-framework'),
         ];
         if(!empty($sorting)){
             foreach($sorting as $k=>$v){
-                $option['cwpsorting-' . $v] = $k;
+                $option[$v.'-ASC'] = $k.': '.esc_html__('Low to high','cubewp-framework');
+                $option[$v.'-DESC'] = $k.': '.esc_html__('High to low','cubewp-framework');
             }
         }
         $input_attrs = array( 
             'class'        => 'cwp-orderby',
-            'id'           => 'cwp-order-filter',
-            'name'         => 'cwp_order',
-            'value'        => isset($_GET['order']) && !empty($_GET['order']) ? sanitize_text_field($_GET['order']) : 'DESC',
-            'options'      => $order,
-            'extra_attrs'  => '',
-            'placeholder'  => esc_html__('Order','cubewp-framework')
-        );
-        echo cwp_render_dropdown_input( $input_attrs );
-        $input_attrs = array( 
-            'class'        => 'cwp-orderby',
             'id'           => 'cwp-sorting-filter',
             'name'         => 'cwp_orderby',
-            'value'        => isset($_GET['orderby']) && !empty($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'none',
+            'value'        => isset($_GET['orderby']) && !empty($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'DESC',
             'options'      => $option,
             'extra_attrs'  => '',
             'placeholder'  => esc_html__('Sort By','cubewp-framework')

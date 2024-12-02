@@ -143,7 +143,7 @@ class CubeWp_Taxonomy_Custom_Fields {
         
         ?>
 
-        <div class="wrap">            
+        <div class="wrap cubewp-wrap">            
             <form method="post" action=""  id="post">
                 <div class="wrap cwp-post-type-title width-40  margin-bottom-0 margin-left-minus-20  margin-right-0">
                     <?php echo self::_title();    ?>

@@ -123,7 +123,7 @@ class CubeWp_Settings_Ajax_Hooks {
         }
     }
 
-    public function cwp_get_font_attributes(){
+    public static function cwp_get_font_attributes(){
         
         $font_family            = isset($_POST['font_family']) ? sanitize_text_field($_POST['font_family']) : '';
         $font_styles_options    = apply_filters("cubewp/settings/font_styles/options", '', $font_family);

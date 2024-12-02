@@ -310,3 +310,30 @@
 input[type=color], input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], select, textarea, .select2-container--default .select2-selection--single {
     border-color: #E1E5E9;
 }
+.cwp-post_type_assignment, .cwp-post_type_assignment-multi-value-field{
+    width:40% !important;
+    margin-right:20px
+}
+.cwp-post_type_assignment-container button{
+    margin-top:3px !important
+}
+.cwp-post_type_assignment-selected-options{
+    margin:10px 0px;
+    margin-top:20px;
+}
+.cwp-post_type_assignment-selected-options > div{
+    margin:10px 0px;
+}
+.cwp-assign-post_type{
+    text-transform: capitalize;
+    font-weight: bold;
+}
+.cwp-post_type_assignment-remove-btn {
+    margin-left: 10px !important;
+    margin-top: -3px !important;
+}
+
+.cwp-repeating-field{
+    width:calc(100% - 95px) !important;
+    margin-right:20px
+}

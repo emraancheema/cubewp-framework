@@ -42,9 +42,13 @@ class CubeWp_Export {
     public function manage_export()
     {
         ?>
-        <div id="cubewp-export">
+        <div id="cubewp-export" class="imp-exp">
             <div class="cubewp-page-header">
-                <h2><?php esc_html_e('CubeWP Export', 'cubewp-framework'); ?></h2>
+                <h2><?php esc_html_e('CubeWP Data Import / Export', 'cubewp-framework'); ?></h2>
+                <nav class="nav-tab-wrapper wp-clearfix">
+                    <a class="nav-tab" href="?page=cubewp-import"><?php esc_html_e('CubeWP Import', 'cubewp-framework'); ?></a>
+                    <a class="nav-tab nav-tab-active" href="?page=cubewp-export"><?php esc_html_e('CubeWP Export', 'cubewp-framework'); ?></a>
+                </nav>
             </div>
             <?php $this->cwp_export_all(); ?>
         </div>
@@ -63,7 +67,7 @@ class CubeWp_Export {
         <form class="export-form" method="post" action="">
             <input type="hidden" name="action" value="cwp_export_data">
             <input type="hidden" name="cwp_export_type" value="all">
-            <input type="hidden" name="cwp_export_nonce" value="<?php echo wp_create_nonce(basename(__FILE__)); ?>">
+            <input type="hidden" name="cwp_export_nonce" value="<?php echo wp_create_nonce( 'cwp_export_data_nonce' ); ?>">
             <div class="cubewp-import-box-container">
                 <div class="cubewp-import-box">
                     <div class="cubewp-import-card">
@@ -194,6 +198,14 @@ class CubeWp_Export {
         <?php
     }
     public function cwp_user_fields_data_callback(){
+        if ( !current_user_can('manage_options') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('You do not have permission to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
+        if ( !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cubewp-admin-nonce') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('Invalid nonce. You are not authorized to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
         if(isset($_POST['export']) && $_POST['export'] == 'success'){
             $buffer = self::cwp_custom_fields_posts('cwp_user_fields');
             $files = self::cwp_file_names();
@@ -217,6 +229,14 @@ class CubeWp_Export {
     }
 
     public function cwp_custom_forms_data_callback(){
+        if ( !current_user_can('manage_options') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('You do not have permission to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
+        if ( !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cubewp-admin-nonce') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('Invalid nonce. You are not authorized to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
         if(isset($_POST['export']) && $_POST['export'] == 'success'){
             $buffer = self::cwp_custom_fields_posts('cwp_forms');
             $files = self::cwp_file_names();
@@ -242,6 +262,15 @@ class CubeWp_Export {
 	 * @since  1.0.0
      */
     public function cwp_export_data_callback() {
+
+        if ( !current_user_can('manage_options') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('You do not have permission to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
+        if ( !isset($_POST['cwp_export_nonce']) || !wp_verify_nonce($_POST['cwp_export_nonce'], 'cwp_export_data_nonce') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('Invalid nonce. You are not authorized to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
 
 		if (isset($_POST['cwp_export_type']) && $_POST['cwp_export_type'] == 'all') {
 			if (empty($_POST['cwp_export_content_type'])) {

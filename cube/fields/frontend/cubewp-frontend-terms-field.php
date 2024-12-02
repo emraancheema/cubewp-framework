@@ -137,99 +137,99 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
         $values         =  !empty($args['value']) ? explode(',', $args['value']) : $args['value'];
         $name           =  '';
         $output         = self::cwp_frontend_post_field_container($args);
+        $args['custom_name']  =  !empty($args['name']) ? '_ST_'.$args['name'] : $args['name'];
 
             $output .= '<div class="cwp-search-field cwp-search-field-checkbox '. $args['container_class'] .'">';
                 $output .= self::cwp_frontend_search_field_label($args);
                 $output .= '<ul class="cwp-field-checkbox-container">';
                     if (is_array($options) && count($options) > 0) {
                         foreach($options as $value => $label){
-                            
                             if(!empty($label)){
-                            $output .= '<li '. $args['class'] .'>';
-                            $output .= '<div class="cwp-field-checkbox">';
-                                $input_attrs = array(
-                                    'type'         =>  'checkbox',
-                                    'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
-                                    'name'         =>  $name,
-                                    'value'        =>  $value,
-                                    'class'        =>  'custom-control-input '. $args['class'],
-                                );
-                                if(isset($args['value']) && is_array($values) && in_array($value, $values)){
-                                    $input_attrs['extra_attrs'] = ' checked="checked"';
-                                } else if(isset($args['value']) && $args['value'] == $value){
-                                    $input_attrs['extra_attrs'] = ' checked="checked"';
-                                }
-                                if(is_tax() && !is_search() && !is_page()){
-                                    $queried_object = get_queried_object();
-                                    if (is_object($queried_object) && !empty($queried_object) && !is_wp_error($queried_object)) {
-                                        $CurrentSlug = $queried_object->slug;
-                                        if(isset($CurrentSlug) && $CurrentSlug == $value){
-                                            $input_attrs['extra_attrs'] = ' checked="checked"';
-                                            $currentVal = $CurrentSlug;
+                                $output .= '<li class="'. $args['class'] .'">';
+                                $output .= '<div class="cwp-field-checkbox">';
+                                    $input_attrs = array(
+                                        'type'         =>  'checkbox',
+                                        'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
+                                        'name'         =>  $name,
+                                        'value'        =>  $label['term_id'],
+                                        'class'        =>  'custom-control-input '. $args['class'],
+                                    );
+                                    if(isset($args['value']) && is_array($values) && in_array($label['term_id'], $values)){
+                                        $input_attrs['extra_attrs'] = ' checked="checked"';
+                                    } else if(isset($args['value']) && $args['value'] == $label['term_id']){
+                                        $input_attrs['extra_attrs'] = ' checked="checked"';
+                                    }
+                                    if(is_tax() && !is_search() && !is_page()){
+                                        $queried_object = get_queried_object();
+                                        if (is_object($queried_object) && !empty($queried_object) && !is_wp_error($queried_object)) {
+                                            $CurrentSlug = $queried_object->term_id;
+                                            if(isset($CurrentSlug) && $CurrentSlug == $label['term_id']){
+                                                $input_attrs['extra_attrs'] = ' checked="checked"';
+                                                $currentVal = $CurrentSlug;
+                                            }
                                         }
                                     }
-                                }
-                                $output .= cwp_render_text_input( $input_attrs );
-                                $output .= '<label for="'. esc_attr($args['id'] .' '. $label['term_name']) .'">'. esc_html($label['term_name']) .'</label>';
-                            $output .= '</div>';
-                            $output .= '</li>';
-                            if(isset($label['childern']) && !empty($label['childern'])){
-                                $output .= '<ul>';
-                                foreach($label['childern'] as $value => $label){
-                                    $output .= '<li '. $args['class'] .'>';
-                                    $output .= '<div class="cwp-field-checkbox">';
-                                        $input_attrs = array(
-                                            'type'         =>  'checkbox',
-                                            'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
-                                            'name'         =>  $name,
-                                            'value'        =>  $value,
-                                            'class'        =>  'custom-control-input '. $args['class'],
-                                        );
-                                        if(isset($args['value']) && is_array($args['value']) && in_array($value, $args['value'])){
-                                            $input_attrs['extra_attrs'] = ' checked="checked"';
-                                        } else if(isset($args['value']) && $args['value'] == $value){
-                                            $input_attrs['extra_attrs'] = ' checked="checked"';
-                                        }
-                                       
+                                    $output .= cwp_render_text_input( $input_attrs );
+                                    $output .= '<label for="'. esc_attr($args['id'] .' '. $label['term_name']) .'">'. esc_html($label['term_name']) .'</label>';
+                                $output .= '</div>';
+                                $output .= '</li>';
+                                if(isset($label['childern']) && !empty($label['childern'])){
+                                    $output .= '<ul>';
+                                    foreach($label['childern'] as $value => $label){
+                                        $output .= '<li class="'. $args['class'] .'">';
+                                        $output .= '<div class="cwp-field-checkbox">';
+                                            $input_attrs = array(
+                                                'type'         =>  'checkbox',
+                                                'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
+                                                'name'         =>  $name,
+                                                'value'        =>  $label['term_id'],
+                                                'class'        =>  'custom-control-input '. $args['class'],
+                                            );
+                                            if(isset($args['value']) && is_array($args['value']) && in_array($label['term_id'], $args['value'])){
+                                                $input_attrs['extra_attrs'] = ' checked="checked"';
+                                            } else if(isset($args['value']) && $args['value'] == $label['term_id']){
+                                                $input_attrs['extra_attrs'] = ' checked="checked"';
+                                            }
+                                        
 
-                                        $output .= cwp_render_text_input( $input_attrs );
-                                        $output .= '<label for="'. esc_attr($args['id'] .' '. $label['term_name']) .'">'. esc_html($label['term_name']) .'</label>';
-                                    $output .= '</div>';
-                                    $output .= '</li>';
-                                    if(isset($label['childern']) && !empty($label['childern'])){
-                                        $output .= '<ul>';
-                                        foreach($label['childern'] as $value => $label){
-                                            $output .= '<li '. $args['class'] .'>';
-                                            $output .= '<div class="cwp-field-checkbox">';
-                                                $input_attrs = array(
-                                                    'type'         =>  'checkbox',
-                                                    'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
-                                                    'name'         =>  $name,
-                                                    'value'        =>  $value,
-                                                    'class'        =>  'custom-control-input '. $args['class'],
-                                                );
-                                                if(isset($args['value']) && is_array($args['value']) && in_array($value, $args['value'])){
-                                                    $input_attrs['extra_attrs'] = ' checked="checked"';
-                                                } else if(isset($args['value']) && $args['value'] == $value){
-                                                    $input_attrs['extra_attrs'] = ' checked="checked"';
-                                                }
+                                            $output .= cwp_render_text_input( $input_attrs );
+                                            $output .= '<label for="'. esc_attr($args['id'] .' '. $label['term_name']) .'">'. esc_html($label['term_name']) .'</label>';
+                                        $output .= '</div>';
+                                        $output .= '</li>';
+                                        if(isset($label['childern']) && !empty($label['childern'])){
+                                            $output .= '<ul>';
+                                            foreach($label['childern'] as $value => $label){
+                                                $output .= '<li class="'. $args['class'] .'">';
+                                                $output .= '<div class="cwp-field-checkbox">';
+                                                    $input_attrs = array(
+                                                        'type'         =>  'checkbox',
+                                                        'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
+                                                        'name'         =>  $name,
+                                                        'value'        =>  $label['term_id'],
+                                                        'class'        =>  'custom-control-input '. $args['class'],
+                                                    );
+                                                    if(isset($args['value']) && is_array($args['value']) && in_array($label['term_id'], $args['value'])){
+                                                        $input_attrs['extra_attrs'] = ' checked="checked"';
+                                                    } else if(isset($args['value']) && $args['value'] == $label['term_id']){
+                                                        $input_attrs['extra_attrs'] = ' checked="checked"';
+                                                    }
 
-                                                $output .= cwp_render_text_input( $input_attrs );
-                                                $output .= '<label for="'. esc_attr($args['id'] .' '. $label['term_name']) .'">'. esc_html($label['term_name']) .'</label>';
-                                            $output .= '</div>';
-                                            $output .= '</li>';
+                                                    $output .= cwp_render_text_input( $input_attrs );
+                                                    $output .= '<label for="'. esc_attr($args['id'] .' '. $label['term_name']) .'">'. esc_html($label['term_name']) .'</label>';
+                                                $output .= '</div>';
+                                                $output .= '</li>';
+                                            }
+                                            $output .= '</ul>';
                                         }
-                                        $output .= '</ul>';
                                     }
+                                    $output .= '</ul>';
                                 }
-                                $output .= '</ul>';
                             }
                         }
                     }
-                    }
                     $currentVal = isset($currentVal) ? $currentVal : '';
                     $input_attrs = array( 
-                        'name'         => $args['name'],
+                        'name'         => !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
                         'class'        => !empty($currentVal) ? 'is_tax': '',
                         'value'        => !empty($currentVal) ? $currentVal : $args['value'],
                         'extra_attrs'  => 'data-current-tax="'.$currentVal.'"',
@@ -259,8 +259,9 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
         
         $args           =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
         $options        = cwp_convert_choices_to_array($args['options']);
-        $name           =  !empty($args['custom_name']) ? $args['custom_name'].'' : $args['name'].'';
+        $name           =  '';
         $output         = self::cwp_frontend_search_field_container($args);
+        $args['custom_name']  =  !empty($args['name']) ? '_ST_'.$args['name'] : $args['name'];
 
             $output .= '<div class="cwp-search-field cwp-search-field-checkbox '. $args['container_class'] .'">';
                 $output .= self::cwp_frontend_search_field_label($args);
@@ -268,13 +269,13 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                     if (!empty($options) && (is_array($options) || is_object($options))) {
                         foreach($options as $value => $label){
                             if(!empty($label)){
-                                $output .= '<li '. $args['class'] .'>';
+                                $output .= '<li class="'. $args['class'] .'">';
                                 $output .= '<div class="cwp-field-checkbox">';
                                     $input_attrs = array(
                                         'type'         =>  'checkbox',
                                         'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
                                         'name'         =>  $name,
-                                        'value'        =>  $value,
+                                        'value'        =>  $label['term_id'],
                                         'class'        =>  'custom-control-input '. $args['class'],
                                     );
                                     $output .= cwp_render_text_input( $input_attrs );
@@ -284,13 +285,13 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                                 if(isset($label['childern']) && !empty($label['childern'])){
                                     $output .= '<ul>';
                                     foreach($label['childern'] as $value => $label){
-                                        $output .= '<li '. $args['class'] .'>';
+                                        $output .= '<li class="'. $args['class'] .'">';
                                         $output .= '<div class="cwp-field-checkbox">';
                                             $input_attrs = array(
                                                 'type'         =>  'checkbox',
                                                 'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
                                                 'name'         =>  $name,
-                                                'value'        =>  $value,
+                                                'value'        =>  $label['term_id'],
                                                 'class'        =>  'custom-control-input '. $args['class'],
                                             );
                                             $output .= cwp_render_text_input( $input_attrs );
@@ -300,13 +301,13 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                                         if(isset($label['childern']) && !empty($label['childern'])){
                                             $output .= '<ul>';
                                             foreach($label['childern'] as $value => $label){
-                                                $output .= '<li '. $args['class'] .'>';
+                                                $output .= '<li class="'. $args['class'] .'">';
                                                 $output .= '<div class="cwp-field-checkbox">';
                                                     $input_attrs = array(
                                                         'type'         =>  'checkbox',
                                                         'id'           =>  esc_attr($args['id'] .' '. $label['term_name']),
                                                         'name'         =>  $name,
-                                                        'value'        =>  $value,
+                                                        'value'        =>  $label['term_id'],
                                                         'class'        =>  'custom-control-input '. $args['class'],
                                                     );
                                                     $output .= cwp_render_text_input( $input_attrs );
@@ -322,12 +323,12 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                             }
                         }
                     }
-                        $input_attrs = array( 
-                            'name'         => $args['name'],
-                            'value'        => '',
-                        );
+                    $input_attrs = array( 
+                        'name'         => !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
+                        'value'        => '',
+                    );
 
-                        $output .= cwp_render_hidden_input( $input_attrs );
+                    $output .= cwp_render_hidden_input( $input_attrs );
                 $output .= '</ul>';
             $output .= '</div>';
         $output .= '</div>';
@@ -386,12 +387,13 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
      * @since  1.0.0
      */
     public function render_search_filters_dropdown_taxonomy_field( $output = '', $args = array() ){
+        
         $args    =  apply_filters( 'cubewp/frontend/field/parametrs', $args );
 		
 		if(is_tax() && !is_search() && !is_page()){
             $queried_object = get_queried_object();
             if (is_object($queried_object) && !empty($queried_object) && !is_wp_error($queried_object)) {
-                $CurrentSlug = $queried_object->slug;
+                $CurrentSlug = $queried_object->term_id;
                 if(isset($CurrentSlug)){
                     $args['value'] = $CurrentSlug;
                 }
@@ -399,6 +401,7 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
         }
 		
         $values  =  !empty($args['value']) ? explode(',', $args['value']) : $args['value'];
+        $args['custom_name']  =  !empty($args['name']) ? '_ST_'.$args['name'] : $args['name'];
 
         if(isset($args['options']) && !empty($args['options'])){
             $output  = self::cwp_frontend_search_field_container($args);
@@ -406,17 +409,18 @@ class CubeWp_Frontend_Terms_Field extends CubeWp_Frontend {
                 $input_attrs = array( 
                     'id'           => !empty($args['id']) ? $args['id'] : $args['name'],
                     'class'        => $args['class'],
-                    'name'         => $args['name'],
+                    'name'         => !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
                     'value'        => $values,
                     'placeholder'  => !empty($args['placeholder']) ? $args['placeholder'] : esc_html__( 'Choose your option', 'cubewp-framework' ),
-                    'options'      => isset($args['options']) ? self::cwp_sub_terms_dropdown_output($args['options']) : array(),
+                    'options'      => isset($args['options']) ? self::cwp_sub_terms_dropdown_output_id($args['options']) : array(),
                 );
                 if( (isset($args['multi']) && $args['multi'] == true) || (isset($args['multiple']) && $args['multiple'] == 1)){
                     unset($input_attrs['name']);
+                    $input_attrs['hidden_input'] = false;
                     $input_attrs['class']  = $args['class'].' '.$args['multi'].' multi-select';
                     $output .= cwp_render_multi_dropdown_input( $input_attrs );
                     $input_attrs = array( 
-                        'name'         => $args['name'],
+                        'name'         => !empty($args['custom_name']) ? $args['custom_name'] : $args['name'],
                         'value'        => isset($args['value']) ? $args['value'] : '',
                     );
                     $output .= cwp_render_hidden_input( $input_attrs );

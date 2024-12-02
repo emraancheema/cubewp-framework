@@ -55,9 +55,6 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 	protected function register_controls() {
 		self::get_post_types();
 
-		//cwp_pre(); cubewp_terms_by_post_types('real-estate')
-		//exit;
-
 		$this->start_controls_section( 'cubewp_widgets_section', array(
 			'label' => esc_html__( 'Query Options', 'cubewp-framework' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
@@ -89,24 +86,42 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 				'orderby!' => 'rand',
 			),
 		) );
-		$this->add_control( 'posts_per_page', array(
+		$this->add_control( 'number_of_posts', array(
 			'type'    => Controls_Manager::SELECT,
-			'label'   => esc_html__( 'Posts Per Page', 'cubewp-framework' ),
+			'label'   => esc_html__( 'Number Of Posts', 'cubewp-framework' ),
 			'options' => array(
-				'-1' => esc_html__( 'Show All Posts', 'cubewp-framework' ),
-				'3'  => esc_html__( 'Show 3 Posts', 'cubewp-framework' ),
-				'4'  => esc_html__( 'Show 4 Posts', 'cubewp-framework' ),
-				'5'  => esc_html__( 'Show 5 Posts', 'cubewp-framework' ),
-				'6'  => esc_html__( 'Show 6 Posts', 'cubewp-framework' ),
-				'8'  => esc_html__( 'Show 8 Posts', 'cubewp-framework' ),
-				'9'  => esc_html__( 'Show 9 Posts', 'cubewp-framework' ),
-				'12' => esc_html__( 'Show 12 Posts', 'cubewp-framework' ),
-				'16' => esc_html__( 'Show 16 Posts', 'cubewp-framework' ),
-				'15' => esc_html__( 'Show 15 Posts', 'cubewp-framework' ),
-				'20' => esc_html__( 'Show 20 Posts', 'cubewp-framework' )
+				'-1' => esc_html__( 'All Posts', 'cubewp-framework' ),
+				'3'  => esc_html__( '3 Posts', 'cubewp-framework' ),
+				'4'  => esc_html__( '4 Posts', 'cubewp-framework' ),
+				'5'  => esc_html__( '5 Posts', 'cubewp-framework' ),
+				'6'  => esc_html__( '6 Posts', 'cubewp-framework' ),
+				'8'  => esc_html__( '8 Posts', 'cubewp-framework' ),
+				'9'  => esc_html__( '9 Posts', 'cubewp-framework' ),
+				'12' => esc_html__( '12 Posts', 'cubewp-framework' ),
+				'16' => esc_html__( '16 Posts', 'cubewp-framework' ),
+				'15' => esc_html__( '15 Posts', 'cubewp-framework' ),
+				'20' => esc_html__( '20 Posts', 'cubewp-framework' )
 			),
 			'default' => '3'
 		) );
+		$this->add_control( 'load_more', array(
+			'type'      => Controls_Manager::SWITCHER,
+			'label'     => esc_html__( 'Load More Button', 'cubewp-framework' ),
+			'default'   => 'yes',
+			'condition' => array(
+				'number_of_posts' => '-1',
+			)
+		) );
+		$this->add_control( 'posts_per_page', array(
+			'type'    => Controls_Manager::NUMBER,
+			'label'   => esc_html__( 'Posts Per Page', 'cubewp-framework' ),
+			'default' => '6',
+			'condition' => array(
+				'number_of_posts' => '-1',
+				'load_more' => 'yes',
+			)
+		) );
+		
 		$this->add_control( 'layout', array(
 			'type'    => Controls_Manager::SELECT,
 			'label'   => esc_html__( 'Layout', 'cubewp-framework' ),
@@ -116,24 +131,6 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 			),
 			'default' => 'grid'
 		) );
-
-		$this->add_control( 'column_per_row', array(
-			'type'    => Controls_Manager::SELECT,
-			'label'   => esc_html__( 'No Of Columns Per Row', 'cubewp-framework' ),
-			'options' => array(
-				'1' => esc_html__( '1 Column Per Row', 'cubewp-framework' ),
-				'2' => esc_html__( '2 Columns Per Row', 'cubewp-framework' ),
-				'3' => esc_html__( '3 Columns Per Row', 'cubewp-framework' ),
-				'4' => esc_html__( '4 Columns Per Row', 'cubewp-framework' ),
-				'0' => esc_html__( 'Auto Adjust Columns Per Row', 'cubewp-framework' )
-			),
-			'condition' => array(
-				'layout' => 'grid',
-			),
-			'default' => '3'
-		) );
-
-		
 
 		$this->end_controls_section();
 
@@ -277,7 +274,7 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 			$options = array(
 				"all" => esc_html__( "All" ),
 				"taxonomy" => esc_html__( "By Taxonomy" ),
-				"post_ids" => esc_html__( "By IDs" ),
+				//"post_ids" => esc_html__( "By IDs" ),
 			);
 			if(class_exists('CubeWp_Booster_Load')){
 				$options['boosted'] = esc_html__( "Boosted Only" );
@@ -318,7 +315,7 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 	}
 
 	private function add_posttype_controls( $post_type ) {
-		$posts = self::get_post_type_posts( $post_type );
+		//$posts = self::get_post_type_posts( $post_type );
 		
 		if ( ! empty( $posts ) ) {
 			$this->add_control( $post_type . '_post__in', array(
@@ -358,7 +355,7 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 		$termArray = [];
 		if(!empty($object)){
 			foreach($object as $key => $terms){
-				$termArray['['.$terms['taxonomy'].']'.$terms['slug']] = $terms['name'];
+				$termArray['['.$terms['taxonomy'].']'.$key] = $terms['name'];
 			}
 		}
 	 
@@ -412,15 +409,17 @@ class CubeWp_Elementor_Posts_Widget extends Widget_Base {
 		$filter_by_meta = isset( $settings[ 'filter_by_meta' ] ) ? $settings[ 'filter_by_meta' ] : array();
 		
 		$args = array(
-			'posttype'       => $settings['posttype'],
+			'post_type'       => $settings['posttype'],
 			'taxonomy'       => array(),
 			'orderby'        => $settings['orderby'],
 			'order'          => $settings['order'],
+			'number_of_posts' => $settings['number_of_posts'],
+			'load_more' 	  => $settings['load_more'],
 			'posts_per_page' => $settings['posts_per_page'],
 			'layout'         => $settings['layout'],
-			'column_per_row' => $settings['column_per_row'],
 			'post__in'       => array(),
 			'boosted_only'   => 'no',
+			'paged'   => '1',
 		);
 
 		if(is_array($settings['posttype']) && ($posts_by !== 'boosted' || $posts_by !== 'all')){

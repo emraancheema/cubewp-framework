@@ -194,15 +194,41 @@ jQuery(document).on("change", '#cwp-sorting-filter', function() {
 });
 
 function cwp_search_filters_ajax_content( page_num=''){
-    jQuery('.cwp-search-result-output').empty();
-    jQuery('.cwp-archive-container').addClass('cwp-active-ajax');
-    var state = jQuery('.cwp-search-filters-fields').find('input[name="page"]').val();
+
+    // Loading SKeleton 
+    if (jQuery('.cwp-archive-container .cwp-grids-container').length > 0) {
+        jQuery('.cwp-archive-container .cwp-grids-container div').html(
+            '<div class="cwp-processing-post-grid">' +
+            '<div class="cwp-processing-post-thumbnail"></div>' +
+            '<div class="cwp-processing-post-content"><p></p><p></p><p></p></div>' +
+            '</div>'
+        );
+    } else {
+        let processingGrid = '';
+        for (let i = 0; i < 6; i++) {
+            processingGrid += 
+                '<div class="cwp-col-md-4">' +
+                '<div class="cwp-processing-post-grid">' +
+                '<div class="cwp-processing-post-thumbnail"></div>' +
+                '<div class="cwp-processing-post-content"><p></p><p></p><p></p></div>' +
+                '</div></div>';
+        }
+        jQuery('.cwp-archive-container .cwp-search-result-output').html(
+            '<div class="cwp-grids-container cwp-row">' + processingGrid + '</div>'
+        );
+    }
+
+    // Getting filter form
+    var FilterForm = jQuery('.cwp-search-filters'),
+        state = jQuery('.cwp-search-filters-fields').find('input[name="page"]').val(),
+        is_tax = FilterForm.find('.is_tax').val();
+
     page_num = page_num || 1;    
 
     var action = '&action=cwp_search_filters_ajax_content';
 
-    var FilterForm = jQuery('.cwp-search-filters');
     FilterForm.find('input[name="page_num"]').val( page_num );
+
     var FilterFields = FilterForm.serialize();
     
     if(jQuery('#cwp-order-filter').length > 0){
@@ -221,10 +247,13 @@ function cwp_search_filters_ajax_content( page_num=''){
     
     data_vals = data_vals.replace('undefined', ''); // remove extra and empty variables
     
-    if(state !== 'page'){
+    if(state !== 'page' && (is_tax == '' || is_tax == undefined)){
         var current_url = location.protocol + "//" + location.host + location.pathname + "?" + data_vals;
         window.history.pushState(null, null, decodeURIComponent(current_url));
     }
+
+    // Remove _ST_ from parameter names from query Strings like if there is a taxonomy property_type it will come in query string _ST_property_type
+    data_vals = stripPrefixFromParams(data_vals, '_ST_');
     
     jQuery.ajax({
         url: cwp_search_filters_params.ajax_url,
@@ -239,7 +268,12 @@ function cwp_search_filters_ajax_content( page_num=''){
             }
             jQuery('.cwp-search-result-output').html(response.grid_view_html);
             jQuery('.cwp-total-results').html(response.post_data_details);
-            CWP_Cluster_Map(response.map_cordinates);
+
+            // Listing update on Map
+            if (typeof CWP_Cluster_Map === 'function') {
+                CWP_Cluster_Map(response.map_cordinates);
+            }
+            
             jQuery('.cwp-archive-container').removeClass('cwp-active-ajax');
             jQuery( document.body ).trigger( 'cubewp_search_results_loaded' );
         }
@@ -283,6 +317,29 @@ function stripUrlParams(args) {
     }
 
     return parts.join('&');
+}
+
+function stripPrefixFromParams(params, prefix) {
+    let paramMap = new Map();
+    
+    // Split the query string into individual parameters
+    params.split('&').forEach(function(param) {
+        let [key, value] = param.split('=');
+        
+        // If the parameter starts with the prefix, remove it and store it in the map
+        if (key.startsWith(prefix)) {
+            key = key.substring(prefix.length);
+            paramMap.set(key, value);
+        } else if (!paramMap.has(key)) {
+            // Only add the parameter if it isn't already in the map (i.e., prefixed version doesn't exist)
+            paramMap.set(key, value);
+        }
+    });
+
+    // Reconstruct the query string from the map
+    return Array.from(paramMap)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
 }
 
 

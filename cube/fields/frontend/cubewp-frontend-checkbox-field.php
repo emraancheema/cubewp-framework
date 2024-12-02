@@ -113,7 +113,7 @@ class CubeWp_Frontend_Checkbox_Field extends CubeWp_Frontend {
                                 $input_attrs['extra_attrs'] = ' checked="checked"';
                             }else if(is_tax()){
                                 $queried_object = get_queried_object();
-                                $CurrentSlug = $queried_object->slug;
+                                $CurrentSlug = $queried_object->term_id;
                                 if(isset($CurrentSlug) && $CurrentSlug == $value){
                                     $input_attrs['extra_attrs'] = ' checked="checked"';
                                     $args['value'] = $CurrentSlug;

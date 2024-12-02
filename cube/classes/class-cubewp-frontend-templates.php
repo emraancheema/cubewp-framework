@@ -24,14 +24,12 @@ class CubeWp_Frontend_Templates {
         if (empty($cwpOptions)) {
             $cwpOptions = get_option('cwpOptions');
         }
-        $is_cubewp_single = (isset($cwpOptions['cubewp_singular']) && ! empty($cwpOptions['cubewp_singular'])) ? $cwpOptions['cubewp_singular'] : 0;
-        $is_cubewp_archive = (isset($cwpOptions['cubewp_archive']) && ! empty($cwpOptions['cubewp_archive'])) ? $cwpOptions['cubewp_archive'] : 0;
         $is_cubewp_author = (isset($cwpOptions['show_author_template']) && ! empty($cwpOptions['show_author_template'])) ? $cwpOptions['show_author_template'] : 0;
         
         if (CWP()->is_request('frontend')) {
 
             // CubeWP theme builder All single
-            if ($is_cubewp_single && !is_singular( 'product' ) ) {
+            if (!is_singular( 'product' ) ) {
                 add_filter('single_template', array($this, 'cubewp_single_template'), 99,3);
             }
 
@@ -41,10 +39,10 @@ class CubeWp_Frontend_Templates {
             }
 
             // CubeWP theme builder Archives
-            if ($is_cubewp_archive && !is_post_type_archive('product')) {
+            if (!is_post_type_archive('product')) {
                 add_filter('archive_template', array($this, 'cubewp_archive_template'), 49,3);
                 add_filter('search_template', array($this, 'cubewp_archive_template'), 49,3);
-                //add_filter('taxonomy_template', array($this, 'cubewp_archive_template'), 49,3);
+                add_filter('taxonomy_template', array($this, 'cubewp_archive_template'), 49,3);
             }
 
             // CubeWP theme builder Product
@@ -85,7 +83,7 @@ class CubeWp_Frontend_Templates {
                 }
             }
 
-            //CubeWP theme builder Blocks
+            //CubeWP theme builder 404
             if(CubeWp_Theme_Builder::is_cubewp_theme_builder_active('404')){
                 if( is_404() ){
                     add_action('cubewp/theme_builder/404', function(){
@@ -163,17 +161,16 @@ class CubeWp_Frontend_Templates {
      * @since  1.0.5
      */
     private function theme_archive_template() {
-        if ( is_post_type_archive() ) {
-            $post_type = get_query_var( 'post_type' );
-        }
 	    $return = false;
 		if (!empty(self::locate_current_archive_template())){
 			$return = true;
         }
-        if($post_type){
-            $return = apply_filters( "cubewp/{$post_type}/archive/template", $return );
+        if ( is_post_type_archive() ) {
+            $post_type = get_query_var( 'post_type' );
+            if($post_type){
+                $return = apply_filters( "cubewp/{$post_type}/archive/template", $return );
+            }
         }
-
 	    return $return;
     }
 
@@ -181,6 +178,17 @@ class CubeWp_Frontend_Templates {
     public function cubewp_single_template($template = '',$type = '',$templates = '') {
         if ( !$this->elementor_single_template_include() ) {
 
+            // If bricks builder is active and single page tempplate is built with bricks
+            if (class_exists('Bricks\Helpers') && method_exists('Bricks\Helpers', 'render_with_bricks')) {
+                $post_id = get_the_ID(); // Get the current post/page ID                
+                // Now call the method safely
+                if (Bricks\Helpers::render_with_bricks( $post_id, 'content') && !CubeWp_Theme_Builder::is_cubewp_theme_builder_active('single')) {
+                    // If the method returns true, the post is built with Bricks Builder
+                    return $template;
+                }
+            }
+
+            // If post type created with CubeWP and single page template not created with theme builder
             if (
                 !array_key_exists(get_post_type(), CWP_types())
                 && !is_singular( 'cubewp-tb' ) 
@@ -211,6 +219,19 @@ class CubeWp_Frontend_Templates {
     public function cubewp_archive_template($template = '',$type = '',$templates = '') {
         if ( !$this->elementor_archive_template_include() ) {
 
+            // If bricks builder is active and Archive page template is built with bricks
+            if (class_exists('Bricks\Database') && method_exists('Bricks\Database', 'get_template_data')) {
+                // Now call the method safely
+                if (
+                    (Bricks\Database::get_template_data('archive') || Bricks\Database::get_template_data('search'))
+                    && !CubeWp_Theme_Builder::is_cubewp_theme_builder_active('archive')
+                    )
+                {
+                    // If the method returns true, the Archive is built with Bricks Builder
+                    return $template;
+                }
+            }
+
             $current_term = get_queried_object();
             
             if ($current_term && !is_wp_error($current_term) && isset($current_term->taxonomy)) {
@@ -218,7 +239,7 @@ class CubeWp_Frontend_Templates {
                     return $template;
                 }
             }
-            
+           
             if(is_post_type_archive( 'product' ) && !CubeWp_Theme_Builder::is_cubewp_theme_builder_active('archive')){
                 return $template;
             }elseif(CubeWp_Theme_Builder::is_cubewp_theme_builder_active('archive') || !self::theme_archive_template()){
@@ -321,12 +342,24 @@ class CubeWp_Frontend_Templates {
                 'author-' . $author->user_nicename . '.php',
                 'author.php'
             );
+        }elseif (is_search()) {
+            if ( isset( $_GET['post_type'] ) && !empty( $_GET['post_type'] ) ) {
+                // Sanitize the post_type value from the query string
+                $post_type = sanitize_text_field( $_GET['post_type'] );
+                
+                // Define the template array
+                $templates = array(
+                    'search-' . $post_type . '.php'
+                );
+            }   
         }
 
-        foreach ($templates as $template) {
-            $located = locate_template($template);
-            if ($located) {
-                return $located;
+        if(!empty($templates)){
+            foreach ($templates as $template) {
+                $located = locate_template($template);
+                if ($located) {
+                    return $located;
+                }
             }
         }
         return false;

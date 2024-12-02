@@ -18,15 +18,15 @@ use Elementor\Widget_Base;
     }
 
     public function get_title() {
-        return __( 'Search Map Display Widget', 'elementor' );
+        return __( 'Archive Map', 'elementor' );
     }
 
     public function get_icon() {
-        return 'eicon-map-pin';
+        return 'eicon-google-maps';
     }
 
     public function get_categories() {
-        return [ 'basic' ];
+        return [ 'cubewp' ];
     }
 
     protected function _register_controls() {
@@ -67,9 +67,17 @@ use Elementor\Widget_Base;
     }
 
     protected function render() {
+        CubeWp_Enqueue::enqueue_style( 'cwp-map-cluster' );
+        CubeWp_Enqueue::enqueue_style( 'cwp-leaflet-css' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-map' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet-cluster' );
+        CubeWp_Enqueue::enqueue_script( 'cubewp-leaflet-fullscreen' );
         ?>
         <script>
-            CWP_Cluster_Map();
+            if (typeof CWP_Cluster_Map === 'function') {
+                CWP_Cluster_Map();
+            }
         </script>
         <div class="cwp-archive-content-map"></div>
         <?php

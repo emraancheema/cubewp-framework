@@ -46,9 +46,13 @@ class CubeWp_Import {
             session_destroy();
         }
        ?>
-        <div id="cubewp-import">
+        <div id="cubewp-import" class="imp-exp">
             <div class="cubewp-page-header">
-                <h2><?php esc_html_e('CubeWP Import', 'cubewp-framework'); ?></h2>
+                <h2><?php esc_html_e('CubeWP Data Import / Export', 'cubewp-framework'); ?></h2>
+                <nav class="nav-tab-wrapper wp-clearfix">
+                    <a class="nav-tab nav-tab-active" href="?page=cubewp-import"><?php esc_html_e('Import', 'cubewp-framework'); ?></a>
+                    <a class="nav-tab " href="?page=cubewp-export"><?php esc_html_e('Export', 'cubewp-framework'); ?></a>
+                </nav>
             </div>
             <form id="import_form" method="post" action="" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="cwp_import_data">
@@ -207,7 +211,14 @@ class CubeWp_Import {
      * @since  1.0.0
      */
     public function cwp_import_dummy_data_callback(){
-
+        if ( !current_user_can('manage_options') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('You do not have permission to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
+        if ( !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cubewp-admin-nonce') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('Invalid nonce. You are not authorized to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
         if(isset($_POST['data_type']) && $_POST['data_type'] == 'dummy'){
             $plugin_targetdir = CWP_PLUGIN_PATH . 'cube/includes/setup/';
             $targetdir = apply_filters( 'cubewp/import/content/path', $plugin_targetdir );
