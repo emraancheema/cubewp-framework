@@ -178,6 +178,12 @@ jQuery(document).ready(function () {
                         if( response.success === 'false' ){
                             alert(response.msg);
                         }else{
+                            var export_post_cards = false;
+                            if ( jQuery('.export-form').find('#cwp_post_cards').length > 0 ) {
+                                if ( jQuery('.export-form').find('#cwp_post_cards').is(':checked') ) {
+                                    export_post_cards = true;
+                                }
+                            }
                             var export_custom_forms = false;
                             if ( jQuery('.export-form').find('#custom-forms-fields').length > 0 ) {
                                 if ( jQuery('.export-form').find('#custom-forms-fields').is(':checked') ) {
@@ -185,6 +191,9 @@ jQuery(document).ready(function () {
                                 }
                             }
                             var _ajax_data = 'action=cwp_user_data&export=success&nonce='+cwp_vars_params.nonce;
+                            if (export_post_cards) {
+                                _ajax_data += '&export_post_cards=true';
+                            }
                             if (export_custom_forms) {
                                 _ajax_data += '&download_now=false';
                             }
@@ -198,10 +207,14 @@ jQuery(document).ready(function () {
                                         alert(response.msg);
                                     }else{
                                         if (export_custom_forms) {
+                                            var custom_form_data = 'action=cwp_custom_forms&export=success&nonce='+cwp_vars_params.nonce;
+                                            if (export_post_cards) {
+                                                custom_form_data += '&export_post_cards=true';
+                                            }
                                             jQuery.ajax({
                                                 type: 'POST',
                                                 url: cwp_vars_params.ajax_url,
-                                                data: 'action=cwp_custom_forms&export=success&nonce='+cwp_vars_params.nonce,
+                                                data: custom_form_data,
                                                 dataType: 'json',
                                                 success: function (response) {
                                                     if( response.success === 'false' ){

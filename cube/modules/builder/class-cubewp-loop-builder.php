@@ -74,45 +74,17 @@ class CubeWp_Loop_Builder {
 		global $cwpOptions;
 		$cwpOptions = ! empty( $cwpOptions ) ? $cwpOptions : get_option( 'cwpOptions' );
 
-		$post_types       = CWP_all_post_types();
-
-		// Styles coming from CUbeWp settings.
-		$custom_styles = isset($cwpOptions['cwp_loop_style']) & !empty($cwpOptions['cwp_loop_style']) ? $cwpOptions['cwp_loop_style'] : [];
+		$post_types = CWP_all_post_types();
 
 		$switcher_options = array();
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $post_type => $label ) {
-				$switcher_options[ $post_type ]['label']       	= $label;
-				$loop_styles                                   	= apply_filters( "cubewp/loop/builder/{$post_type}/styles", array() );
-				$loop_styles                                   	= ! empty( $loop_styles ) && is_array( $loop_styles ) ? $loop_styles : array();
-				$_loop_styles 									= isset($custom_styles[$post_type]) && !empty($custom_styles[$post_type]) ? self::render_custom_styles($custom_styles[$post_type]) : self::render_custom_styles();
-				$loop_styles                                   	= array_merge( $_loop_styles, $loop_styles );
-				$switcher_options[ $post_type ]['loop-styles'] 	= $loop_styles;
+				$switcher_options[ $post_type ]['label'] = $label;
+				$switcher_options[ $post_type ]['loop-styles'] = cwp_get_loop_styles_by_post_type($post_type);
 			}
 		}
 
 		self::$cubewp_style_options = $switcher_options;
-	}
-
-	private static function render_custom_styles($styles = '') {
-		$styles_array = [];
-		if(!empty($styles)){
-			$styles_array = explode(",", $styles);
-		}
-		
-		//Default STyle for all post types
-		$new_array = array(
-			'default_style' => esc_html__( 'Basic Style', 'cubewp-frontend' )
-		);
-
-		if(is_array($styles_array) && !empty($styles_array)){
-			foreach($styles_array as $style){
-				$key = str_replace(' ', '_', $style);
-				$new_array[$key] = $style;
-			}
-		}
-
-		return $new_array;
 	}
 
 	private static function cubewp_loop_builder_title_bar() {

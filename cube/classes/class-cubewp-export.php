@@ -183,6 +183,11 @@ class CubeWp_Export {
                        value="cwp_settings" checked="checked">
                 <label for="cwp_settings"><?php esc_html_e('CubeWP Settings', 'cubewp-framework'); ?></label>
             </div>
+            <div class="cubewp-export-option">
+                <input type="checkbox" id="cwp_post_cards" name="cwp_export_content_type[]"
+                    value="cwp_post_cards" checked="checked">
+                <label for="cwp_post_cards"><?php esc_html_e('CubeWP Post Cards', 'cubewp-framework'); ?></label>
+            </div>
         </div>
         <?php
     }
@@ -380,34 +385,79 @@ class CubeWp_Export {
         return $names;
     }
 
-    private function cwp_create_zip_file($final = false){
-
+    private function cwp_create_zip_file($final = false)
+    {
         $files = self::cwp_file_names();
         $zip = new ZipArchive();
 
-        $DelFilePath = $files['file_name'].".zip";
+        $DelFilePath = $files['file_name'] . ".zip";
         $upload_dir = wp_upload_dir();
-        if(file_exists($upload_dir['path'] . '/cubewp/export/'.$DelFilePath)) {
+        $export_path = $upload_dir['path'] . '/cubewp/export/';
+        $post_cards_dir = $upload_dir['basedir'] . '/cubewp-post-cards';
 
-            unlink ($upload_dir['path'] . '/cubewp/export/'.$DelFilePath); 
-
+        if (!is_dir($export_path)) {
+            mkdir($export_path, 0755, true); // Ensure export directory exists
         }
-        if ($zip->open($upload_dir['path'] . '/cubewp/export/'.$DelFilePath, ZIPARCHIVE::CREATE) != TRUE) {
-                die ("Could not open archive");
-        }
-            $zip->addFile($files['setup_file'],'cwp-setup.json');
-            $zip->addFile($files['cwp_post_groups'],'cwp_post_groups.json');
-            $zip->addFile($files['cwp_user_groups'],'cwp_user_groups.json');
-            $zip->addFile($files['cwp_custom_forms'],'cwp_custom_forms.json');
-        // close and save archive
 
+        if (file_exists($export_path . $DelFilePath)) {
+            unlink($export_path . $DelFilePath);
+        }
+
+        if ($zip->open($export_path . $DelFilePath, ZIPARCHIVE::CREATE) !== TRUE) {
+            die("Could not open archive");
+        }
+
+        // Add files to the zip archive
+        $zip->addFile($files['setup_file'], 'cwp-setup.json');
+        $zip->addFile($files['cwp_post_groups'], 'cwp_post_groups.json');
+        $zip->addFile($files['cwp_user_groups'], 'cwp_user_groups.json');
+        $zip->addFile($files['cwp_custom_forms'], 'cwp_custom_forms.json');
+
+        $export_post_cards = isset($_POST['export_post_cards']) ? sanitize_text_field($_POST['export_post_cards']) : 'false';
+        // Add "cubewp-post-cards" to the zip archive
+        if ($export_post_cards == 'true' && is_dir($post_cards_dir)) {
+            $this->add_post_cards_folder_to_zip($post_cards_dir, $zip, 'cubewp-post-cards');
+        }
+
+        // Close and save archive
         $zip->close();
-        unlink ($files['setup_file']);
-        unlink ($files['cwp_post_groups']);
-        unlink ($files['cwp_user_groups']);
-        unlink ($files['cwp_custom_forms']);
 
+        // Cleanup temporary files
+        unlink($files['setup_file']);
+        unlink($files['cwp_post_groups']);
+        unlink($files['cwp_user_groups']);
+        unlink($files['cwp_custom_forms']);
     }
+
+    /**
+     * Recursively add a folder and its contents to a zip archive.
+     *
+     * @param string $folder Source folder path.
+     * @param ZipArchive $zip ZipArchive instance.
+     * @param string $parent_folder Parent folder path inside the zip file.
+     */
+    private function add_post_cards_folder_to_zip($folder, $zip, $parent_folder = '')
+    {
+        $files = scandir($folder);
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+
+            $file_path = $folder . '/' . $file;
+            $zip_path = $parent_folder ? $parent_folder . '/' . $file : $file;
+
+            if (is_dir($file_path)) {
+                // Add directory and its contents
+                $zip->addEmptyDir($zip_path);
+                $this->add_post_cards_folder_to_zip($file_path, $zip, $zip_path);
+            } else {
+                // Add file to zip
+                $zip->addFile($file_path, $zip_path);
+            }
+        }
+    }
+
     /**
      * Method cwp_file_force_contents
      *

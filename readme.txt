@@ -5,7 +5,7 @@ Tags: custom fields, custom post types, custom taxonomies, acf, metabox
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 1.1.22
+Stable tag: 1.1.23
 License: GPLv2 or later
 
 CubeWP is an end-to-end dynamic content framework for WordPress to help you shrink time and cut cost of development up to 90%.
@@ -375,6 +375,14 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+= 1.1.23 2024-11-28
+
+- Added: Import and Export Functionality for CubeWP Post Cards.
+- Added: Post slider options in CubeWP Posts Elementor widget, allowing users to enable a slider for posts.
+- Optimized: Reduced API calls for CubeWP Addons plugin updates by setting a transient.
+- UPDATED: Improved role checks to hide custom post types from subscribers and redirect them if accessed directly.
+- FIXED: Post card styles issue in CubeWP Posts Elementor widget.
 
 = 1.1.22 2024-11-13
 
