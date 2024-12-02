@@ -17,7 +17,7 @@ ob_start();
             </a>
             <?php
             if (class_exists('CubeWp_Booster_Load')) {
-                if (is_boosted($post_id)) {
+                if (function_exists('is_boosted') && is_boosted($post_id)) {
                     ?>
                     <div class="cwp-post-boosted">
                         <?php echo esc_html_e('Ad', 'cubewp-framework'); ?>

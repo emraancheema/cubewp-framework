@@ -80,7 +80,7 @@ class CubeWp_User_Custom_Fields_UI extends CubeWp_Custom_Fields_Processor{
         $group = wp_parse_args( $group, $defaults );
         
         ?>
-        <div class="wrap">            
+        <div class="wrap cubewp-wrap">            
             <form id="post" class="cwpgroup" method="post" action="" enctype="multipart/form-data">
                 <div class="wrap cwp-post-type-title  margin-bottom-0 width-40 margin-left-minus-20  margin-right-0">
                     <?php echo self::_title();    ?>

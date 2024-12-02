@@ -470,3 +470,38 @@ ul.cwp-single-category-widget-inner li {
     padding: 2px 5px;
 }
 }
+
+/*--------- Business Hour ------------*/
+.cwp-cpt-single-business_hours.cwp-cpt-single-field-container {
+    display: block;
+}
+.cwp-business-hours {
+    margin: 20px 0 0 0;
+}
+.cwp-business-hours .cwp-cpt-single-field-container {
+    margin: 0 0 15px 0;
+}
+.cwp-business-hours p {
+    color: #898886;
+    font-size: 14px;
+    margin: 0;
+}
+.cwp-business-hours h6 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    text-transform: capitalize;
+}
+.cwp-business-status {
+    margin: 12px 0 0 0;
+    padding: 0;
+    font-size: 12px;
+    text-align: right;
+    text-transform: capitalize;
+}
+.cwp-business-status.Closed {
+    color: #dc3545;
+}
+.cwp-business-status.Open {
+    color: #0ccd15;
+}

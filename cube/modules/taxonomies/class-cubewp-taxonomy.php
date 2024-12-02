@@ -132,6 +132,9 @@ class CubeWp_taxonomy {
             
             
             $ctax_slug = sanitize_text_field($_POST['cwp']['CWPterm']['slug']);
+            if(is_numeric($ctax_slug)){
+                return '';
+            }
             $ctax = array(
                 $ctax_slug                => array(
                     'slug'                => sanitize_text_field($_POST['cwp']['CWPterm']['slug']),
@@ -205,7 +208,7 @@ class CubeWp_taxonomy {
         );
         $CWPterm  = wp_parse_args($CWPterm, $defaults);
         ?>
-         <div class="wrap">            
+         <div class="wrap cubewp-wrap">            
             <form id="post" class="cwptaxonomyform" method="post" action="" enctype="multipart/form-data">
                 <div class="wrap cwp-post-type-title width-40 margin-bottom-0 margin-left-minus-20  margin-right-0">
                     <?php echo self::_title();    ?>
@@ -222,6 +225,7 @@ class CubeWp_taxonomy {
                             <?php echo self::taxonomy_options($CWPterm); ?>
 
                         </div>
+                        <div class="clear"></div>
                     </div>
                 </div>
             </form>

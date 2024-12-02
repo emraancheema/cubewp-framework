@@ -19,15 +19,17 @@
         if (cubewp_settings_params.required.hasOwnProperty(t)) {
             $.each(cubewp_settings_params.required[t], function (e) {
                 jQuery.each(cubewp_settings_params.required_child[e], function (f, r) {
-                    var parentValue = $.cubewp.getContainerValue(r.parent);
-                    var show = $.cubewp.check_dependencies_visibility(parentValue, r);
-                    var i = jQuery("#cwp-" + e);
-                    if (show == true) {
-                        $(this).removeClass("hide");
-                        i.parents("tr:first").css('display', 'flex');
-                    } else {
-                        $(this).addClass("hide");
-                        i.parents("tr:first").css('display', 'none');
+                    if(!jQuery("#cwp-" + r.parent).hasClass('hide')){
+                        var parentValue = $.cubewp.getContainerValue(r.parent);
+                        var show = $.cubewp.check_dependencies_visibility(parentValue, r);
+                        var i = jQuery("#cwp-" + e);
+                        if (show == true) {
+                            i.removeClass("hide");
+                            i.parents("tr:first").css('display', 'flex');
+                        } else {
+                            i.addClass("hide");
+                            i.parents("tr:first").css('display', 'none');
+                        }
                     }
                 });
             });

@@ -90,8 +90,26 @@ class CubeWp_Rest_API extends WP_REST_Controller {
 	 * @see register_rest_route()
 	 */
 	public function register_routes() {
+
 		register_rest_route(
-			$this->namespace,
+			'cubewp-framework/v1',
+			'/verify',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => function () {
+						return true;
+					},
+					'permission_callback' => function () {
+						return true;
+					},
+					'args'                => [],
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->CF_namespace,
 			'/' . $this->base,
 			array(
 				array(
@@ -103,7 +121,7 @@ class CubeWp_Rest_API extends WP_REST_Controller {
 			)
 		);
 		register_rest_route(
-			$this->namespace,
+			$this->CF_namespace,
 			'/' . $this->custom_fields,
 			array(
 				array(
@@ -121,6 +139,21 @@ class CubeWp_Rest_API extends WP_REST_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array($this, 'get_cubewp_posts'),
+					'permission_callback' => function () {
+						return true;
+					},
+					'args'                => $this->get_render_params(),
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->QUERY_namespace,
+			'/query-new',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array($this, 'get_cubewp_posts_object'),
 					'permission_callback' => function () {
 						return true;
 					},
@@ -220,7 +253,74 @@ class CubeWp_Rest_API extends WP_REST_Controller {
 			$query  = new CubeWp_Query( $cwp_query );
 			$posts  = $query->cubewp_post_query();
 			if ( $posts->have_posts() ){
-				return $posts->posts;
+				$data = array(
+					'total_posts'    => $posts->found_posts,
+					'paged' => $posts->query['paged'],
+					'max_num_pages' => $posts->max_num_pages,
+					'posts' => $posts->posts,
+					
+				);
+				return $data;
+			}else{
+				return 'Sorry no post available.';
+			}		
+		}
+	}
+
+	public function get_cubewp_posts_object( $request ) {
+		$cwp_query =   $request->get_param(self::CWP_QUERY);
+		if($cwp_query){
+			$query  = new CubeWp_Query( $cwp_query );
+			$posts  = $query->cubewp_post_query();
+			if ( $posts->have_posts() ){
+				
+				$return=[];
+				while ($posts->have_posts()) {
+					$posts->the_post();
+					$post_id = get_the_ID();
+					$return[$post_id]['ID'] = $post_id;
+					$return[$post_id]['title'] = get_the_title();
+					if ( has_post_thumbnail() ) {
+						$return[$post_id]['profileImg'] = get_the_post_thumbnail_url( get_the_ID(), 'full' ); // 'full' can be changed to any registered image size
+					}else{
+						$return[$post_id]['profileImg'] = '';
+					}
+					$post_terms = array();
+					$taxonomies = get_object_taxonomies( get_post_type($post_id) );
+					if ( ! empty( $taxonomies ) && is_array( $taxonomies ) ) {
+						foreach ( $taxonomies as $taxonomy ) {
+							$all_terms = get_the_terms( $post_id, $taxonomy );
+							if(!is_wp_error( $all_terms ) && !empty( $all_terms )){
+								foreach($all_terms as $all_term){
+									$post_terms[$taxonomy][] = $all_term->name;
+								}
+							}
+						}
+					}
+					$return[$post_id]['taxonomies'] = isset( $post_terms ) && ! empty( $post_terms ) ? array_filter( $post_terms ) : array();
+					$post_meta = get_post_meta($post_id);
+
+					// Iterate over each meta value
+					foreach ($post_meta as $key => $values) {
+						foreach ($values as $index => $value) {
+							// Check if the value is serialized
+							if (is_serialized($value)) {
+								$return[$post_id]['post_meta'][$key] = maybe_unserialize($value);
+							}else{
+								$return[$post_id]['post_meta'][$key] = $value;
+							}
+						}
+					}
+					
+				}
+				$data = array(
+						'total_posts'    => $posts->found_posts,
+						'paged' => $posts->query['paged'],
+						'max_num_pages' => $posts->max_num_pages,
+						'posts' => $return,
+						
+				);
+				return $data;
 			}else{
 				return 'Sorry no post available.';
 			}		
@@ -425,6 +525,9 @@ class CubeWp_Rest_API extends WP_REST_Controller {
 		if($object && isset($object['id'])){
 			$post_id   = $object['id'];
 			$fields = CubeWp_Single_Cpt::cubewp_post_metas($post_id,true);
+			if(isset($object['type']) && $object['type'] == 'price_plan'){
+				$fields = get_post_meta($post_id);
+			}
 			return $fields;
 		}
 	}

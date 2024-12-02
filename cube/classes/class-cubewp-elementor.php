@@ -148,7 +148,9 @@ final class CubeWp_Elementor {
 			'Posts_Widget',
 			'CubeWP_Form_Widget',
 			'Archive_Map_Widget',
-			'Archive_Posts_Widget'
+			'Archive_Posts_Widget',
+			'Archive_Result_Data_Widget',
+			'Archive_Sorting_Widget',
 		);
 		$classes = apply_filters("cubewp/elementor/widgets/classes", $classes);
 		if (!empty($classes && is_array($classes))) {

@@ -61,7 +61,6 @@ function cubewp_render_blocks($block_content, $block, $wp_block) {
                         $ImgPostfix = $parts[1];
                     }
                     if(count($output) <= $imgID){
-                        cwp_pre($output);
                         if(is_numeric($output)){
                             $field = get_field_options($args['f_name']);
                             if($field['type'] == 'image' && $field['files_save'] == 'ids'){

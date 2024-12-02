@@ -4,8 +4,8 @@ Donate link: NA
 Tags: custom fields, custom post types, custom taxonomies, acf, metabox
 Requires at least: 5.0
 Requires PHP: 7.4
-Tested up to: 6.4.3
-Stable tag: 1.1.16
+Tested up to: 6.7
+Stable tag: 1.1.23
 License: GPLv2 or later
 
 CubeWP is an end-to-end dynamic content framework for WordPress to help you shrink time and cut cost of development up to 90%.
@@ -375,6 +375,86 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+= 1.1.23 2024-11-28
+
+- Added: Import and Export Functionality for CubeWP Post Cards.
+- Added: Post slider options in CubeWP Posts Elementor widget, allowing users to enable a slider for posts.
+- Optimized: Reduced API calls for CubeWP Addons plugin updates by setting a transient.
+- UPDATED: Improved role checks to hide custom post types from subscribers and redirect them if accessed directly.
+- FIXED: Post card styles issue in CubeWP Posts Elementor widget.
+
+= 1.1.22 2024-11-13
+
+- Compatibility: Updated for the latest version of WordPress.
+- Fixed: Google reCAPTCHA warning.
+- Added: "cubewp/theme_builder/options/register" hook added to allow custom options in CubeWP Theme Builder template types.
+
+= 1.1.21 2024-10-16
+
+- FIXED: Post-Card Customizer Code editor issue.
+- FIXED: Google fonts subsets and variants issue in CubeWP Settings.
+- FIXED: "cubewp/settings/google_fonts" Hooks added to include your own fonts in CubeWP Settings for font selection.
+
+= 1.1.20 2024-10-13
+
+- FIXED: Taxonomy-Based Conditional Custom Fields in Search Fitlers.
+
+= 1.1.19 2024-10-09
+
+- Compatibility Of CubeWP Theme Builder with Bricks Builder Template Conditions. Now if you have build templates with Bricks Builder, They will work properly.
+- FIXED: VC Elements post element query loop issue.
+- FIXED: Nonce issue fixed while Bookmarking or saving.
+- FIXED: CubeWP Theme Builder Edit template name issue.
+
+= 1.1.18 2024-10-02
+
+-  FIXED: CubeWP Posts Element order control (ascending/descending) now functions correctly. Resolved fatal error when no posts were found.
+-  UPDATED: Prevented numeric slugs for CubeWP Post Types and Taxonomies during creation.
+
+= 1.1.17.3 2024-09-25
+
+-  FIXED: Search & Filter form builder sidebar acordian.
+
+= 1.1.17.2 2024-09-21
+
+-  FIXED: Search result page fixed for different compatible themes.
+
+= 1.1.17.1 2024-09-21
+
+-  FIXED: Invalid argument supplied for foreach() in frontend templates file
+
+= 1.1.17 2024-09-20
+
+-Added:
+--Theme Builder: Build and customize theme templates using Elementor without any coding. Overwrite key sections like the header, single post page, archive page, product page, and footer.
+
+--Dynamic Post Cards: Create dynamic post cards with the new Post Card Builder.
+
+--Archive Elements for Elementor: Add CubeWP search filters, search forms, results, sorting widgets, and archive maps using Elementor widgets.
+
+--Custom Field "Business Hours": Introduced a new custom field to capture business operating hours.
+
+--CubeWP Community Link: Added a direct link to the CubeWP community within the plugin.
+
+--File Optimization: Minimized file calls for improved performance.
+
+-Fixed:
+
+--Conditional Logic: Fixed issues with conditional logic in form fields.
+
+--Radio Button Logic: Resolved issues related to radio button conditional logic.
+
+--Post Type Data Overlap: Fixed a bug where fields with the same name but different post types were overwriting each other's data.
+
+--UI/UX Enhancements: General user interface and experience improvements.
+
+--Typos: Corrected multiple typographical errors.
+
+
+= 1.1.16 2024-09-04
+
+- Enhanced security by implementing comprehensive input sanitisation and nonce verification across the plugin.
 
 = 1.1.15 2024-04-24
 

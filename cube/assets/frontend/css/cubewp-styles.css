@@ -711,3 +711,55 @@ p.cwp-author-uname:after {
 ul.cwp-single-category-widget-inner li p {
     margin: 0 0 0 0;
 }
+
+/* CSS For CubeWP Post Slider */ 
+
+/* slider style */
+.cubewp-post-slider {
+    position: relative;
+}
+
+.cubewp-post-slider .slick-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: auto;
+	height: fit-content;
+    z-index: 999;
+}
+
+/* slick dots style */
+.cubewp-post-slider .slick-dots {
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+    height: fit-content;
+}
+
+.cubewp-post-slider .slick-dots li {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+.cubewp-post-slider .slick-dots li button {
+    padding: 0px;
+    border: none;
+    background: none;
+    font-size: 0px;
+    outline: none;
+}
+
+/* progress bar */
+.slick-progress {
+    width: 100%;
+    border-radius: 50px;
+    position: relative;
+}
+
+.slick-progress .slick-progress-bar {
+    width: 0;
+    border-radius: 50px;
+    transition: width 0.3s ease;
+}

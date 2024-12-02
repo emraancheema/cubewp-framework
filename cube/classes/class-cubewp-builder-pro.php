@@ -22,7 +22,7 @@ class CubeWp_Builder_Pro {
         add_action("cubewp_user_profile_form", array($this, "CubeWp_Empty_Form_Builder"));
         add_action("cubewp_single_layout", array($this, "CubeWp_Empty_Form_Builder"));
         add_action("cubewp_user_dashboard", array($this, "CubeWp_Empty_Form_Builder"));
-        add_action("cubewp_loop_builder", array($this, "CubeWp_Empty_Form_Builder"));
+        //add_action("cubewp_loop_builder", array($this, "CubeWp_Empty_Form_Builder"));
     }
 
 	/**

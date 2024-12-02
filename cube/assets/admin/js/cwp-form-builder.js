@@ -82,38 +82,46 @@
             $.cubewp_form_builder.remove_field(this);
         }
     );
-    
-    $(document).on(
-        'click',
-        '.cwpform-builder .cubewp-expand-trigger',
-        function () {
-            $.cubewp_form_builder.expande_fields(this);
-        }
-    );
-    $(document).on(
-        'click',
-        '.cwpform-builder .cubewp-builder-group-widget-row-wrapper, .cubewp-builder-section-header',
-        function (event) {
-            var clicked_ele = $(event.target);
-            if (clicked_ele.hasClass('cubewp-builder-group-widget-decrease-size') || clicked_ele.hasClass('cubewp-builder-group-widget-increase-size') || clicked_ele.hasClass('cubewp-expand-trigger') || clicked_ele.hasClass('cubewp-builder-group-widget-delete')) {
-                return false;
+    var trigger = false;
+    if(jQuery('body').hasClass('cubewp-addon-frontend-pro-active') && !jQuery('body').hasClass('cubewp_page_cubewp-loop-builder')){
+        trigger = true;
+    }else if(!jQuery('body').hasClass('cubewp-addon-frontend-pro-active')){
+        trigger = true;
+    }
+    if(trigger){
+        
+        $(document).on(
+            'click',
+            '.cwpform-builder .cubewp-expand-trigger',
+            function () {
+                $.cubewp_form_builder.expande_fields(this);
             }
-            $.cubewp_form_builder.expande_fields($(this).find('.cubewp-expand-trigger'));
-        }
-    );
-    $(document).on(
-        'click',
-        '.cwpform-builder .form-settings-form',
-        function () {
-            $.cubewp_form_builder.form_settings(this);
-        }
-    );
-
+        );
+        $(document).on(
+            'click',
+            '.cwpform-builder .cubewp-builder-group-widget-row-wrapper, .cubewp-builder-section-header',
+            function (event) {
+                var clicked_ele = $(event.target);
+                if (clicked_ele.hasClass('cubewp-builder-group-widget-decrease-size') || clicked_ele.hasClass('cubewp-builder-group-widget-increase-size') || clicked_ele.hasClass('cubewp-expand-trigger') || clicked_ele.hasClass('cubewp-builder-group-widget-delete')) {
+                    return false;
+                }
+                $.cubewp_form_builder.expande_fields($(this).find('.cubewp-expand-trigger'));
+            }
+        );
+        $(document).on(
+            'click',
+            '.cwpform-builder .form-settings-form',
+            function () {
+                $.cubewp_form_builder.form_settings(this);
+            }
+        );
+    }
     $(document).on(
         'click',
         '.cwpform-get-shortcode',
         function () {
             $.cubewp_form_builder.get_shortcode(this);
+            $.cubewp_form_builder.get_post_card_css(this);
         }
     );
 
@@ -466,45 +474,115 @@
         var form_type = parent.find('.form-type').val();
         var section_fields = '';
         var form_sections = '';
-        parent.find('.cubewp-builder-area .cubewp-builder-section').each(function () {
-            $(this).find('.cubewp-builder-section-fields').find('.cubewp-builder-group-widget').each(function () {
-                var field_meta_key = $(this).find('.field-name').val();                    
-                $(this).find('.group-field').each(function () {
-                    var field_name = $(this).data('name');
+        jQuery(".cwpform-shortcode").hide();
+        if (parent.find('.cubewp-plan-tab').length > 0) {
+            var form_data = '';
+            parent.find('.cubewp-plan-tab').each(function () {
+                var pthis = $(this);
+                var plan_id = $(this).attr('data-id');
+                pthis.find('.cubewp-builder-area .cubewp-builder-section').each(function () {
+                    var section_id = $(this).find('.section-id').val();
+                    $(this).find('.section-field').each(function () {
+                        var field_name = $(this).data('name');
+                        $(this).attr('name', "cwpform[" + form_relation + "][" + plan_id + "][groups][" + section_id + "][" + field_name + "]");
+                    });
 
-                    if (form_type == 'search_filters' || form_type == 'search_fields') {
-                        $(this).attr('name', "cwpform[" + form_relation + "][fields][" + field_meta_key + "][" + field_name + "]");
-                    } 
+                    $(this).find('.cubewp-builder-section-fields').find('.cubewp-builder-group-widget').each(function () {
+                        var field_meta_key = $(this).find('.field-name').val();
+                        $(this).find('.group-field').each(function () {
+                            var field_name = $(this).data('name');
+                            if (form_type == 'loop_builder') {
+                                $(this).attr('name', "cwpform[" + form_relation + "][" + plan_id + "][" + field_name + "]");
+                            } 
+                        });
+                    });
+                });
+            
+
+                if (pthis.find('.cwpform-settings .form-field').length > 0) {
+
+                    pthis.find('.cwpform-settings .form-field').each(function () {
+                        var _val = $(this).val();
+                        var type = $(this).attr('type');
+                        if (type == 'checkbox') {
+                            
+                            var field_name = $(this).closest('.cwpform-setting-field').data('name');
+                            if($(this).hasClass('switch-field')){
+                                field_name = $(this).data('name');
+                            }
+                            $(this).attr('name', "cwpform[" + form_relation + "][" + plan_id + "][form][" + field_name + "]");
+                            if ($(this).is(':checked')) {
+                                //form_args += ' ' + field_name + '="' + _val + '"';
+                            }
+                        } else {
+                            var field_name = $(this).data('name');
+                            $(this).attr('name', "cwpform[" + form_relation + "][" + plan_id + "][form][" + field_name + "]");
+                            if (_val != '') {
+                                //form_args += ' ' + field_name + '="' + _val + '"';
+                            }
+                        }
+                    });
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: cwp_vars_params.ajax_url,
+                data: form_data + '&form_relation=' + form_relation + '&form_type=' + form_type + '&action=cwpform_save_shortcode',
+                success: function (data) {
+                    var $class = '';
+                    if (form_type === 'single_layout' || form_type === 'search_filters' || form_type === 'loop_builder') {
+                        shortcode = data.message;
+                    } else {
+                        $class = 'copy-to-clipboard';
+                        shortcode = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/></svg>' + shortcode;
+                    }
+                    $('.cwpform-shortcode').show().html('<div class="inner ' + $class + '">' + shortcode + '</div>');
+                }
+            });
+
+        } else {
+            parent.find('.cubewp-builder-area .cubewp-builder-section').each(function () {
+                $(this).find('.cubewp-builder-section-fields').find('.cubewp-builder-group-widget').each(function () {
+                    var field_meta_key = $(this).find('.field-name').val();                    
+                    $(this).find('.group-field').each(function () {
+                        var field_name = $(this).data('name');
+
+                        if (form_type == 'search_filters' || form_type == 'search_fields') {
+                            $(this).attr('name', "cwpform[" + form_relation + "][fields][" + field_meta_key + "][" + field_name + "]");
+                        } 
+                    });
+                    if (form_type == 'search_filters') {
+                        section_fields += '[cwpFilterField field="' + field_meta_key + '"]';
+                    } else if (form_type == 'search_fields') {
+                        section_fields += '[cwpSearchField name="' + field_meta_key + '" ]';
+                    }
                 });
                 if (form_type == 'search_filters') {
-                    section_fields += '[cwpFilterField field="' + field_meta_key + '"]';
+                    form_sections += section_fields;
                 } else if (form_type == 'search_fields') {
-                    section_fields += '[cwpSearchField name="' + field_meta_key + '" ]';
+                    form_sections += section_fields;
                 }
             });
-            if (form_type == 'search_filters') {
-                form_sections += section_fields;
-            } else if (form_type == 'search_fields') {
-                form_sections += section_fields;
-            }
-        });
-        if (parent.find('.cwpform-settings .form-field').length > 0) {
-            parent.find('.cwpform-settings .form-field').each(function () {
-                var type = $(this).attr('type');
-                
-                if (type == 'checkbox') {
-                    var field_name = $(this).closest('.cwpform-setting-field').data('name');
-                    if($(this).hasClass('switch-field')){
-                        field_name = $(this).data('name');
-                    }
-                    $(this).attr('name', "cwpform[" + form_relation + "][form][" + field_name + "]");
-                } else {
-                    var field_name = $(this).data('name');
-                    $(this).attr('name', "cwpform[" + form_relation + "][form][" + field_name + "]");
+            if (parent.find('.cwpform-settings .form-field').length > 0) {
+                parent.find('.cwpform-settings .form-field').each(function () {
+                    var type = $(this).attr('type');
                     
-                }
-            });
+                    if (type == 'checkbox') {
+                        var field_name = $(this).closest('.cwpform-setting-field').data('name');
+                        if($(this).hasClass('switch-field')){
+                            field_name = $(this).data('name');
+                        }
+                        $(this).attr('name', "cwpform[" + form_relation + "][form][" + field_name + "]");
+                    } else {
+                        var field_name = $(this).data('name');
+                        $(this).attr('name', "cwpform[" + form_relation + "][form][" + field_name + "]");
+                        
+                    }
+                });
+            }
         }
+        
         var shortcode = '';
         if (form_type == 'search_filters') {
             shortcode = '[cwpFilter type="' + form_relation + '"]' + form_sections + '[/cwpFilter]';
@@ -528,6 +606,29 @@
         });
     }
 
+    $.cubewp_form_builder.get_post_card_css = function (t) {
+        if ($('.cubewp-builder-loop_builder').length > 0) {
+            var textAreasData = [];
+            
+            $('.css-builder').each(function() {
+                textAreasData.push($(this).val());
+            });
+            $.ajax({
+                type: 'POST',
+                url: cwp_vars_params.ajax_url,
+                data: {
+                    'action': 'cubewp_process_post_card_css',
+                    'styles': JSON.stringify(textAreasData),
+                    'security_nonce': cwp_vars_params.nonce
+                },
+                success: function (response) {
+                    
+                },
+            });
+        }
+    }
+
+
 
 })(jQuery);
 
@@ -538,4 +639,113 @@
         if (onload_tab_switcher.length > 0) {
             onload_tab_switcher.trigger("change");
         }
+
+        if (jQuery(".ace-editor").length > 0) {
+            jQuery( '.cubewp-loop-builder-editor-container .ace-editor' ).each(
+                function( index, element ) {
+                    var $this = jQuery(this),
+                        $id = $this.attr('data-editor'),
+                        value = $this.text();
+
+                    var aceeditor = ace.edit( $id );
+                    aceeditor.setTheme( 'ace/theme/' + $this.attr( 'data-theme' ) );
+                    aceeditor.getSession().setMode( 'ace/mode/' + $this.attr( 'data-mode' ) );
+                    aceeditor.setValue("", -1);
+
+                    if(value !== ""){
+                        //var htmlContent = JSON.parse(value);
+                        aceeditor.insert(value);
+                    }
+                    
+                    const stringID = $id.split('-');
+                    const TypeArr = stringID.slice(-2);
+                    const EditorType = TypeArr.join('-');
+                    if(EditorType == 'css-editor'){
+                        var previewcss = $this.closest('.cubewp-builder-sections').find('style');
+                        previewcss.html(aceeditor.session.getValue());
+                    }
+                    var timeout;
+                    aceeditor.on('change', function() {
+                        var htmlContent = aceeditor.getSession().getValue();
+
+                        //var jsonEncodedHtml = JSON.stringify(htmlContent);
+                        $this.text( htmlContent );
+                        
+                        if(EditorType == 'css-editor'){
+                            var previewcss = $this.closest('.cubewp-builder-sections').find('style');
+                            previewcss.html(aceeditor.session.getValue());
+                        }else if(EditorType == 'html-editor'){
+                            clearTimeout(timeout);
+                            timeout = setTimeout(updatePreview, 300);
+                        }
+                        aceeditor.resize();
+                    });
+
+                    // Function to update preview
+                    function updatePreview() {
+                        var preview = $this.closest('.cubewp-builder-sections').find('.cubewp-loop-preview');
+                        var parent = $this.closest('.cubewp-builder-area');
+                        var postID = parent.find('.preview-postid').val();
+                        try {
+                            $.ajax({
+                                type: 'POST',
+                                url: cwp_vars_params.ajax_url,
+                                data: {
+                                    'action': 'cubewp_process_post_card_preview',
+                                    'html': aceeditor.getValue(),
+                                    'post_id': postID,
+                                    'security_nonce': cwp_vars_params.nonce
+                                },
+                                dataType: 'json',
+                                success: function (response) {
+                                    if ( response.success ) {
+                                        preview.html(response.data.html);
+                                    }
+                                },
+                            });
+                        } catch (error) {
+                            console.error("Error processing content:", error);
+                        }
+                    }
+
+                    if(EditorType == 'html-editor'){
+                        updatePreview();
+                    }
+
+                }
+            );
+        }
+
+        var is_primary_loop = $('.loop-is-primary');
+        if (is_primary_loop.length > 0) {
+            is_primary_loop.on('change', function (){
+                var $this = $(this),
+                    parent = $this.closest('.cubewp-type-container');
+                if ($this.is(':checked')) {
+                    var otherPrimary = parent.find('input[type="checkbox"].loop-is-primary');
+        
+                    otherPrimary.not(this).prop('checked', false);
+                }
+            });
+        }
+
+        jQuery(document).ready(function() {
+            var is_previewID = jQuery('.preview-postid');
+        
+            if (is_previewID.length > 0) {
+                is_previewID.on('change', function() {
+                    if (jQuery(".ace-editor").length > 0) {
+                        jQuery('.cubewp-loop-builder-editor-container .ace-editor').each(function() {
+                            var $this = jQuery(this),
+                                editorId = $this.attr('data-editor');
+                            
+                            if (editorId) {
+                                var aceEditor = ace.edit(editorId);
+                                aceEditor.session.setValue(aceEditor.session.getValue()); // Trigger change
+                            }
+                        });
+                    }
+                });
+            }
+        }); 
 })(jQuery);

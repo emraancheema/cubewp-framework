@@ -138,65 +138,65 @@ class CubeWp_Submenu {
                 'position'     => 11
             ),
             array(
-                'id'           =>  'cubewp-user-registration-form',
+                'id'           =>  'cubewp-loop-builder',
                 'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('User Signup Form', 'cubewp'),
-                'callback'     =>  'cubewp-user-registration-form',
+                'title'        =>  esc_html__('Post Cards', 'cubewp-framework').'<span class="new-feature-tag"></span>',
+                'callback'     =>  'cubewp-loop-builder',
                 'position'     => 12
-            ),
-            array(
-                'id'           =>  'cubewp-user-profile-form',
-                'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('User Profile Form', 'cubewp'),
-                'callback'     =>  'cubewp-user-profile-form',
-                'position'     => 13
             ),
             array(
                 'id'           =>  'cubewp-post-types-form',
                 'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('Post Types Form', 'cubewp'),
+                'title'        =>  esc_html__('Post Types Form', 'cubewp-framework'),
                 'callback'     =>  'cubewp-post-types-form',
+                'position'     => 13
+            ),
+            array(
+                'id'           =>  'cubewp-user-registration-form',
+                'parent'       =>  'cube_wp_dashboard',
+                'title'        =>  esc_html__('User Signup Form', 'cubewp-framework'),
+                'callback'     =>  'cubewp-user-registration-form',
                 'position'     => 14
             ),
             array(
-                'id'           =>  'cubewp-loop-builder',
+                'id'           =>  'cubewp-user-profile-form',
                 'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('Post Loop', 'cubewp'),
-                'callback'     =>  'cubewp-loop-builder',
+                'title'        =>  esc_html__('User Profile Form', 'cubewp-framework'),
+                'callback'     =>  'cubewp-user-profile-form',
                 'position'     => 15
             ),
             array(
                 'id'           =>  'cubewp-single-layout',
                 'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('Single-Post', 'cubewp'),
+                'title'        =>  esc_html__('Single-Post', 'cubewp-framework'),
                 'callback'     =>  'cubewp-single-layout',
                 'position'     => 16
             ),
             array(
                 'id'           =>  'cubewp-user-dashboard',
                 'parent'       =>  'cube_wp_dashboard',
-                'title'        =>  esc_html__('User Dashboard', 'cubewp'),
+                'title'        =>  esc_html__('User Dashboard', 'cubewp-framework'),
                 'callback'     =>  'cubewp-user-dashboard',
                 'position'     => 17
             ),
             array(
                 'id'        => 'cubewp-settings', // Expected to be overridden if dashboard is enabled.
                 'parent'    => 'cube_wp_dashboard',
-                'title'     => esc_html__('CubeWP Settings', 'cubewp-framework'),
+                'title'     => esc_html__('Settings', 'cubewp-framework'),
                 'callback'  => 'cubewp-settings',
                 'position'     => 18
             ),
             array(
                 'id'        => 'cubewp-import', // Expected to be overridden if dashboard is enabled.
                 'parent'    => 'cube_wp_dashboard',
-                'title'     => esc_html__('CubeWP Import', 'cubewp-framework'),
+                'title'     => esc_html__('Import/Export', 'cubewp-framework'),
                 'callback'  => 'cubewp-import',
                 'position'     => 19
             ),
             array(
                 'id'        => 'cubewp-export', // Expected to be overridden if dashboard is enabled.
                 'parent'    => 'cube_wp_dashboard',
-                'title'     => esc_html__('CubeWP Export', 'cubewp-framework'),
+                'title'     => esc_html__('Export', 'cubewp-framework'),
                 'callback'  => 'cubewp-export',
                 'position'     => 20
             ),
@@ -209,13 +209,15 @@ class CubeWp_Submenu {
                 'callback'  => 'cubewp-forms-unsubscribed-templates'
             );
 		}
-		$settings[]	=	array(
-			'id'        => 'cubewp-pricing', // Expected to be overridden if dashboard is enabled.
-			'parent'    => 'cube_wp_dashboard',
-			'title'     => '<a href="https://cubewp.com/pricing/" target="_blank"><span class="dashicons dashicons-star-filled"></span> Get All Access</a>',
-			'callback'  => 'cubewp-pricing',
-			'position'     => 20
-		);
+        if( !class_exists( 'CubeWp_Forms_Custom' ) ){
+            $settings[]	=	array(
+                'id'        => 'cubewp-pricing', // Expected to be overridden if dashboard is enabled.
+                'parent'    => 'cube_wp_dashboard',
+                'title'     => '<a href="https://cubewp.com/pricing/" target="_blank"><span class="dashicons dashicons-star-filled"></span> Get All Access</a>',
+                'callback'  => 'cubewp-pricing',
+                'position'     => 20
+            );
+        }
         return apply_filters( 'cubewp-submenu', $settings);
     }
     

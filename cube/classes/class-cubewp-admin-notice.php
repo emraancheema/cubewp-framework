@@ -33,6 +33,7 @@ class CubeWp_Admin_Notice {
 					add_action( 'admin_print_footer_scripts', array( $this, 'cubewp_admin_notice_script_event' ), 10 );
 				}
 				add_action( 'admin_notices', array( $this, 'cubewp_build_admin_notices_ui' ), 10 );
+				add_action( 'cubewp_admin_notices', array( $this, 'cubewp_build_admin_notices_ui' ), 10 );
 			}
 		}
 	}
@@ -60,6 +61,7 @@ class CubeWp_Admin_Notice {
 	public function cubewp_load_default_notices() {
 		add_action( 'admin_print_footer_scripts', array( $this, 'cubewp_admin_notice_script_event' ), 10 );
 		add_action( 'admin_notices', array( $this, 'cubewp_admin_notices' ), 10 );
+		add_action( 'cubewp_admin_notices', array( $this, 'cubewp_admin_notices' ), 10 );
 	}
 
 	/**
@@ -104,10 +106,7 @@ class CubeWp_Admin_Notice {
 			$notice_ui .= '
 			<div class="cwp-welcome-page-section"><div class="flot-left cwp-logo">
 				<a href="https://cubewp.com" target="_blank"><img src="' . CWP_PLUGIN_URI . 'cube/assets/admin/images/CubeWP-light-logo.png" alt="image" /></a>
-			</div>
-			<div class="flot-left cwp-library">
-                <a href="' . admin_url( 'admin.php?page=cubewp-libraries' ) . '"><span class="dashicons dashicons-art"></span>Themes Library <span class="new">New!</span></a>
-            </div>';
+			</div>';
 			if( class_exists( 'CubeWp_Forms_Custom' ) ){
 				$notice_ui .= '<div class="flot-left form-templates">
 					<a href="' . admin_url( 'admin.php?page=cubewp-custom-form-templates' ) . '">Form Templates <span class="new">New!</span></a>

@@ -122,7 +122,7 @@ jQuery(document).ready(function () {
                 jQuery.ajax({
                     type: 'POST',
                     url: cwp_vars_params.ajax_url,
-                    data:'action=cwp_import_dummy_data&data_type=dummy',
+                    data:'action=cwp_import_dummy_data&data_type=dummy&nonce='+cwp_vars_params.nonce,
                     dataType: 'json',
                     success: function (response) {
                         if( response.success === 'true' ){
@@ -130,7 +130,7 @@ jQuery(document).ready(function () {
                                 jQuery.ajax({
                                     type: 'POST',
                                     url: cwp_vars_params.ajax_url,
-                                    data:'action=cwp_import_dummy_data&data_type=dummy&content=true',
+                                    data:'action=cwp_import_dummy_data&data_type=dummy&content=true&nonce='+cwp_vars_params.nonce,
                                     dataType: 'json',
                                     success: function (response) {
                                         if( response.success === 'false' ){
@@ -178,13 +178,22 @@ jQuery(document).ready(function () {
                         if( response.success === 'false' ){
                             alert(response.msg);
                         }else{
+                            var export_post_cards = false;
+                            if ( jQuery('.export-form').find('#cwp_post_cards').length > 0 ) {
+                                if ( jQuery('.export-form').find('#cwp_post_cards').is(':checked') ) {
+                                    export_post_cards = true;
+                                }
+                            }
                             var export_custom_forms = false;
                             if ( jQuery('.export-form').find('#custom-forms-fields').length > 0 ) {
                                 if ( jQuery('.export-form').find('#custom-forms-fields').is(':checked') ) {
                                     export_custom_forms = true;
                                 }
                             }
-                            var _ajax_data = 'action=cwp_user_data&export=success';
+                            var _ajax_data = 'action=cwp_user_data&export=success&nonce='+cwp_vars_params.nonce;
+                            if (export_post_cards) {
+                                _ajax_data += '&export_post_cards=true';
+                            }
                             if (export_custom_forms) {
                                 _ajax_data += '&download_now=false';
                             }
@@ -198,10 +207,14 @@ jQuery(document).ready(function () {
                                         alert(response.msg);
                                     }else{
                                         if (export_custom_forms) {
+                                            var custom_form_data = 'action=cwp_custom_forms&export=success&nonce='+cwp_vars_params.nonce;
+                                            if (export_post_cards) {
+                                                custom_form_data += '&export_post_cards=true';
+                                            }
                                             jQuery.ajax({
                                                 type: 'POST',
                                                 url: cwp_vars_params.ajax_url,
-                                                data: 'action=cwp_custom_forms&export=success',
+                                                data: custom_form_data,
                                                 dataType: 'json',
                                                 success: function (response) {
                                                     if( response.success === 'false' ){
@@ -359,6 +372,7 @@ jQuery(document).ready(function () {
 });
 
 function cwp_load_theme_builder_rules( templateType = ''){
+    
     var templateLocation = jQuery('#template_location');
     var excludeLocation = jQuery('#exclude_location');
 
@@ -377,7 +391,7 @@ function cwp_load_theme_builder_rules( templateType = ''){
                 templateLocation.append(response.data.template_options);
                 excludeLocation.append(response.data.exclude_options);
 
-                if (templateType === '404' || templateType === 'mega-menu') {
+                if (templateType === '404' || templateType === 'mega-menu' || templateType === 'shop') {
                     templateLocation.closest('.form-fileds').hide();
                 } else {
                     templateLocation.closest('.form-fileds').show();
