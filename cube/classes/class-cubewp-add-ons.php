@@ -32,6 +32,7 @@ class CubeWp_Add_Ons {
 	public function __construct() {
 		//license system
         add_action( 'admin_init', array( $this, 'check_license' ) );
+		add_action('admin_init', array( $this, 'updates_enable_for_free_addon'));
         add_action( 'admin_init', array( $this, 'check_for_plugin_update'), 0 );
 		add_action( self::CUBEWP.'/'.self::ADDON.'/'.self::ACTI.self::VATION, array($this,'_plugins'), 9, 1 );
 	}
@@ -85,20 +86,24 @@ class CubeWp_Add_Ons {
                 'load' => CUBEWP.'_Booster_Load',
             ),
             'cubewp-addon-claim' => array(
-                'item_name' => 'CubeWP Claim',
+                'item_name' => 'CubeWP Post Claim',
                 'slug' => 'cubewp-addon-claim',
                 'author' => 'Emraan Cheema',
                 'base' => 'cubewp-addon-claim/cubewp-claim.php',
                 'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-claim/cube/',
                 'load' => CUBEWP.'_Claim_Load',
+                'license_type' => 'free',
+				'key'	=> '35a2833bea9bbf02ee48cb5fcce2e2cf',
 			),
-            'cubewp-addon-social-logins' => array(
-                'item_name' => 'CubeWP Social Logins',
-                'slug' => 'cubewp-addon-social-logins',
+            'cubewp-addon-social-login' => array(
+                'item_name' => 'CubeWP Social Login',
+                'slug' => 'cubewp-addon-social-login',
                 'author' => 'Emraan Cheema',
                 'base' => 'cubewp-addon-social-logins/cubewp-social-logins.php',
                 'path' => plugin_dir_path( dirname(dirname(__DIR__)) ).'cubewp-addon-social-logins/cube/',
                 'load' => CUBEWP.'_Social_Logins_Load',
+				'license_type' => 'free',
+				'key'	=> '9663701ddf66d0f23096c3fb186726c5',
 			),
 			'cubewp-addon-classified' => array(
                 'item_name' => 'CubeWP Classified',
@@ -177,6 +182,7 @@ class CubeWp_Add_Ons {
 				$path = $add_ons[$plugin]['path'];
 				$item_name = $add_ons[$plugin]['item_name'];
 				$slug = $add_ons[$plugin]['slug'];
+				$license_type = isset($add_ons[$plugin]['license_type']) ? $add_ons[$plugin]['license_type']: '';
 				$file = $path . "config.txt";
 
 				if(empty(CWP()->cubewp_options($slug))){
@@ -189,7 +195,14 @@ class CubeWp_Add_Ons {
 					if ( file_exists ( $file ) ) {
 
 						$key = file_get_contents ( $file );
-            
+
+						// If plugin is free
+						if($license_type == 'free'){
+							CWP()->update_cubewp_options($slug.'_key', $key);
+							unlink ( $file );
+							return;
+						}
+
                         // data to send in our API request
                         $api_params = array(
                             'edd_action'=> 'activate_license',
@@ -344,6 +357,37 @@ class CubeWp_Add_Ons {
             CWP()->update_cubewp_options($slug.'-status', self::DIS);
 			CWP()->update_cubewp_options($slug, '');
 			return false;
+		}
+	}
+
+	public function updates_enable_for_free_addon() {
+		//cwp_pre(get_option('cubewp-addon-social-logins_key'));
+		//delete_option('cubewp-addon-social-logins_key');
+
+		$add_ons = self::cubewp_add_ons();
+		$all_plugins = array('cubewp-addon-claim');
+		foreach($all_plugins as $plugin){
+			if(isset($add_ons[$plugin])){
+				$path = $add_ons[$plugin]['path'];
+				$slug = $add_ons[$plugin]['slug'];
+				$license_type = isset($add_ons[$plugin]['license_type']) ? $add_ons[$plugin]['license_type']: '';
+				$file = $path . "config.txt";
+				$existing_key = get_option($slug.'_key');
+				if (empty($existing_key) && $license_type == 'free') {
+					// If file exists
+					if(file_exists($file)){
+						$key = file_get_contents ( $file );
+						CWP()->update_cubewp_options($slug.'_key', $key);
+						unlink ( $file );
+						return;
+					}else{
+						$key = isset($add_ons[$plugin]['key']) ? $add_ons[$plugin]['key']: '';
+						CWP()->update_cubewp_options($slug.'_key', $key);
+						return;
+					}
+
+				}
+			}
 		}
 	}
 

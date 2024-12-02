@@ -424,7 +424,7 @@ trait CubeWp_Single_Page_Trait {
 		return apply_filters('cubewp/singlecpt/field/radio', $output, $args);
 	}
 
-	/**
+		/**
 	 * Method field_business_hours
 	 *
 	 * @param array $args field data
@@ -435,32 +435,37 @@ trait CubeWp_Single_Page_Trait {
 	public static function field_business_hours($args = array()) {
 		$args['field_size'] = isset($args['field_size']) ? $args['field_size'] : '';
 		$args['container_class'] = isset($args['container_class']) ? $args['container_class'] : '';
-		$output = null;
-
-		if (is_array($args['value']) && !empty($args['value']) ){
-			$output .= cwp_business_hours_status($args['value']);
+        $output = null;
+        if (!empty($args['value']) && is_array($args['value'])) {
+			$status = cwp_business_hours_status($args['value']);
+            $output = '<div class="cwp-cpt-single-business_hours cwp-cpt-single-field-container' . esc_attr($args['container_class']) . ' ' . esc_attr($args['field_size']) . '">
+				<h4>' . $args['label'] . '</h4>
+				<p class="cwp-business-status '.$status.'">'.$status.'</p>
+				<div class="cwp-business-hours ' . $args['class'] . '">';
 			$time_format = get_option('time_format');
 			foreach ($args['value'] as $day => $times) {
-				$output .= '<div> '.ucfirst($day).' </div>';
+				$output .= '<div class="cwp-cpt-single-field-container">';
+				$output .= '<h6>' . ucfirst($day) . '</h6>';
 				if(!is_array($times) && is_string($times) && $times == '24-hours-open'){
-					$output .= "<span> 24 Hours Open </span>";
+					$output .= '<p> '. __('24 Hours Open','cubewp-framework') .'</p>';
 				}else{
 					$openTimes = $times['open'];
 					$closeTimes = $times['close'];
-					
+					$output .= '<div class="cwp-single-day-timings">';
 					for ($i = 0; $i < count($openTimes); $i++) {
-
 						$otime = date_i18n($time_format, strtotime($openTimes[$i]));
 						$ctime = date_i18n($time_format, strtotime($closeTimes[$i]));
-
-						$output .= "<span> Open: " . $otime . "</span><span> ~ Close: " . $ctime . "</span>";
+						$output .= '<p>' . $otime . ' ~ ' . $ctime . '</p>';
 					}
+					$output .= '</div>';
 				}
 				
 				
-				$output .= "<br/>";
+				$output .= '</div>';
 			}
-		}
+            $output .= '</div>
+			</div>';
+        }
 		return apply_filters('cubewp/singlecpt/field/business_hour', $output, $args);
 	}
 	

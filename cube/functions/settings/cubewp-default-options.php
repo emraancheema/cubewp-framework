@@ -182,126 +182,68 @@ $settings['archive_settings']    = array(
 	'icon'   => 'dashicons-archive',
 	'fields' => array(
 		array(
-			'id'      => 'cubewp_archive',
-			'title'   => __( 'CubeWP Archive', 'cubewp-framework' ),
-			'desc'    => __( 'You can easily On/Off CubeWP custom archive page' ),
-			'type'    => 'switch',
-			'default' => '1',
-		),
-		array(
 			'id'      => 'archive_map',
 			'title'   => __( 'Map', 'cubewp-framework' ),
-			'desc'    => __( 'You can easily On/Off map on archive page' ),
+			'desc'    => __( 'You can easily On/Off map on CubeWP default archive page' ),
 			'type'    => 'switch',
 			'default' => '0',
-			'required' => array(
-				array( 'cubewp_archive', 'equals', '1' )
-			)
 		),
 		array(
 			'id'      => 'archive_filters',
 			'title'   => __( 'Filters', 'cubewp-framework' ),
-			'desc'    => __( 'You can easily On/Off filters on archive page' ),
+			'desc'    => __( 'You can easily On/Off filters on CubeWP default archive page' ),
 			'type'    => 'switch',
 			'default' => '0',
-			'required' => array(
-				array( 'cubewp_archive', 'equals', '1' )
-			)
 		),
 		array(
 			'id'      => 'archive_sort_filter',
 			'title'   => __( 'Sorting Filter', 'cubewp-framework' ),
-			'desc'    => __( 'You can easily On/Off sorting filter on archive page' ),
+			'desc'    => __( 'You can easily On/Off sorting filter on CubeWP default archive page' ),
 			'type'    => 'switch',
 			'default' => '1',
-			'required' => array(
-				array( 'cubewp_archive', 'equals', '1' )
-			)
 		),
 		array(
 			'id'      => 'archive_layout',
 			'title'   => __( 'Layout Switcher', 'cubewp-framework' ),
-			'desc'    => __( 'You can easily On/Off layout switcher on archive page' ),
+			'desc'    => __( 'You can easily On/Off layout switcher on CubeWP default archive page' ),
 			'type'    => 'switch',
 			'default' => '1',
-			'required' => array(
-				array( 'cubewp_archive', 'equals', '1' )
-			)
 		),
 		array(
 			'id'      => 'archive_found_text',
 			'title'   => __( 'Found Text', 'cubewp-framework' ),
-			'desc'    => __( 'You can easily On/Off found text on archive page' ),
+			'desc'    => __( 'You can easily On/Off found text on CubeWP default archive page' ),
 			'type'    => 'switch',
 			'default' => '1',
-			'required' => array(
-				array( 'cubewp_archive', 'equals', '1' )
-			)
 		),
 		array(
 			'id'      => 'archive_posts_per_page',
 			'title'   => __( 'Posts Per Page', 'cubewp-framework' ),
-			'desc'    => __( 'Set number of posts per page in search' ),
+			'desc'    => __( 'Set number of posts per page in search for CubeWP default archive page' ),
 			'type'    => 'text',
 			'default' => 10,
-			'required' => array(
-				array( 'cubewp_archive', 'equals', '1' )
-			)
 		),
 	)
  );
  
-$conditional_options = array();
-if ( cubewp_check_if_elementor_active() && ! cubewp_check_if_elementor_active(true) && ! class_exists("CubeWp_Frontend_Load") ) {
-   	$pages   = get_pages( array( "fields" => "ids" ) );
-   	$options = array();
-   	if ( ! empty( $pages ) && !is_null(Elementor\Plugin::$instance->documents) ) {
-		foreach ( $pages as $page ) {
-			$document = Elementor\Plugin::$instance->documents->get( $page->ID );
-			if ( $document && $document->is_built_with_elementor() && $document->is_editable_by_current_user() ) {
-				$options[ $page->ID ] = $page->post_title;
-			}
-		}
-   	}
-   	$conditional_options[] = array(
-		'id'      => 'post_type_for_elementor_page',
-		'type'    => 'select',
-		'title'   => __( 'Post-Type For Elementor Single Page', 'cubewp-framework' ),
-		'options' => cwp_post_types(),
-		'desc'    => __( 'Please select post-type for Elementor single page template. If you want to use custom page with multiple post-types please download <a href="https://cubewp.com/cubewp-frontend-pro/" target="_blank">CubeWP Frontend Pro</a>', 'cubewp-framework' ),
-			'required' => array(
-				array( 'cubewp_singular', 'equals', '1' )
-			)
-   	);
-   	$conditional_options[] = array(
-		'id'      => 'custom_elementor_page',
-		'type'    => 'select',
-		'title'   => __( 'Elementor Single Page', 'cubewp-framework' ),
-		'options' => $options,
-		'desc'    => __( 'Please select Elementor single page template', 'cubewp-framework' ),
-		'required' => array(
-			array( 'post_type_for_elementor_page', '!=', '' )
-		)
-   	);
-}
-if ( cubewp_check_if_elementor_active() && ! cubewp_check_if_elementor_active(true) ) {
-	$conditional_options[] = array(
-	   'id'      => 'cubewp_ignore_theme_single',
-	   'title'   => __( 'Overwrite Theme Single Template', 'cubewp-framework' ),
-	   'desc'    => __( 'Enable if you also want to overwrite post type single page theme layout.' ),
-	   'type'    => 'switch',
-	   'default' => '0',
-	);
-}
 $settings['post_settings'] = array(
 	'title'  => __( 'Post Settings', 'cubewp-framework' ),
 	'id'     => 'post_settings',
 	'fields' => array_merge(
 		array(
 			array(
+				'id'       => 'cwp_loop_style',
+				'type'     => 'post_type_assignment',
+				'title'    => __( 'Create Post Card Styles', 'cubewp-framework' ),
+				'parent_options'  => CWP_all_post_types('settings'),
+				'child_type'  => 'text',
+				'multi'  => true,
+				'desc'     => __( 'Select post type and assign style names to post type and then you can create different styles output using CubeWP Post Card Builder', 'cubewp-framework' ),
+			),
+			array(
 				'id'      => 'cubewp_singular',
-				'title'   => __( 'CubeWP Single Page', 'cubewp-framework' ),
-				'desc'    => __( 'You can easily On/Off CubeWP custom single page' ),
+				'title'   => __( 'CubeWP Single Post Layout Builder', 'cubewp-framework' ),
+				'desc'    => __( 'Enable/Disable CubeWP Single Post Layout Builder for managing default single post layout if you are not using CubeWP Theme Builder.' ),
 				'type'    => 'switch',
 				'default' => '1',
 			),
@@ -332,6 +274,7 @@ $settings['post_settings'] = array(
 				'default'  => '1',
 				'desc'     => __( 'By enabling this option, you can share post on X (twitter)', 'cubewp-framework' ),
 				'required' => array(
+					array( 'cubewp_singular', 'equals', '1' ),
 					array( 'post_type_share_button', 'equals', '1' )
 				)
 			),
@@ -342,6 +285,7 @@ $settings['post_settings'] = array(
 				'default'  => '1',
 				'desc'     => __( 'By enabling this option, you can share post on facebook', 'cubewp-framework' ),
 				'required' => array(
+					array( 'cubewp_singular', 'equals', '1' ),
 					array( 'post_type_share_button', 'equals', '1' )
 				)
 			),
@@ -352,6 +296,7 @@ $settings['post_settings'] = array(
 				'default'  => '1',
 				'desc'     => __( 'By enabling this option, you can share post on pinterest', 'cubewp-framework' ),
 				'required' => array(
+					array( 'cubewp_singular', 'equals', '1' ),
 					array( 'post_type_share_button', 'equals', '1' )
 				)
 			),
@@ -362,6 +307,7 @@ $settings['post_settings'] = array(
 				'default'  => '1',
 				'desc'     => __( 'By enabling this option, you can share post on linkedIn', 'cubewp-framework' ),
 				'required' => array(
+					array( 'cubewp_singular', 'equals', '1' ),
 					array( 'post_type_share_button', 'equals', '1' )
 				)
 			),
@@ -372,10 +318,11 @@ $settings['post_settings'] = array(
 				'default'  => '1',
 				'desc'     => __( 'By enabling this option, you can share post on reddit', 'cubewp-framework' ),
 				'required' => array(
+					array( 'cubewp_singular', 'equals', '1' ),
 					array( 'post_type_share_button', 'equals', '1' )
 				)
 			),
-		),$conditional_options
+		)
 	)
 );
 $settings['author_settings'] = array(
@@ -465,6 +412,22 @@ $settings['author_settings'] = array(
 		),
 	)
 );
+
+$settings['cubewp-theme-builder'] = array(
+	'title'  => __( 'Theme Builder', 'cubewp-framework' ),
+	'id'     => 'cubewp-theme-builder',
+	'icon'   => 'dashicons-editor-code',
+	'fields' => array(
+		array(
+			'id'       => 'cwp_tb_hooks',
+			'type'     => 'repeating_field',
+			'title'    => __( 'Add WordPress Hooks For Theme builder', 'cubewp-framework' ),
+			'child_type'  => 'text',
+			'desc'     => __( 'Add WordPress Hooks here and then you will be able to select these hooks in theme builder and you can create template to show on these hooks wherever you want.', 'cubewp-framework' ),
+		),
+	)
+);
+
 $settings['cubewp-css-js'] = array(
 	'title'  => __( 'CSS & JS', 'cubewp-framework' ),
 	'id'     => 'cubewp-css-js',

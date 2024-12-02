@@ -2,27 +2,27 @@
 	box-sizing: border-box;
 }
 
-.size-1-1 {
+.cwp-frontend-form-container .size-1-1 {
 	width: calc(100% - 0px) !important;
 }
 
-.size-1-2 {
+.cwp-frontend-form-container .size-1-2 {
 	width: calc(50% - 0px) !important;
 }
 
-.size-1-3 {
+.cwp-frontend-form-container .size-1-3 {
 	width: calc(33% - 0px) !important;
 }
 
-.size-1-4 {
+.cwp-frontend-form-container .size-1-4 {
 	width: calc(25% - 0px) !important;
 }
 
-.size-2-3 {
+.cwp-frontend-form-container .size-2-3 {
 	width: calc(65% - 0px) !important;
 }
 
-.size-3-4 {
+.cwp-frontend-form-container .size-3-4 {
 	width: calc(75% - 0px) !important;
 }
 
@@ -132,37 +132,39 @@ span.select2-selection.select2-selection--single span.select2-selection__arrow {
 }
 
 /*-------Multi Value Select 2----------*/
-span.select2.select2-container .selection span.select2-selection.select2-selection--multiple {
+/* Removed due to select2 update */
+/* span.select2.select2-container .selection span.select2-selection.select2-selection--multiple {
 	border: 0.1rem solid #dcd7ca;
 	min-height: unset;
 	line-height: 10px;
-}
+} */
 
-span.select2.select2-container .selection span.select2-selection.select2-selection--multiple li.select2-search.select2-search--inline input {
+/* Removed due to select2 update */
+/* span.select2.select2-container .selection span.select2-selection.select2-selection--multiple li.select2-search.select2-search--inline input {
 	margin: 0;
 	line-height: 10px;
 	font-size: 14px;
 	cursor: pointer;
 	padding: 5px 0;
 	max-width: 100%;
-}
+} */
 
-span.select2.select2-container span.selection span.select2-selection.select2-selection--multiple ul.select2-selection__rendered {
+/* Removed due to select2 update */
+/* span.select2.select2-container span.selection span.select2-selection.select2-selection--multiple ul.select2-selection__rendered {
 	padding: 5px 10px 1px;
 	clear: both;
-}
+} */
 
 span.select2.select2-container .selection span.select2-selection.select2-selection--multiple ul.select2-selection__rendered li.select2-selection__choice {
-	font-size: 14px;
-	padding: 7px;
-	line-height: 10px;
+	width: fit-content;
 }
 
-span.select2.select2-container .selection span.select2-selection.select2-selection--multiple ul.select2-selection__rendered li {
+/* Removed due to select2 update */
+/* span.select2.select2-container .selection span.select2-selection.select2-selection--multiple ul.select2-selection__rendered li {
 	margin: 0 5px 5px 0;
 	width: auto;
 	max-width: 100%;
-}
+} */
 /*-------------Password Field-----------*/
 .cwp-field-password {
     position: relative;
@@ -993,7 +995,9 @@ a.ui-datepicker-next {
 .cwp-hide {
 	display: none !important;
 }
-
+.search-form-fields .cwp-address-range {
+	display: none !important;
+}
 .cwp-address-range {
 	width: 100%;
 }

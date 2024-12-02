@@ -462,6 +462,10 @@ a {
     flex-wrap: wrap;
 }
 
+.cwp-post-type-title.margin-minus-20 {
+    width: calc(100% - 20px);
+}
+
 .wrap .button-primary {
     padding: 3px 25px !important;
     background: #1486B8 0% 0% no-repeat padding-box;
@@ -623,8 +627,7 @@ a {
     display: block;
 }
 
-.postbox-header,
-.postbox-header {
+.cubewp-wrap .postbox-header {
     border-bottom: 1px solid #dddddd9e !important;
     padding: 10px 0;
 }
@@ -821,7 +824,7 @@ span.dashicons.dashicons-trash:hover {
     margin: 0 !important;
 }
 
-.postbox {
+.cubewp-wrap .postbox {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 0px 3px 6px #00000029;
     opacity: 1;
@@ -846,7 +849,8 @@ span.dashicons.dashicons-trash:hover {
 #toplevel_page_cube_wp_dashboard li:has(a[href^="admin.php?page=taxonomy-custom-fields"]),
 #toplevel_page_cube_wp_dashboard li:has(a[href^="admin.php?page=user-custom-fields"]),
 #toplevel_page_cube_wp_dashboard li:has(a[href^="admin.php?page=settings-custom-fields"]),
-#toplevel_page_cube_wp_dashboard li a[href^="admin.php?page=cubewp-pricing"]
+#toplevel_page_cube_wp_dashboard li a[href^="admin.php?page=cubewp-pricing"],
+#toplevel_page_cube_wp_dashboard li a[href^="admin.php?page=cubewp-export"]
 {
     display: none;
 }
@@ -869,6 +873,12 @@ span.dashicons.dashicons-trash:hover {
     font-weight: bold;
 }
 
+#toplevel_page_cube_wp_dashboard li .new-feature-tag {
+    background-image: url('../images/new-tag-submenu.svg'); /* Navigate one directory up and then into the 'images' folder */
+    background-position: right center; /* Position the image on the right side, vertically centered */
+    background-repeat: no-repeat; /* Ensure the image doesn't repeat */
+    padding-right: 42px; /* Adjust padding so text doesn't overlap with the image */
+}
 label .cwp-required {
     color: #ff0000;
 }
@@ -1367,21 +1377,26 @@ cwp-unlock-feature a {
 
 
 /*CubeWP Import*/
-.cubewp-page-header {
+.imp-exp .cubewp-page-header {
     background-color: #FFFFFF;
     box-shadow: 0 3px 6px #00000029;
     border: 1px solid #DDDDDD;
     padding: 25px 45px;
     margin: 0 0 40px -20px;
+    display: flex;
+
 }
-.cubewp-page-header h2 {
+.imp-exp .cubewp-page-header h2 {
     font-size: 20px;
     line-height: 24px;
     font-family: Helvetica, sans-serif;
     color: #32373C;
     font-weight: bold;
-    margin:0px
+    margin:0px;
+    line-height: 47px;
 }
+
+
 
 .cubewp-import-box-container {
     display: flex;
@@ -1781,158 +1796,122 @@ cwp-unlock-feature a {
 }
 
 
-/* add new template popup in cubewp theme builder css */
-
-.cubewp-elements-builder-nav {
-    justify-content: space-between;
+/* theme Builder Pop Up Css Start */
+.cubewp-theme-builder-popup {
+    padding: 20px !important;
     display: flex;
     align-items: center;
-    padding: 20px 15px;
-    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    gap: 20px;
 }
-.cubewp-elements-builder-nav .logo h3 {
-    font-family: 'Roboto';
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 24px;
+.cubewp-theme-builder-popup .page-content {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap:15px;
 }
-.cubewp-elements-builder-nav .cross-button button {
-    border: none;
-    background: unset;
-    font-size: 16px;
-    padding: 10px;
-    border-left: 1px solid #ddd;
-}
-
-.main-heading {
-    line-height: 55px;
-    font-family: "Roboto";
-    font-weight: 400;
-    font-size: 40px;
-    margin-bottom: 30px;
-}
-.main-heading span {
-    font-weight: 600;
-}
-.main-paragraph {
-    font-family: 'Roboto';
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-}
-.form-heading {
-    font-family: 'Roboto';
-    font-size: 30px;
+.cubewp-theme-builder-popup .page-content .heading {
+    line-height: 50px;
     font-weight: 500;
+    font-size: 25px;
+    color: #644FE4;
+    margin: 0px;
+}
+.cubewp-theme-builder-popup .page-content .heading span {
+    font-weight: 700;
+    font-size: 50px;
+    color:#1D1D1D;
+}
+.cubewp-theme-builder-popup .page-content .paragraph {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    margin: 0px;
+    scrollbar-width: none;
+    overflow: auto;
+    scrollbar-width: none;
+    margin-bottom: 20px;
+}
+.cubewp-theme-builder-popup .cubewp-main-form{
+    width: 50%;
+    border: 1px solid #D9D9D9;
+    padding: 40px;
+    border-radius: 6px;
+    background: #f6f6f6;
+}
+.cubewp-theme-builder-popup .cubewp-main-form .heading {
+    font-size: 33px;
+    font-weight: 400;
     line-height: 40px;
     margin-bottom: 30px;
 }
-.page-content {
-    float: left;
-}
-.main-form-content {
-    float: right;
-    border: 1px solid #c7bbbbdb;
-    padding: 40px;
-    border-radius: 4px;
-}
-.cubewp-elements-builder {
-    padding: 120px 0px;
-    clear: both;
-    overflow: hidden;
-}
-.cubewp-elements-builder .form-fileds label {
-    display: block;
-    font-family: 'Roboto';
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-}
-.cubewp-elements-builder .form-fileds {
+.cubewp-main-form .cubewp-form-fileds {
     margin-bottom: 15px;
     width: 100%;
 }
-.cubewp-elements-builder .form-fileds select {
+.cubewp-main-form .cubewp-form-fileds label{
+    display: block;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    padding-bottom: 5px;
+}
+.cubewp-main-form .cubewp-form-fileds select {
     width: 100%;
     border: 1px solid #ddd;
     padding: 15px 12px;
     border-radius: 4px;
     font-size: 16px;
     font-weight: 400;
-    font-family: 'Roboto';
     line-height: 20px;
 }
-.cubewp-elements-builder .form-fileds input {
+.cubewp-main-form .cubewp-form-fileds select:hover {
+    color: #505052;
+}
+.cubewp-main-form .cubewp-form-fileds select:focus {
+    border-color: #644FE4;
+    box-shadow:none;
+}
+.cubewp-main-form .cubewp-form-fileds input {
     padding: 15px 12px;
-    width: calc(100% - 24px);
+    width: 100%;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-family: 'Roboto';
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
 }
-.cubewp-elements-builder .main-form {
-    width: 100%;
+.cubewp-main-form .cubewp-form-fileds input:focus {
+    border-color: #644FE4;
+    box-shadow:none;
 }
-.cubewp-elements-builder .form-fileds-buttons button {
+.cubewp-main-form .form-fileds-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.cubewp-main-form .form-fileds-buttons button {
     border-radius: 4px;
     padding: 15px;
-    background-color: #F3BAFD;
+    background-color: #644FE4;
     border: none;
     width: 100%;
-    font-family: 'Roboto';
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 400;
     line-height: 20px;
+    color: white !important;
+    cursor: pointer !important;
+    transition: 0.3s ease-in-out;
 }
-.cubewp-elements-builder .form-fileds input::placeholder {
-    font-family: 'Roboto';
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
+.cubewp-main-form .form-fileds-buttons button:hover {
+    background: #1254CD;
+    border-color: #1254CD;
+    color: #fff;
 }
-.cubewp-elements-builder .form-fileds option {
-    font-family: 'Roboto';
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
+@media (max-width: 1620px) {
+    .cubewp_page_cubewp-theme-builder .cwp-post-type-title .cwp-post-type-title-nav .nav-tab-wrapper{
+        margin:20px 0;
+        width:100%;
+    }
 }
-.cubewp-elements-builder input:focus-visible {
-    outline: unset;
-}
-.cubewp-elements-builder select:focus-visible {
-    outline: unset;
-}
-form.loader:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-    background: #00000011;
-    box-shadow: 0 0 10px 5px #00000011;
-}
-form.loader:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 40px;
-    margin-top: -20px;
-    margin-left: -20px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    z-index: 2;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+/* theme Builder Pop Up Css End */

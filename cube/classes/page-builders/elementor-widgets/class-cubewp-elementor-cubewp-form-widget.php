@@ -20,19 +20,19 @@ class CubeWp_Elementor_CubeWP_Form_Widget extends Widget_Base {
 
     public function get_name() {
         
-        return 'custom_form_widget';
+        return 'search_filter_form_widget';
     }
 
     public function get_title() {
-        return __( 'Custom Form Widget', 'elementor' );
+        return __( 'Search & Filter Form', 'elementor' );
     }
 
     public function get_icon() {
-        return 'eicon-form-horizontal';
+        return 'eicon-site-search';
     }
 
     public function get_categories() {
-        return [ 'basic' ];
+        return [ 'cubewp' ];
     }
 
     protected function _register_controls() {
@@ -49,8 +49,8 @@ class CubeWp_Elementor_CubeWP_Form_Widget extends Widget_Base {
                 'label' => __( 'Select Form Type', 'elementor' ),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'search_fields' => __( 'Search 1', 'elementor' ),
-                    'search_filters' => __( 'Filters 2', 'elementor' ),
+                    'search_fields' => __( 'Search Form', 'elementor' ),
+                    'search_filters' => __( 'Filters Form', 'elementor' ),
                 ],
             ]
         );
@@ -360,17 +360,26 @@ class CubeWp_Elementor_CubeWP_Form_Widget extends Widget_Base {
 
     protected function render() {
         $settings = $this->get_settings_for_display();
-        CubeWp_Frontend_Search_Filter::get_filters_style_scripts();
-        if ( isset( $settings['post_type'] ) ) {
-            $post_type = $settings['post_type'];
-            ?>
-            <div class="cwp-search-filters-wrap">
-            <form name="cwp-search-filters" class="cwp-search-filters method="post">   
-            <div class="cwp-search-filters-fields">
-            <?php
 
-            echo CubeWp_Frontend_Search_Filter::filter_hidden_fields($post_type);
-            $cwp_search_filters = CWP()->get_form('search_filters');
+        /* Calling all css and JS files for filters */
+        CubeWp_Enqueue::enqueue_script( 'cwp-search-filters' );
+        CubeWp_Enqueue::enqueue_script( 'select2' );
+        CubeWp_Enqueue::enqueue_style( 'select2' );
+        CubeWp_Enqueue::enqueue_script( 'jquery-ui-datepicker' );
+        CubeWp_Enqueue::enqueue_style( 'frontend-fields' );
+        CubeWp_Enqueue::enqueue_script('cwp-frontend-fields');
+        new CubeWp_Frontend();
+
+        $output = '';
+        $post_type = isset($settings['post_type']) ? $settings['post_type']: '';
+        $form_type = isset($settings['form_type']) ? $settings['form_type']: '';
+        if ( !empty(  $post_type ) && !empty( $form_type ) ) {
+            $output .= '<div class="cwp-search-filters-wrap">';
+            $output .= '<form name="cwp-search-filters" class="cwp-search-filters method="post">';  
+            $output .= '<div class="cwp-search-filters-fields">';
+
+            $output .= CubeWp_Frontend_Search_Filter::filter_hidden_fields($post_type);
+            $cwp_search_filters = CWP()->get_form($form_type);
             CubeWp_Frontend_Search_Filter::$conditional_filters = isset($cwp_search_filters[$post_type]['form']['conditional_filters']) ? $cwp_search_filters[$post_type]['form']['conditional_filters'] : '0';
             if(!empty($cwp_search_filters[$post_type]['fields']) && count($cwp_search_filters[$post_type]['fields'])>0 ){
                 if(isset($cwp_search_filters[$post_type]['fields']) && !empty($cwp_search_filters[$post_type]['fields'])){
@@ -378,19 +387,17 @@ class CubeWp_Elementor_CubeWP_Form_Widget extends Widget_Base {
                         if(($search_filter['type'] == 'number' || $search_filter['type'] == 'date_picker') && isset($search_filter['sorting']) && $search_filter['sorting'] == 1){
                             CubeWp_Frontend_Search_Filter::$sorting[$search_filter['label']] = $search_filter['name'];
                         }
-                        echo CubeWp_Frontend_Search_Filter::get_filters_content($search_filter,$field_name);
+                        $output .= CubeWp_Frontend_Search_Filter::get_filters_content($search_filter,$field_name);
                     }
                 }
             }
-        ?>
-            </div>
-            </form>
-            </div>
-        <?php
-
+            $output .= '</div></form></div>';
+            
         } else {
-            echo __( 'Post type not set gfrf', 'elementor' );
+            $output .= _e( 'Post type not set gfrf', 'elementor' );
         }
+
+        echo apply_filters( 'cubewp/elementor/archive/posts', $output );
     }
     
 }

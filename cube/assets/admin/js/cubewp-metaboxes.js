@@ -160,7 +160,7 @@ jQuery(document).ready(function ($){
         jQuery.ajax({
             type: 'POST',
             url: cwp_vars_params.ajax_url,
-            data: 'action=cwp_add_repeating_field&id='+ thisObj.data('id'),
+            data: 'action=cwp_add_repeating_field&id='+ thisObj.data('id') + '&nonce=' + cwp_vars_params.nonce,
             dataType : 'json',
             success: function (resp) {
                 var new_row = thisObj.closest('.cwp-repeating-field').find('.cwp-repeating-table').append(resp.sub_field_html);

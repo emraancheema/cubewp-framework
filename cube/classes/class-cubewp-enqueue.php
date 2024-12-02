@@ -62,6 +62,10 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 		if ( ! is_admin() ) {
 			CubeWp_Enqueue::enqueue_style( 'cwp-alert-ui' );
 			CubeWp_Enqueue::enqueue_script( 'cwp-alert-ui' );
+			$file_path = CUBEWP_POST_CARDS_DIR . '/cubewp-post-cards.css';
+			if (file_exists(dirname($file_path))) {
+				CubeWp_Enqueue::enqueue_style( 'cwp-post-cards' );
+			}
 		}
 
 		// CSS Styles.
@@ -99,6 +103,11 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 			),
             'cwp-search-filters'     => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/search-filters.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			),
+			'cwp-load-more'     => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/frontend/js/load-more.js',
 				'deps'    => array( 'jquery' ),
 				'version' => CUBEWP_VERSION,
 			),
@@ -258,6 +267,12 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'media'   => 'all',
 				'has_rtl' => false,
 			),
+			'cwp-post-cards'     => array(
+				'src'     => CUBEWP_POST_CARDS_URL . '/cubewp-post-cards.css',
+				'deps'    => array(),
+				'version' => CUBEWP_VERSION,
+				'has_rtl' => false,
+			),
 		);
 		$register_styles = apply_filters( 'frontend/style/register', $register_styles );
 		foreach ( $register_styles as $name => $props ) {
@@ -312,6 +327,7 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				$params = array(
 					'ajax_url'  => admin_url( 'admin-ajax.php' ),
 					'admin_url' => admin_url(),
+					'nonce' 	=> wp_create_nonce("cubewp-alert-nonce"),
 				);
 				break;
 			case 'cubewp-map':

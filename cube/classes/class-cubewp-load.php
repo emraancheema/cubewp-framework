@@ -20,7 +20,7 @@ final class CubeWp_Load {
      *
      * @var string
      */
-    public static $CubeWp_version = '1.1.16';
+    public static $CubeWp_version = '1.1.22';
     
     /**
      * Wordpress required version.
@@ -121,6 +121,10 @@ final class CubeWp_Load {
 	    add_action('cubewp_loaded', array('CubeWp_Elementor', 'init'));
         add_action('cubewp_loaded', array('CubeWp_Vc_Elements', 'init'));
         add_action('cubewp_loaded', array('CubeWp_Relationships', 'init'));
+        require_once( CUBEWP_FILES . 'modules/theme-update/theme-updater.php' );
+        if(self::is_request('admin')){
+            new CubeWp_Ping();
+        }
         if (self::is_request('frontend')) {
             self::frontend_includes();
         }
@@ -337,7 +341,7 @@ final class CubeWp_Load {
         $cwp_plugin_meta = array(
             '<a href="https://cubewp.com/store/" target="_blank">Add-Ons</a>',
             '<a href="https://support.cubewp.com/" target="_blank">CubeWP Documentation</a>',
-            '<a href="https://support.cubewp.com/forums/forum/community/" target="_blank">CubeWP Community</a>',
+            '<a href="https://support.cubewp.com/forums/" target="_blank">CubeWP Community</a>',
             '<a href="https://support.cubewp.com/forums/forum/feedback/" target="_blank">Feedback</a>',
             '<a href="https://www.youtube.com/channel/UCKGX3FHQv7xFylXQZOPOy7w" target="_blank">Video Tutorials</a>',
         );

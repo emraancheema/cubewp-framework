@@ -118,7 +118,7 @@ class CubeWp_Frontend_Search_Filter {
 
     public function check_if_custom_widget_exists( $elements ) {
         foreach ( $elements as $element ) {
-            if ( isset( $element['widgetType'] ) && 'custom_form_widget' === $element['widgetType'] ) {
+            if ( isset( $element['widgetType'] ) && 'search_filter_form_widget' === $element['widgetType'] ) {
                 return true;
             }
     
@@ -252,7 +252,7 @@ class CubeWp_Frontend_Search_Filter {
      * @return string html
      * @since  1.0.0
      */
-    public static function filter_hidden_fields($type='',$page_num=''){
+    public static function filter_hidden_fields($type='', $page_num='', $style=''){
         if(empty($type)){
             $type = _get_post_type();
         }
@@ -268,6 +268,10 @@ class CubeWp_Frontend_Search_Filter {
         if(!is_archive()){
             $output .= '<input type="hidden" name="page" value="page">';
         }
+
+        if(!empty($style)){
+            $output .= '<input type="hidden" name="style" value="'.$style.'">';
+        }
         
         
         return $output;
@@ -282,8 +286,9 @@ class CubeWp_Frontend_Search_Filter {
      * @return array
      * @since  1.0.0
      */
-    private static function get_filters_taxonomy( $search_filter = array(), $field_name ='' ){
+    public static function get_filters_taxonomy( $search_filter = array(), $field_name ='' ){
         if( $search_filter['type'] == 'taxonomy' ){
+            $field_name = self::taxonomy_prefix($field_name);
             $search_filter['value']      = isset($_GET[$field_name]) ? sanitize_text_field($_GET[$field_name]) : '';
             $search_filter['appearance'] = isset($search_filter['display_ui']) ? $search_filter['display_ui'] : '';
             if(isset($search_filter['field_size'])){
@@ -291,6 +296,17 @@ class CubeWp_Frontend_Search_Filter {
             }
             return apply_filters("cubewp/search_filters/taxonomy/field", '', $search_filter);
         }
+    }
+
+    public static function taxonomy_prefix($string) {
+        $prefix = '_ST_';
+        
+        // Check if the string does not start with _ST_
+        if (strpos($string, $prefix) !== 0) {
+            $string = $prefix . $string;
+        }
+        
+        return $string;
     }
         
      /**
@@ -305,7 +321,15 @@ class CubeWp_Frontend_Search_Filter {
     public static function get_filters_fields( $search_filter = array(), $field_name =''){
 
         if( $search_filter['type'] != 'taxonomy' ){
-            $fieldOptions            =   get_field_options($field_name);
+            $fieldOptions =  get_field_options($field_name);
+            $defaults = array(
+                'label' => '',
+                'name' => '',
+                'class' => '',
+                'container_class' => '',
+                'placeholder' => '',
+            );
+            $fieldOptions = wp_parse_args($fieldOptions, $defaults);
             $fieldOptions['label']   =   isset($search_filter['label']) ? $search_filter['label'] : $fieldOptions['label'];
             $fieldOptions['name']    =   isset($search_filter['name']) ? $search_filter['name'] : $fieldOptions['name'];
             $fieldOptions['type']    =   isset($search_filter['display_ui']) ? $search_filter['display_ui'] : $fieldOptions['type'];
@@ -339,8 +363,8 @@ class CubeWp_Frontend_Search_Filter {
                 if(isset($fieldOptions['group_id']) && !empty($fieldOptions['group_id'])){
                     $terms  = get_post_meta($fieldOptions['group_id'], '_cwp_group_terms', true);
                     if(isset($terms) && !empty($terms)){
-                        $termSLug = cwp_term_by('id','comma', $terms, false);
-                        $fieldOptions['container_attrs'] = ' data-terms="'. $termSLug .'"';
+                        //$termSLug = cwp_term_by('id','comma', $terms, false);
+                        $fieldOptions['container_attrs'] = ' data-terms="'. $terms .'"';
                         $fieldOptions['container_class'] = ' cwp-conditional-by-term';
                     }
                 }
@@ -376,12 +400,12 @@ class CubeWp_Frontend_Search_Filter {
      *
      * @return void
      */
-    private static function get_hidden_field_if_tax(){
+    public static function get_hidden_field_if_tax(){
         if(is_tax() && !is_search()){
             if(!is_page()){
                 $queried_object = get_queried_object();
                 if (is_object($queried_object) && !empty($queried_object) && !is_wp_error($queried_object)) {
-                    $slug = $queried_object->slug;
+                    $slug = $queried_object->term_id;
                     $taxonomy = $queried_object->taxonomy;
                     echo '<input class="is_tax" data-current-tax="'.esc_attr($slug).'" type="hidden" name="' .esc_attr($taxonomy). '" value="' . esc_attr($slug) . '">';
 
@@ -447,8 +471,8 @@ class CubeWp_Frontend_Search_Filter {
      */
     public static function get_shortcode_filters($type='',$page_num=''){
         global $cwpOptions;
-              /* Calling all css and JS files for filters */
-             self::get_filters_style_scripts();
+        /* Calling all css and JS files for filters */
+        self::get_filters_style_scripts();
         
         $archive_map = isset($cwpOptions['archive_map']) ? $cwpOptions['archive_map'] : 1;
         $archive_filters = isset($cwpOptions['archive_filters']) ? $cwpOptions['archive_filters'] : 1;

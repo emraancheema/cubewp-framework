@@ -238,7 +238,27 @@ trait CubeWp_Builder_Ui {
 	 * @since  1.0.0
 	 */
 	protected static function cubewp_builder_title($title = '') {
-		return "<h1>{$title}</h1>";
+		// $navi = array(
+		// 		'cubewp_post_types_form' => array(
+		// 			'title' => esc_html__( 'Post Type Forms', 'cubewp-framework' ),
+		// 			'slug' => '?page=cubewp-post-types-form',
+		// 		),
+		// 		'cubewp_user_registration_form' => array(
+		// 			'title' => esc_html__( 'User Signup Forms', 'cubewp-framework' ),
+		// 			'slug' => '?page=cubewp-user-registration-form',
+		// 		),
+		// 		'cubewp_user_profile_form' => array(
+		// 			'title' => esc_html__( 'User Profile Forms', 'cubewp-framework' ),
+		// 			'slug' => '?page=cubewp-user-profile-form',
+		// 		)
+		// 	);
+		// $nav = '<nav class="nav-tab-wrapper wp-clearfix">
+        //             <a class="nav-tab nav-tab-active" href="?page=cubewp-post-types-form">Post Type Forms</a>
+        //             <a class="nav-tab" href="?page=cubewp-user-registration-form">User Signup Forms</a>
+        //             <a class="nav-tab" href="?page=cubewp-user-profile-form">User Profile Forms</a>
+        //         </nav>';
+		//return "<div class='builder-title-nav'><h1>CubeWP Form Builders</h1>{$nav}</div>";
+		return "<div class='builder-title-nav'><h1>CubeWP Form Builders</h1></div>";
 	}
 	
 	/**
@@ -319,8 +339,9 @@ trait CubeWp_Builder_Ui {
 	 * @since  1.0.0
 	 */
 	protected static function cubewp_builder_area_topbar(string $slug = "", array $data = array()) {
+		$setting_btn = !empty(apply_filters("cubewp/builder/right/settings", '', $slug,$data)) ? self::builder_form_settings_btn($data['form_type']) : '';
         return '<div class="cubewp-builder-container-topbar">
-            ' . self::builder_form_settings_btn($data['form_type']) . '
+            ' . $setting_btn . '
             ' . self::builder_add_Section() . '
             '.self::builder_hidden_fields($slug, $data['form_type']).'
         </div>';
@@ -538,18 +559,10 @@ trait CubeWp_Builder_Ui {
 	 * @return string html
 	 * @since  1.0.0
 	 */
-	protected static function builder_form_settings_btn($FormType) {
-		if ( (! cubewp_check_if_elementor_active() || cubewp_check_if_elementor_active(true)) && $FormType == 'single_layout') {
-			return '';
-		}
-		$setting_text = esc_html__("Form Settings", "cubewp-framework");
-		if ($FormType == 'single_layout') {
-		   $setting_text = esc_html__("Single Page Settings", "cubewp-framework");
-		}
-	 
+	protected static function builder_form_settings_btn($FormType) {			 
 		return '<button class="button form-settings-form">
 				<span class="dashicons dashicons-admin-generic"></span>
-				' . $setting_text . '
+				' . esc_html__("Form Settings", "cubewp-framework") . '
 			</button>';
 	}
 

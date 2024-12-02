@@ -42,6 +42,7 @@ class CubeWp_Plugin_Updater {
 			$this->purchase_url = $_plugin_update_data[ 'purchase_url' ];
 			$this->plugin_title = $_plugin_update_data[ 'plugin_title' ];
 		}
+		//delete_site_transient('update_plugins');
 		// Set up hooks.
 		$this->init();
 		add_action( 'admin_init', array( $this, 'show_changelog' ) );

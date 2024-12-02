@@ -106,7 +106,7 @@ class CubeWp_Settings_Custom_Fields_Display extends CubeWp_Custom_Fields_Process
         $group = wp_parse_args( $group, $defaults );
         
         ?>
-        <div class="wrap">
+        <div class="wrap cubewp-wrap">
         <form id="post" class="cwpgroup" method="post" action="" enctype="multipart/form-data">
             
             <div class="wrap cwp-post-type-title width-40 margin-bottom-0 margin-left-minus-20  margin-right-0">

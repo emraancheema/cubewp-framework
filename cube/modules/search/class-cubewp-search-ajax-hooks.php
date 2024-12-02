@@ -44,6 +44,7 @@ class CubeWp_Search_Ajax_Hooks{
         $page_num     =  isset($_DATA['page_num']) ? $_DATA['page_num'] : 1;
         $post_type    =  isset($_DATA['post_type']) ? $_DATA['post_type'] : '';
         $post_per_page = isset($_DATA['posts_per_page']) ? $_DATA['posts_per_page'] : 10;
+        $style = isset($_DATA['style']) ? $_DATA['style'] : '';
 
         $query = new CubeWp_Query($_DATA);
         $the_query = $query->cubewp_post_query();
@@ -66,7 +67,7 @@ class CubeWp_Search_Ajax_Hooks{
                         if(!empty(self::cwp_map_lat_lng(get_the_ID()))){
                             $latLng[] = self::cwp_map_lat_lng(get_the_ID());
                         }
-                        echo CubeWp_frontend_grid_HTML(get_the_ID(), $grid_class);
+                        echo CubeWp_frontend_grid_HTML(get_the_ID(), $grid_class,$style);
                     }
                     endwhile;
                 ?>

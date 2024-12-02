@@ -93,6 +93,10 @@ class CubeWp_Admin_Repeater_Field extends CubeWp_Admin {
 	 * @since  1.0.0
 	 */
 	public function cwp_add_repeating_field() {
+		if ( !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cubewp-admin-nonce') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('Invalid nonce. You are not authorized to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
 		$field_id      = isset($_POST['id']) ? sanitize_text_field($_POST['id']) : '';
 		$field_options = get_field_options($field_id);
 		$field_of      = 'post';

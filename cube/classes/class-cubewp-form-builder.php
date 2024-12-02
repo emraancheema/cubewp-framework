@@ -26,6 +26,10 @@ class CubeWp_Form_Builder {
      * @return void
      */
     public static function cwpform_save_shortcode() {
+        if ( !current_user_can('manage_options') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('You do not have permission to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
         $form_relation = isset( $_POST['form_relation'] ) ? sanitize_text_field( $_POST['form_relation'] ) : '';
         $form_type     = isset( $_POST['form_type'] ) ? sanitize_text_field( $_POST['form_type'] ) : '';
         if ( $form_type != '' ) {
@@ -57,6 +61,10 @@ class CubeWp_Form_Builder {
      * @since  1.0.0
      */
     public function cwpform_add_section() {
+        if ( !current_user_can('manage_options') ) {
+            wp_send_json( array( 'success' => 'false', 'msg' => esc_html__('You do not have permission to perform this action.', 'cubewp-framework') ) );
+            wp_die();
+        }
         $section_args = [];
         if(isset($_POST['action'])){
             unset($_POST['action']);
@@ -611,60 +619,25 @@ class CubeWp_Form_Builder {
     public function cwpform_form_setting_fields( array $form_fields, string $form_type, $key = '' ) {
         $output = '<div class="cwpform-settings">';
         $output .= '<div class="cwpform-setting-label">';
-        if ( $form_type == 'single_layout' || empty( $form_type ) ) {
-            $output .= '<h2>' . esc_html__( "Single Page Settings", "cubewp-framework" ) . '</h2>';
-        } else {
-            $output .= '<h2>' . esc_html__( "Form Settings", "cubewp-framework" ) . '</h2>';
-        }
+       
+        $output .= '<h2>' . esc_html__( "Form Settings", "cubewp-framework" ) . '</h2>';
+
         $output .= '</div>';
         $output .= '<div class="cwpform-setting-fields">';
 
-        if ( $form_type == 'single_layout' && cubewp_check_if_elementor_active() && ! cubewp_check_if_elementor_active(true) ) {
-            $output .= self::cubewp_single_layout_builder_settings( $form_fields );
-        } else {
+        if ( $form_type != 'single_layout') {
             $output .= self::cubewp_form_builders_settings( $form_fields, $form_type );
-            if ( $form_type == 'search_fields' ) {
-                $output .= self::cubewp_search_form_builder_settings( $form_fields );
-            }
-            if ( $form_type == 'search_filters' ) {
-                $output .= self::cubewp_search_filters_builder_settings( $form_fields );
-            }
-            if ( $form_type != 'search_filters' && $form_type != 'search_fields' ) {
-                $form_fields['form_type'] = $form_type;
-                $form_fields['post_type'] = $key;
-                $output .= self::cubewp_form_builder_settings( $form_fields );
-            }
+        }
+        if ( $form_type == 'search_filters' ) {
+            $output .= self::cubewp_search_filters_builder_settings( $form_fields );
+        }
+        if ( $form_type != 'search_filters' && $form_type != 'search_fields' && $form_type != 'single_layout' ) {
+            $form_fields['form_type'] = $form_type;
+            $form_fields['post_type'] = $key;
+            $output .= self::cubewp_form_builder_settings( $form_fields );
         }
         $output .= '</div>';
         $output .= '</div>';
-
-        return $output;
-    }
-
-    public static function cubewp_single_layout_builder_settings( $form_fields ) {
-        $output = '';
-        $output             .= '<div class="cwpform-setting-field">';
-        $output             .= '<label>' . esc_html__( "Single Page Template", "cubewp-framework" ) . '</label>';
-        $pages              = get_pages( array( "fields" => "ids" ) );
-        $options['default'] = __( "Use Default Template", "cubewp-framework" );
-        if ( ! empty( $pages ) && !is_null(Elementor\Plugin::$instance->documents)) {
-            foreach ( $pages as $page ) {
-                $document = Elementor\Plugin::$instance->documents->get( $page->ID );
-                if ( $document && $document->is_built_with_elementor() && $document->is_editable_by_current_user() ) {
-                    $options[ $page->ID ] = $page->post_title;
-                }
-            }
-        }
-        $input_attrs = array(
-            'class'       => 'form-field',
-            'name'        => 'single_page',
-            'value'       => isset( $form_fields['single_page'] ) ? $form_fields['single_page'] : 'default',
-            'options'     => $options,
-            'extra_attrs' => 'data-name="single_page"',
-        );
-        $output      .= cwp_render_dropdown_input( $input_attrs );
-        $output      .= '<p>' . esc_html__( "Note: If you use the custom template the CubeWP Single Layout Builder will be overwritten.", "cubewp-framework" ) . '</p>';
-        $output      .= '</div>';
 
         return $output;
     }
@@ -724,27 +697,10 @@ class CubeWp_Form_Builder {
         return $output;
     }
 
-    public static function cubewp_search_form_builder_settings( $form_fields ) {
-        $output             = '<div class="cwpform-setting-field">';
-        $output             .= '<label>' . esc_html__( "Search Result Page", "cubewp-framework" ) . '</label>';
-        $options            = cwp_has_shortcode_pages_array( '[cwpFilters]' );
-        $options['default'] = __( "Default search result page" );
-        $input_attrs        = array(
-            'class'       => 'form-field',
-            'name'        => 'search_result_page',
-            'value'       => isset( $form_fields['search_result_page'] ) ? $form_fields['search_result_page'] : 'default',
-            'options'     => $options,
-            'extra_attrs' => 'data-name="search_result_page"',
-        );
-        $output             .= cwp_render_dropdown_input( $input_attrs );
-        $output             .= '</div>';
-
-        return $output;
-    }
 
     public static function cubewp_search_filters_builder_settings( $form_fields ) {
         $output             = '<div class="cwpform-setting-field">';
-        $output             .= '<label>' . esc_html__( "Enable Conditional Fields", "cubewp-framework" ) . '</label>';
+        $output             .= '<label>' . esc_html__( "Enable Taxonomy-Based Conditional Fields in Filters", "cubewp-framework" ) . '</label>';
         $input_attrs = array(
             'name'        => 'conditional_filters',
             'class'       => 'form-field conditional_filters',
