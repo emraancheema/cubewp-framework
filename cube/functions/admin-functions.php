@@ -2350,7 +2350,8 @@ function cwp_hide_custom_post_types_for_subscribers() {
     // Get an array of custom post types
     $custom_post_types = cwp_post_types();
     // Check if the current user is a subscriber
-    if (current_user_can('subscriber')) {
+    $user = wp_get_current_user();
+    if (!empty($user->roles) && in_array('subscriber', (array) $user->roles, true) && count($user->roles) === 1) {
         global $submenu;
         // Loop through each custom post type
         foreach ($custom_post_types as $slug => $name) {
@@ -2381,14 +2382,46 @@ function cubewp_post_card_styles($post_type = '') {
 
 	if($post_type == '') return [];
 
-    $cubewp_styles = [];
+    $cubewp_styles = $cubewp_cards = [];
 	if(class_exists('CubeWp_Loop_Builder')){
-		$cubewp_cards = CubeWp_Loop_Builder::$cubewp_style_options;
+		$post_types = CWP_all_post_types();
+		foreach ( $post_types as $_post_type => $label ) {
+			$cubewp_cards[ $_post_type ]['label']       	= $label;
+			$cubewp_cards[ $_post_type ]['loop-styles'] = cwp_get_loop_styles_by_post_type($_post_type);
+		}
 		if(isset($cubewp_cards[$post_type]['loop-styles'])){
             $cubewp_styles = apply_filters( 'cubewp/post/card/styles', $cubewp_cards[$post_type]['loop-styles'], $post_type);
 		}
 	}
     return $cubewp_styles;
+}
+
+/**
+ * Method cwp_get_loop_styles_by_post_type
+ *
+ * @param $post_type 
+ *
+ * @return array
+ */
+function cwp_get_loop_styles_by_post_type($post_type) {
+    global $cwpOptions;
+    $custom_styles = isset($cwpOptions['cwp_loop_style'][$post_type]) && !empty($cwpOptions['cwp_loop_style'][$post_type]) ? explode(',', $cwpOptions['cwp_loop_style'][$post_type]) : [];
+
+    $default_styles = [
+        'default_style' => esc_html__('Basic Style', 'cubewp-framework')
+    ];
+
+    $_custom_styles = [];
+    foreach ($custom_styles as $style) {
+        $key = str_replace(' ', '_', $style);
+        $_custom_styles[$key] = $style;
+    }
+
+    $filter_styles = apply_filters("cubewp/loop/builder/{$post_type}/styles", []);
+    $filter_styles = is_array($filter_styles) ? $filter_styles : [];
+
+    $loop_styles = array_merge($default_styles, $_custom_styles, $filter_styles);
+	return $loop_styles;
 }
 
 

@@ -181,6 +181,11 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 				'deps'    => array( 'jquery' ),
 				'version' => CUBEWP_VERSION,
 			),
+			'cubewp-slick'             => array(
+				'src'     => CWP_PLUGIN_URI . 'cube/assets/lib/slick/slick.js',
+				'deps'    => array( 'jquery' ),
+				'version' => CUBEWP_VERSION,
+			), 
 		);
 		$register_scripts = apply_filters( 'frontend/script/register', $register_scripts );
 		foreach ( $register_scripts as $name => $props ) {
@@ -262,6 +267,13 @@ class CubeWp_Enqueue extends CubeWp_Admin_Enqueue {
 			),
 			'cubewp-pretty-photo'  => array(
 				'src'     => CWP_PLUGIN_URI . 'cube/assets/lib/pretty-photo/css/prettyPhoto.css',
+				'deps'    => array(),
+				'version' => CUBEWP_VERSION,
+				'media'   => 'all',
+				'has_rtl' => false,
+			),
+			'cubewp-slick'  => array(
+				'src'     =>  CWP_PLUGIN_URI . 'cube/assets/lib/slick/slick.css',
 				'deps'    => array(),
 				'version' => CUBEWP_VERSION,
 				'media'   => 'all',
